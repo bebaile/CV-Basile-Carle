@@ -27,6 +27,8 @@
   align-items: center;
 }
 
+/* ------------------- */
+
 .general-info {
   width: clamp(375px, 1024px, 100vw - 1rem);
   min-width: 375px - 1rem;
@@ -116,4 +118,17 @@
 .download-vcard-btn:active {
   background-color: #298e46;
   box-shadow: rgba(20, 70, 32, 0.2) 0 1px 0 inset;
+}
+
+/* ---------- */
+
+.github-summary {
+  width: clamp(375px, 1024px, 100vw - 1rem);
+  min-width: 375px - 1rem;
+  max-width: 1024px;
+  margin: 1rem;
+  display: flex;
+  background-color: hsla(0, 0%, 75%, 0.2);
+  padding: 0.5rem;
+  border-radius: 5px;
 }
