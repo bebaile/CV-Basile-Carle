@@ -1,0 +1,27 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+.App {
+  display: flex;
+  justify-content: center;
+}
+
+.navbar {
+  width: clamp(375px, 1024px, 100vw - 1rem);
+  min-width: 375px - 1rem;
+  max-width: 1024px;
+  border-radius: 5px;
+  padding: 0.5rem;
+  margin: 1rem;
+  background-color: #bfbfbfbc;
+  color: #1e4b9f;
+  box-shadow: 1rem 1rem 3rem rgba(203, 200, 200, 0.631);
+}
+
+.title {
+  display: flex;
+  justify-content: space-between;
+}
