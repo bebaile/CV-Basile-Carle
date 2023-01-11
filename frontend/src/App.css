@@ -173,6 +173,8 @@
   min-width: 375px - 1rem;
   max-width: 1024px;
   margin: 1rem;
+  display: flex;
+  flex-direction: column;
 }
 
 .onglet {
@@ -180,11 +182,32 @@
   justify-content: space-around;
   border-radius: 5px;
   background-color: whitesmoke;
-  padding: 1rem;
+  padding: 0.5rem;
   flex-wrap: wrap;
+  align-items: center;
 }
 
 .onglet div {
-  margin: 0.5rem;
-  width: 50vh;
+  margin: 0.3rem;
+  width: 130px;
+}
+
+.section-content-container {
+  display: flex;
+  width: 100%;
+  padding: 1rem;
+}
+
+.section-content-container div {
+  /* margin: 1rem; */
+  width: 100vw;
+  /* overflow: scroll; */
+}
+
+.section-content-container div article {
+  margin: 0 0 1rem 0;
+}
+
+.sub-section-title {
+  font-weight: bold;
 }
