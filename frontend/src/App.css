@@ -148,9 +148,11 @@
   font-weight: bold;
   font-size: medium;
   margin: 0 0 1rem 0;
+  display: inline;
 }
 
 .objectives {
+  margin: 1rem 1rem;
   padding: 0 1rem;
   border-left: 1px solid gray;
 }
