@@ -133,3 +133,24 @@
   border-radius: 5px;
   box-shadow: -1rem -1rem -1rem hsla(0, 0%, 50%, 0.284);
 }
+
+/* -------- */
+
+.professional-objectives {
+  width: clamp(375px, 1024px, 100vw - 1rem);
+  min-width: 375px - 1rem;
+  max-width: 1024px;
+  margin: 1rem;
+}
+
+.professional-objectives h1 {
+  color: #618cbb;
+  font-weight: bold;
+  font-size: medium;
+  margin: 0 0 1rem 0;
+}
+
+.objectives {
+  padding: 0 1rem;
+  border-left: 1px solid gray;
+}
