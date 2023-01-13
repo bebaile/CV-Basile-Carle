@@ -171,7 +171,7 @@
 /* ------- */
 
 .cv-sections {
-  width: clamp(375px, 1024px, 100vw - 1rem);
+  width: var(--content-width);
   min-width: 375px - 1rem;
   max-width: 1024px;
   margin: 1rem;
@@ -212,15 +212,15 @@
 }
 
 .experiences-selected {
-  transform: translateX(calc(var(--content-width) * -1 - 1rem));
+  transform: translateX(calc(var(--content-width) * -1));
 }
 
 .formations-selected {
-  transform: translateX(calc(var(--content-width) * -2 - 1rem));
+  transform: translateX(calc(var(--content-width) * -2));
 }
 
 .extraprofessionel-selected {
-  transform: translateX(calc(var(--content-width) * -3 - 1rem));
+  transform: translateX(calc(var(--content-width) * -3));
 }
 
 @keyframes scroll {
@@ -233,8 +233,9 @@
 }
 
 .section-slider div {
-  margin-right: 1rem;
-  width: clamp(375px, 1024px, 100vw - 1rem);
+  margin-right: 0;
+  padding-right: 1rem;
+  width: var(--content-width);
   min-width: 375px - 1rem;
   max-width: 1024px;
 }
@@ -260,15 +261,3 @@
 .sub-section-title {
   font-weight: bold;
 }
-
-/* .experiences-professionnelles {
-  display: none;
-}
-
-.formations {
-  display: none;
-}
-
-.extra-professionel {
-  display: none;
-} */
