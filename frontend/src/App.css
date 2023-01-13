@@ -193,6 +193,10 @@
   width: 130px;
 }
 
+.section > article {
+  display: flex;
+}
+
 .section-content-container {
   display: flex;
   width: 100%;
@@ -205,11 +209,6 @@
   width: clamp(375px, 1024px, 100vw - 1rem);
   min-width: 375px - 1rem;
   max-width: 1024px;
-
-  /* width: 1000px; */
-  /* margin: 1rem; */
-  /* width: 100vw; */
-  /* overflow: scroll; */
 }
 
 .section-content-container li {
@@ -231,3 +230,15 @@ li li {
 .sub-section-title {
   font-weight: bold;
 }
+
+/* .experiences-professionnelles {
+  display: none;
+}
+
+.formations {
+  display: none;
+}
+
+.extra-professionel {
+  display: none;
+} */
