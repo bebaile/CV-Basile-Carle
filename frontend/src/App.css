@@ -219,8 +219,10 @@
   margin-top: 0.5rem;
 }
 
-li li {
+.sub-li {
   list-style-type: "- ";
+  margin-left: 1rem;
+  padding-left: 1rem;
 }
 
 .section-content-container div article {
