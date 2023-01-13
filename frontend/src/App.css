@@ -209,27 +209,22 @@
 
 .competences-selected {
   transform: translateX(0px);
+  transition: all ease-out 1s;
 }
 
 .experiences-selected {
   transform: translateX(calc(var(--content-width) * -1));
+  transition: all ease-out 1s;
 }
 
 .formations-selected {
   transform: translateX(calc(var(--content-width) * -2));
+  transition: all ease-out 1s;
 }
 
 .extraprofessionel-selected {
   transform: translateX(calc(var(--content-width) * -3));
-}
-
-@keyframes scroll {
-  0% {
-    transform: translateX(0px);
-  }
-  100% {
-    transform: translateX(clamp(375px, 1024px, 100vw - 1rem));
-  }
+  transition: all ease-out 1s;
 }
 
 .section-slider div {
