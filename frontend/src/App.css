@@ -2,6 +2,7 @@
   box-sizing: border-box;
   margin: 0;
   padding: 0;
+  --content-width: clamp(375px, 1024px, 100vw - 1rem);
 }
 
 .container {
@@ -10,7 +11,7 @@
 }
 
 .navbar {
-  width: clamp(375px, 1024px, 100vw - 1rem);
+  width: var(--content-width);
   min-width: 375px - 1rem;
   max-width: 1024px;
   border-radius: 5px;
@@ -30,7 +31,7 @@
 /* ------------------- */
 
 .general-info {
-  width: clamp(375px, 1024px, 100vw - 1rem);
+  width: var(--content-width);
   min-width: 375px - 1rem;
   max-width: 1024px;
   margin: 1rem;
@@ -123,7 +124,7 @@
 /* ---------- */
 
 .github-summary {
-  width: clamp(375px, 1024px, 100vw - 1rem);
+  width: var(--content-width);
   min-width: 375px - 1rem;
   max-width: 1024px;
   margin: 1rem;
@@ -137,7 +138,7 @@
 /* -------- */
 
 .professional-objectives {
-  width: clamp(375px, 1024px, 100vw - 1rem);
+  width: var(--content-width);
   min-width: 375px - 1rem;
   max-width: 1024px;
   margin: 1rem;
@@ -198,24 +199,51 @@
 }
 
 .section-content-container {
-  display: flex;
-  width: 100%;
-  padding: 1rem;
-  overflow: scroll;
+  overflow: hidden;
 }
 
-.section-content-container div {
+.section-slider {
+  display: flex;
+  padding: 1rem;
+}
+
+.competences-selected {
+  transform: translateX(0px);
+}
+
+.experiences-selected {
+  transform: translateX(calc(var(--content-width) * -1 - 1rem));
+}
+
+.formations-selected {
+  transform: translateX(calc(var(--content-width) * -2 - 1rem));
+}
+
+.extraprofessionel-selected {
+  transform: translateX(calc(var(--content-width) * -3 - 1rem));
+}
+
+@keyframes scroll {
+  0% {
+    transform: translateX(0px);
+  }
+  100% {
+    transform: translateX(clamp(375px, 1024px, 100vw - 1rem));
+  }
+}
+
+.section-slider div {
   margin-right: 1rem;
   width: clamp(375px, 1024px, 100vw - 1rem);
   min-width: 375px - 1rem;
   max-width: 1024px;
 }
 
-.section-content-container li {
+.section-slider li {
   margin-left: 1rem;
 }
 
-.section-content-container li:first-child {
+.section-slider li:first-child {
   margin-top: 0.5rem;
 }
 
@@ -225,7 +253,7 @@
   padding-left: 1rem;
 }
 
-.section-content-container div article {
+.section-slider div article {
   margin: 0 0 1rem 0;
 }
 
