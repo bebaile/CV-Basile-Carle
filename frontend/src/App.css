@@ -183,7 +183,9 @@
   display: flex;
   justify-content: space-around;
   border-radius: 5px;
-  background-color: whitesmoke;
+  background-color: hsla(0, 0%, 50%, 0.195);
+  color: black;
+  font-weight: bold;
   padding: 0.5rem;
   flex-wrap: wrap;
   align-items: center;
@@ -192,6 +194,16 @@
 .onglet div {
   margin: 0.3rem;
   width: 130px;
+}
+
+.onglet div:hover {
+  color: hsl(219, 68%, 37%);
+  font-size: larger;
+}
+
+.onglet-selected {
+  color: hsl(238, 68%, 37%);
+  font-size: larger;
 }
 
 .section > article {
