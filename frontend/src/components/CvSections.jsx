@@ -47,8 +47,8 @@ function CvSections() {
           <div
             className={
               isSelected === 1
-                ? "competences-onglet onglet-selected"
-                : "competences-onglet"
+                ? "competences-onglet onglet-selected sub-onglet"
+                : "competences-onglet sub-onglet"
             }
             role="button"
             onClick={() => handleOnglet(1)}
@@ -61,8 +61,8 @@ function CvSections() {
           <div
             className={
               isSelected === 2
-                ? "experiences-onglet onglet-selected"
-                : "experiences-onglet"
+                ? "experiences-onglet onglet-selected sub-onglet"
+                : "experiences-onglet sub-onglet"
             }
             role="button"
             onClick={() => handleOnglet(2)}
@@ -74,8 +74,8 @@ function CvSections() {
           <div
             className={
               isSelected === 3
-                ? "formations-onglet onglet-selected"
-                : "formations-onglet"
+                ? "formations-onglet onglet-selected sub-onglet"
+                : "formations-onglet sub-onglet"
             }
             role="button"
             onClick={() => handleOnglet(3)}
@@ -87,8 +87,8 @@ function CvSections() {
           <div
             className={
               isSelected === 4
-                ? "extraprofessionel-onglet onglet-selected"
-                : "extraprofessionel-onglet"
+                ? "extraprofessionel-onglet onglet-selected sub-onglet"
+                : "extraprofessionel-onglet sub-onglet"
             }
             role="button"
             onClick={() => handleOnglet(4)}
