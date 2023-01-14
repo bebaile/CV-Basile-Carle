@@ -201,7 +201,7 @@
   font-size: larger;
 }
 
-.sub-onglet:hover > .sub-onglet {
+.sub-onglet:hover ~ .sub-onglet {
   color: black;
 }
 
