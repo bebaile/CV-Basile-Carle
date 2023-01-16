@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+import DOMPurify from "dompurify";
+import HTMLReactParser from "html-react-parser";
 import sections from "../data/section.json";
 
 function CvSections() {
@@ -101,11 +103,9 @@ function CvSections() {
         <div className="section-content-container">
           <div className="section-slider">
             {sections.map((section) => {
+              const html = DOMPurify.sanitize(section.html);
               return (
-                <div
-                  className={section.name}
-                  dangerouslySetInnerHTML={{ __html: section.html }}
-                />
+                <div className={section.name}>{HTMLReactParser(html)}</div>
               );
             })}
           </div>
