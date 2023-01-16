@@ -105,7 +105,9 @@ function CvSections() {
             {sections.map((section) => {
               const html = DOMPurify.sanitize(section.html);
               return (
-                <div className={section.name}>{HTMLReactParser(html)}</div>
+                <div className={section.name} key={section.name}>
+                  {HTMLReactParser(html)}
+                </div>
               );
             })}
           </div>
