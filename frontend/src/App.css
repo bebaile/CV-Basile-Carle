@@ -3,6 +3,8 @@
   margin: 0;
   padding: 0;
   --content-width: clamp(375px, 1024px, 100vw - 1rem);
+  --title-color: #1e4b9f;
+  --button-color: #2ea44f;
 }
 
 .container {
@@ -18,7 +20,7 @@
   padding: 0.5rem;
   margin: 1rem;
   background-color: #bfbfbfbc;
-  color: #1e4b9f;
+  color: var(--title-color);
   box-shadow: 1rem 1rem 3rem rgba(203, 200, 200, 0.631);
 }
 
@@ -70,7 +72,7 @@
 
 .download-vcard-btn {
   appearance: none;
-  background-color: #2ea44f;
+  background-color: var(--button-color);
   border: 1px solid rgba(27, 31, 35, 0.15);
   border-radius: 6px;
   box-shadow: rgba(27, 31, 35, 0.1) 0 1px 0;
@@ -134,6 +136,12 @@
   padding: 0.5rem;
   border-radius: 5px;
   box-shadow: -1rem -1rem -1rem hsla(0, 0%, 50%, 0.284);
+}
+
+.github-summary h2 {
+  color: var(--title-color);
+  font-size: medium;
+  display: inline;
 }
 
 /* -------- */
