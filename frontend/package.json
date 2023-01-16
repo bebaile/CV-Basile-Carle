@@ -10,6 +10,8 @@
     "fix": "prettier --write . && eslint --fix --ext .jsx ."
   },
   "dependencies": {
+    "dompurify": "^2.4.3",
+    "html-react-parser": "^3.0.7",
     "prop-types": "^15.8.1",
     "react": "^18.0.0",
     "react-dom": "^18.0.0"
