@@ -6,6 +6,8 @@
   --title-color: #1e4b9f;
   --button-color: #2ea44f;
   --button-color-2: hsla(13, 36%, 31%, 0.4);
+  --button-color-3: #e1662b;
+  --bar-background-color: hsla(0, 0%, 50%, 0.195);
 }
 
 .container {
@@ -39,6 +41,8 @@
   max-width: 1024px;
   margin: 1rem;
   display: flex;
+  align-items: center;
+  position: relative;
 }
 
 #basile {
@@ -64,6 +68,26 @@
 
 .contacts p a {
   text-decoration: none;
+}
+
+.qrcode {
+  transform: rotate(-0.25turn);
+  width: 20ch;
+  font-weight: bold;
+  position: absolute;
+  left: calc(var(--content-width) - 6.5rem);
+  text-align: center;
+  background-color: var(--button-color-3);
+  border-top-right-radius: 5px;
+  border-top-left-radius: 5px;
+  color: white;
+  padding-top: 0.25rem;
+}
+
+.qrcode img {
+  width: 8rem;
+  margin: 1rem;
+  display: none;
 }
 
 .download-vcard-btn a {
@@ -124,6 +148,12 @@
   box-shadow: rgba(20, 70, 32, 0.2) 0 1px 0 inset;
 }
 
+@media screen and (max-width: 542px) {
+  .qrcode {
+    display: none;
+  }
+}
+
 /* ---------- */
 
 .github-summary {
@@ -133,7 +163,8 @@
   margin: 1rem;
   display: flex;
   justify-content: space-between;
-  background-color: hsla(0, 0%, 50%, 0.195);
+  background-color: var(--bar-background-color);
+  /* background-color: hsla(0, 0%, 50%, 0.195); */
   padding: 0.5rem;
   border-radius: 5px;
   box-shadow: -1rem -1rem -1rem hsla(0, 0%, 50%, 0.284);
@@ -193,7 +224,7 @@
   display: flex;
   justify-content: space-around;
   border-radius: 5px;
-  background-color: hsla(0, 0%, 50%, 0.195);
+  background-color: var(--bar-background-color);
   color: black;
   font-weight: bold;
   padding: 0.5rem;
@@ -207,7 +238,7 @@
 }
 
 .sub-onglet:hover {
-  color: #e1662b;
+  color: var(--button-color-3);
   font-size: larger;
 }
 
