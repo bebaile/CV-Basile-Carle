@@ -1,0 +1,15 @@
+[US_cv_sections 6fd7caa] fixed ESLint error regarding an unappropriate use of > instead of {
+ Committer: Basile Carle <puma@iMac-de-Basile.lan>
+Votre nom et votre adresse courriel ont été configurés automatiquement en se
+fondant sur votre nom d'utilisateur et le nom de votre machine. Veuillez 
+vérifier qu'ils sont corrects. Vous pouvez supprimer ce message en les 
+paramétrant explicitement. Lancez les commandes suivantes et suivez les
+instructions dans votre éditeur pour éditer votre fichier de configuration :
+
+    git config --global --edit
+
+Après ceci, vous pouvez corriger l'identité utilisée pour cette validation avec :
+
+    git commit --amend --reset-author
+
+ 1 file changed, 2 insertions(+), 1 deletion(-)
