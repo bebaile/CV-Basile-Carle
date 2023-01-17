@@ -72,26 +72,44 @@
 
 .qrcode {
   transform: rotate(-0.25turn);
-  width: 20ch;
-  font-weight: bold;
   position: absolute;
   left: calc(
     (100vw - var(--content-width)) / 2 + var(--content-width) - 80px - 1rem -
       0.25rem
   );
   top: calc(1rem + 10px + 1rem + 28px);
-  text-align: center;
   background-color: var(--button-color-3);
+  width: 20ch;
+  height: 22px;
+  font-weight: bold;
+  text-align: center;
   border-top-right-radius: 5px;
   border-top-left-radius: 5px;
   color: white;
   padding-top: 0.25rem;
 }
 
-.qrcode img {
+.qrcode:hover {
+  z-index: 5;
+  height: 175px;
+  left: calc(
+    (100vw - var(--content-width)) / 2 + var(--content-width) - 80px - 1rem -
+      0.25rem - 76px
+  );
+  top: -7px;
+  opacity: 90%;
+  transition: left 0.5s;
+}
+
+#qrcode-img {
+  transform: rotate(0.25turn);
   width: 8rem;
   margin: 1rem;
   display: none;
+}
+
+.qrcode:hover #qrcode-img {
+  display: initial;
 }
 
 .download-vcard-btn a {
@@ -168,7 +186,6 @@
   display: flex;
   justify-content: space-between;
   background-color: var(--bar-background-color);
-  /* background-color: hsla(0, 0%, 50%, 0.195); */
   padding: 0.5rem;
   border-radius: 5px;
   box-shadow: -1rem -1rem -1rem hsla(0, 0%, 50%, 0.284);
@@ -252,7 +269,6 @@
 
 .onglet-selected {
   color: var(--title-color);
-  /* color: hsl(238, 68%, 37%); */
   font-size: larger;
 }
 

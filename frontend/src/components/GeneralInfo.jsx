@@ -38,14 +38,14 @@ function GeneralInfo() {
             </button>
           </p>
         </div>
-        <div className="qrcode">
-          <div id="tiroir-qrcode">{">"} Flasher mon CV</div>
-          <img src={qrcode} alt="QR code pour consulter le CV sur un mobile" />
-        </div>
       </div>
       <div className="qrcode">
-        <div id="tiroir-qrcode">{">"} Flasher mon CV</div>
-        <img src={qrcode} alt="QR code pour consulter le CV sur un mobile" />
+        <div id="tiroir-qrcode">{"> "}Flasher mon CV</div>
+        <img
+          src={qrcode}
+          alt="QR code pour consulter le CV sur un mobile"
+          id="qrcode-img"
+        />
       </div>
     </div>
   );
