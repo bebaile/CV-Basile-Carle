@@ -2,6 +2,7 @@ import React from "react";
 import basile from "@assets/basileCarle.png";
 import github from "@assets/github.png";
 import linkedin from "@assets/linkedin.png";
+import qrcode from "@assets/qrcode.png";
 
 function GeneralInfo() {
   return (
@@ -37,6 +38,14 @@ function GeneralInfo() {
             </button>
           </p>
         </div>
+      </div>
+      <div className="qrcode">
+        <div id="tiroir-qrcode">{"> "}Flasher mon CV</div>
+        <img
+          src={qrcode}
+          alt="QR code pour consulter le CV sur un mobile"
+          id="qrcode-img"
+        />
       </div>
     </div>
   );
