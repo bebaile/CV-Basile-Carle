@@ -1,22 +1,21 @@
 import React from "react";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Navbar from "@components/Navbar";
-import GeneralInfo from "@components/GeneralInfo";
-import GithubSummary from "@components/GithubSummary";
-import ProfessionalObjectives from "@components/ProfessionalObjectives";
-import CvSections from "@components/CvSections";
+import MyCV from "@pages/MyCV";
 import Login from "@pages/Login";
 import "./App.css";
 
 function App() {
   return (
-    <div className="App">
-      <Navbar />
-      <GeneralInfo />
-      <GithubSummary />
-      <ProfessionalObjectives />
-      <CvSections />
-      <Login />
-    </div>
+    <Router>
+      <div className="App">
+        <Navbar />
+        <Routes>
+          <Route path="/" element={<MyCV />} />
+          <Route path="/login" element={<Login />} />
+        </Routes>
+      </div>
+    </Router>
   );
 }
 
