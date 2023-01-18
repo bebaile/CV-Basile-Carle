@@ -1,15 +1,22 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import api from "@services/services";
 import "@styles/login.css";
 import basile from "@assets/basileCarle.png";
 
 function Login() {
+  const [isSubscribing, setIsSubscribing] = useState(false);
+
   const ENDPOINT = "/users";
   useEffect(() => {
     api.get(`${ENDPOINT}`).then((result) => {
       console.error(result);
     });
   }, []);
+
+  const handleClick = () => {
+    setIsSubscribing(!isSubscribing);
+  };
+
   return (
     <div className="container">
       <div className="login-section">
@@ -22,6 +29,15 @@ function Login() {
             />
           </div>
           <div id="connexion-form">
+            <div
+              id="inscription"
+              role="button"
+              onClick={handleClick}
+              onKeyDown={handleClick}
+              tabIndex="0"
+            >
+              Je souhaite m'inscrire
+            </div>
             <form>
               <label htmlFor="login">
                 <div>Login :</div>
@@ -35,8 +51,23 @@ function Login() {
                   <input type="password" id="password" name="password" />
                 </div>
               </label>
+              {isSubscribing ? (
+                <label htmlFor="confirmed-password">
+                  <div>Confirmation :</div>
+                  <div>
+                    <input
+                      type="password"
+                      id="confirmed-password"
+                      name="confirmed-password"
+                    />
+                  </div>
+                </label>
+              ) : null}
+
               <label htmlFor="submit">
-                <input type="submit" id="submit" className="connect-btn" />
+                <button type="button" id="submit" className="connect-btn">
+                  {isSubscribing ? "S'inscrire" : "Se connecter"}
+                </button>
               </label>
             </form>
           </div>

@@ -20,7 +20,18 @@
 }
 
 #basile {
-  width: 100px;
+  width: 200px;
+}
+
+#inscription {
+  text-align: center;
+  font-weight: bold;
+  color: rgba(0, 0, 0, 0.313);
+}
+
+#inscription:hover {
+  color: black;
+  cursor: pointer;
 }
 
 label {
@@ -65,6 +76,7 @@ input {
   touch-action: manipulation;
   vertical-align: middle;
   white-space: nowrap;
+  width: 260px;
 }
 
 .connect-btn:focus:not(:focus-visible):not(.focus-visible) {
