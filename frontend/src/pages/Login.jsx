@@ -1,10 +1,12 @@
-import React, { useState } from "react";
-import api from "@services/services";
-import "@styles/login.css";
-import basile from "@assets/basileCarle.png";
+import React, { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
+import api from "@services/services";
+import Context from "../context/Context";
+import basile from "@assets/basileCarle.png";
+import "../styles/login.css";
 
 function Login() {
+  const { setIsConnected } = useContext(Context);
   const [isSubscribing, setIsSubscribing] = useState(false);
   const [arePasswordEqual, setArePasswordEqual] = useState(true);
 
@@ -57,6 +59,7 @@ function Login() {
         })
         .then((result) => {
           console.error(result.data);
+          setIsConnected(true);
           navigate("/");
         });
     }

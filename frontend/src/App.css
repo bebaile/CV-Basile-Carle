@@ -56,6 +56,43 @@
   font-size: 1.5rem;
 }
 
+#rightPart-navbar {
+  display: flex;
+  align-items: center;
+}
+
+#login-img {
+  width: 30px;
+  margin: 0 0 0 1rem;
+}
+
+#login-btn {
+  position: relative;
+}
+
+#login-btn:hover {
+  cursor: pointer;
+}
+
+#login-btn span {
+  display: none;
+  color: black;
+  font-weight: normal;
+  font-size: 0.8rem;
+  position: absolute;
+  width: 13ch;
+  left: -25px;
+  bottom: -1rem;
+  background-color: rgba(255, 255, 0, 0.534);
+  padding: 0.1rem;
+  border-radius: 5px;
+  text-align: center;
+}
+
+#login-btn:hover > span {
+  display: initial;
+}
+
 #spacer {
   height: 50px;
   padding: 0.5rem;

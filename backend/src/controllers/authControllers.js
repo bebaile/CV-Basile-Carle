@@ -37,19 +37,11 @@ const session = (req, res) => {
     });
 };
 
-const disconnect = (req, res) => {
-  models.user
-    .findAll()
-    .then(([rows]) => {
-      res.send(rows);
-    })
-    .catch((err) => {
-      console.error(err);
-      res.sendStatus(500);
-    });
+const logout = (req, res) => {
+  res.clearCookie(req.cookies.user_token).sendStatus(200);
 };
 
 module.exports = {
   session,
-  disconnect,
+  logout,
 };
