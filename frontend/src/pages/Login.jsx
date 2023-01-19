@@ -7,46 +7,53 @@ function Login() {
   const [isSubscribing, setIsSubscribing] = useState(false);
   const [arePasswordEqual, setArePasswordEqual] = useState(true);
 
-  //   const ENDPOINT = "/users";
-  //   useEffect(() => {
-  //     api.get(`${ENDPOINT}`).then((result) => {
-  //       console.error(result);
-  //     });
-  //   }, []);
-
   const handleClick = () => {
     setIsSubscribing(!isSubscribing);
     setArePasswordEqual(true);
   };
 
   const handleSubmit = () => {
-    if (
-      document.querySelector("#password").value !==
-      document.querySelector("#confirmed-password").value
-    ) {
-      setArePasswordEqual(false);
-      document.querySelector("#inscription").innerHTML =
-        "<span style='color:red'>Mots de passes différents</span>";
-    } else {
+    // si l'utilisateur veut créer un compte
+    if (isSubscribing === true) {
+      if (
+        document.querySelector("#password").value !==
+        document.querySelector("#confirmed-password").value
+      ) {
+        setArePasswordEqual(false);
+        document.querySelector("#inscription").innerHTML =
+          "<span style='color:red'>Mots de passes différents</span>";
+      } else {
+        api
+          .post("/users/create", {
+            username: document.querySelector("#login").value,
+            email: document.querySelector("#email").value,
+            password: document.querySelector("#password").value,
+            company: document.querySelector("#company").value,
+          })
+          .then((result) => {
+            if (result.data === "Created") {
+              document.querySelector("#inscription").innerHTML =
+                "<span style='color:green'>Utilisateur créé avec succès</span>";
+              setTimeout(() => {
+                setIsSubscribing(false);
+              }, 3000);
+            } else {
+              console.error(
+                `L'utilisateur n'a pas pu être créé. Erreur ${result.status}`
+              );
+            }
+          });
+      }
+    }
+    // si l'utilisateur a déjà un compte et veut se connecter
+    else {
       api
-        .post("/users", {
-          username: document.querySelector("#login").value,
-          email: document.querySelector("#email").value,
+        .post("/auth", {
+          login: document.querySelector("#login").value,
           password: document.querySelector("#password").value,
-          company: document.querySelector("#company").value,
         })
         .then((result) => {
-          if (result.data === "Created") {
-            document.querySelector("#inscription").innerHTML =
-              "<span style='color:green'>Utilisateur créé avec succès</span>";
-            setTimeout(() => {
-              setIsSubscribing(false);
-            }, 3000);
-          } else {
-            console.error(
-              `L'utilisateur n'a pas pu être créé. Erreur ${result.status}`
-            );
-          }
+          console.error(result);
         });
     }
   };

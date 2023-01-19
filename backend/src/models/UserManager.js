@@ -21,6 +21,13 @@ class UserManager extends AbstractManager {
       [item.title, item.id]
     );
   }
+
+  findByLogin(login) {
+    return this.connection.query(
+      `SELECT * FROM ${this.table} WHERE username = ?`,
+      [login]
+    );
+  }
 }
 
 module.exports = UserManager;
