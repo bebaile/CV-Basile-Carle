@@ -2,10 +2,13 @@ import React, { useState } from "react";
 import api from "@services/services";
 import "@styles/login.css";
 import basile from "@assets/basileCarle.png";
+import { useNavigate } from "react-router-dom";
 
 function Login() {
   const [isSubscribing, setIsSubscribing] = useState(false);
   const [arePasswordEqual, setArePasswordEqual] = useState(true);
+
+  const navigate = useNavigate();
 
   const handleClick = () => {
     setIsSubscribing(!isSubscribing);
@@ -53,7 +56,8 @@ function Login() {
           password: document.querySelector("#password").value,
         })
         .then((result) => {
-          console.error(result);
+          console.error(result.data);
+          navigate("/");
         });
     }
   };
