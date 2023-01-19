@@ -52,13 +52,14 @@ const edit = (req, res) => {
 
 const add = (req, res) => {
   const item = req.body;
+  console.error(req.body);
 
   // TODO validations (length, format...)
 
   models.user
     .insert(item)
     .then(([result]) => {
-      res.location(`/items/${result.insertId}`).sendStatus(201);
+      res.location(`/users/${result.insertId}`).sendStatus(201);
     })
     .catch((err) => {
       console.error(err);
