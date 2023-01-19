@@ -125,10 +125,10 @@ DROP TABLE IF EXISTS `my_cv`.`user` ;
 CREATE TABLE IF NOT EXISTS `my_cv`.`user` (
   `username` VARCHAR(16) NOT NULL,
   `email` VARCHAR(255) NULL,
-  `password` VARCHAR(32) NOT NULL,
+  `password` VARCHAR(255) NOT NULL,
   `create_time` TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
   `company` VARCHAR(45) NULL,
-  `id_user` BINARY(16) NOT NULL,
+  `id_user` BINARY(48) NOT NULL,
   PRIMARY KEY (`id_user`),
   UNIQUE INDEX `id_user_UNIQUE` (`id_user` ASC) VISIBLE);
 

@@ -1,4 +1,5 @@
 const models = require("../models");
+const { hashPassword } = require("../helpers/auth");
 
 const browse = (req, res) => {
   models.user
@@ -51,20 +52,21 @@ const edit = (req, res) => {
 };
 
 const add = (req, res) => {
-  const item = req.body;
-  console.error(req.body);
+  hashPassword(req.body.password).then((hashedPassword) => {
+    req.body.password = hashedPassword;
+    const user = req.body;
+    models.user
+      .insert(user)
+      .then(([result]) => {
+        res.location(`/users/${result.insertId}`).sendStatus(201);
+      })
+      .catch((err) => {
+        console.error(err);
+        res.sendStatus(500);
+      });
+  });
 
   // TODO validations (length, format...)
-
-  models.user
-    .insert(item)
-    .then(([result]) => {
-      res.location(`/users/${result.insertId}`).sendStatus(201);
-    })
-    .catch((err) => {
-      console.error(err);
-      res.sendStatus(500);
-    });
 };
 
 const destroy = (req, res) => {

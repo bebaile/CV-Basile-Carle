@@ -36,7 +36,17 @@ function Login() {
           company: document.querySelector("#company").value,
         })
         .then((result) => {
-          console.error(result);
+          if (result.data === "Created") {
+            document.querySelector("#inscription").innerHTML =
+              "<span style='color:green'>Utilisateur créé avec succès</span>";
+            setTimeout(() => {
+              setIsSubscribing(false);
+            }, 3000);
+          } else {
+            console.error(
+              `L'utilisateur n'a pas pu être créé. Erreur ${result.status}`
+            );
+          }
         });
     }
   };
