@@ -46,6 +46,10 @@ input {
   padding: 0.1rem;
 }
 
+.incorrect {
+  border: 1px solid red;
+}
+
 .connect-btn a {
   text-decoration: none;
   color: white;
