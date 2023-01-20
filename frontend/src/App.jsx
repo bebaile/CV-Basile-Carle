@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Navbar from "@components/Navbar";
 import MyCV from "@pages/MyCV";
 import Login from "@pages/Login";
+import Admin from "@pages/Admin";
 import { ContextProvider } from "./context/Context";
 import "./App.css";
 
@@ -15,6 +16,7 @@ function App() {
           <Routes>
             <Route path="/" element={<MyCV />} />
             <Route path="/login" element={<Login />} />
+            <Route path="/admin" element={<Admin />} />
           </Routes>
         </div>
       </Router>

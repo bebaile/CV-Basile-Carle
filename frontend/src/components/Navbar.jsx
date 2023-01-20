@@ -1,9 +1,9 @@
 import React, { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "@services/services";
-import Context from "../context/Context";
 import login from "@assets/login.png";
 import logout from "@assets/logout.png";
+import Context from "../context/Context";
 
 function Navbar() {
   const { isConnected, setIsConnected } = useContext(Context);
@@ -24,6 +24,7 @@ function Navbar() {
       navigate("/login");
     } else {
       api.post("/logout").then((result) => {
+        setIsConnected(false);
         console.error(result);
       });
     }
