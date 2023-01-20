@@ -1,4 +1,5 @@
 const express = require("express");
+const cookieParser = require("cookie-parser");
 const fs = require("fs");
 const path = require("path");
 const cors = require("cors");
@@ -16,6 +17,7 @@ app.use(
 );
 
 app.use(express.json());
+app.use(cookieParser());
 
 // Serve the public folder for public resources
 app.use(express.static(path.join(__dirname, "../public")));
