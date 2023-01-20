@@ -1,0 +1,30 @@
+* {
+  --content-width: clamp(375px, 1024px, 100vw - 1rem);
+}
+
+.availability-pref {
+  width: var(--content-width);
+  border: 1px solid gray;
+  width: var(--content-width);
+  min-width: 375px - 1rem;
+  max-width: 1024px;
+  margin-top: 1rem;
+  border-radius: 5px;
+  padding: 1rem;
+}
+
+#select-availability-box {
+}
+
+.day-box {
+  display: flex;
+  align-items: center;
+}
+.day-title {
+  background-color: var(--button-color-3);
+  margin: 1rem;
+  padding: 0.25rem 1rem;
+  border-radius: 5px;
+  color: white;
+  width: 10ch;
+}

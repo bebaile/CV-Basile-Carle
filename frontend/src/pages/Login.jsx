@@ -1,8 +1,8 @@
 import React, { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "@services/services";
-import Context from "../context/Context";
 import basile from "@assets/basileCarle.png";
+import Context from "../context/Context";
 import "../styles/login.css";
 
 function Login() {
