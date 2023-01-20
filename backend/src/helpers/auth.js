@@ -23,7 +23,7 @@ const verifyPassword = (plainPassword, hashedPassword) => {
 };
 
 const createToken = (data) => {
-  return jwt.sign(data, process.env.PRIVATEKEY);
+  return jwt.sign(data, process.env.PRIVATEKEY, { expiresIn: "15m" });
 };
 
 module.exports = { returnUuid, hashPassword, verifyPassword, createToken };
