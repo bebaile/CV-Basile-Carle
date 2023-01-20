@@ -1,7 +1,18 @@
-import React from "react";
+import React, { useEffect } from "react";
+import api from "@services/services";
+import AvailabilitySlot from "@components/AvailabilitySlot";
 import "../styles/admin.css";
 
 function Admin() {
+  // récupère les préférences de disponibilités
+  useEffect(() => {
+    api.get("/availability").then((result) => {
+      console.error(result);
+    });
+  }, []);
+
+  const handleNewTimeslot = () => {};
+
   return (
     <div className="container">
       <div className="availability-pref">
@@ -9,12 +20,9 @@ function Admin() {
         <div id="select-availability-box">
           <div className="day-box">
             <div className="day-title">Lundi</div>
-            <div>
-              <button type="button">Ajouter un créneau</button>
-            </div>
-          </div>
-          <div className="day-box">
-            <div className="day-title">Lundi</div>
+            {/*  */}
+            <AvailabilitySlot />
+            {/*  */}
           </div>
           <div className="day-box">
             <div className="day-title">Mardi</div>
@@ -24,6 +32,9 @@ function Admin() {
           </div>
           <div className="day-box">
             <div className="day-title">Jeudi</div>
+          </div>
+          <div className="day-box">
+            <div className="day-title">Vendredi</div>
           </div>
         </div>
       </div>
