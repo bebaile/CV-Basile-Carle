@@ -23,7 +23,7 @@ USE `my_cv` ;
 DROP TABLE IF EXISTS `my_cv`.`availability` ;
 
 CREATE TABLE IF NOT EXISTS `my_cv`.`availability` (
-  `idavailability` INT NOT NULL,
+  `idavailability` INT NOT NULL AUTO_INCREMENT,
   `day` VARCHAR(10) NOT NULL,
   `start` TIME NOT NULL,
   `end` TIME NOT NULL,

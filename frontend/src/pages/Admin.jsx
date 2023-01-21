@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import api from "@services/services";
-import AvailabilitySlot from "@components/AvailabilitySlot";
+import DaysAvailability from "@components/DaysAvailability";
 import "../styles/admin.css";
 
 function Admin() {
@@ -11,31 +11,21 @@ function Admin() {
     });
   }, []);
 
-  const handleNewTimeslot = () => {};
+  const days = ["Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi"];
 
   return (
     <div className="container">
       <div className="availability-pref">
         <h1>Disponibilité semaine type</h1>
         <div id="select-availability-box">
-          <div className="day-box">
-            <div className="day-title">Lundi</div>
-            {/*  */}
-            <AvailabilitySlot />
-            {/*  */}
-          </div>
-          <div className="day-box">
-            <div className="day-title">Mardi</div>
-          </div>
-          <div className="day-box">
-            <div className="day-title">Mercredi</div>
-          </div>
-          <div className="day-box">
-            <div className="day-title">Jeudi</div>
-          </div>
-          <div className="day-box">
-            <div className="day-title">Vendredi</div>
-          </div>
+          {days.map((day) => {
+            return (
+              <div className="day-box" key={day}>
+                <div className="day-title">{day}</div>
+                <DaysAvailability day={day} key={day} />
+              </div>
+            );
+          })}
         </div>
       </div>
     </div>
