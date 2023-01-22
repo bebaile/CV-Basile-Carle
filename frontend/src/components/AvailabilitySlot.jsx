@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import api from "@services/services";
 
 function AvailabilitySlot({ day }) {
+  console.error(day);
   const [timeslotStart, setTimeslotStart] = useState();
   const [timeslotEnd, setTimeslotEnd] = useState();
 
@@ -15,13 +16,17 @@ function AvailabilitySlot({ day }) {
 
   const handleAddTimeslot = () => {
     const availability = {
-      day: day.day,
+      day,
       start: timeslotStart,
       end: timeslotEnd,
     };
 
     api.post("/availability", availability).then((result) => {
-      console.error(result);
+      if (result.status === 201) {
+        console.error("disponibilité ajouté avec succès");
+      } else {
+        console.error("Erreur lors de la création de la disponibilité");
+      }
     });
   };
   return (

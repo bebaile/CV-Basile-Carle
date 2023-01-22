@@ -29,6 +29,12 @@
   width: 10ch;
 }
 
+.dispo-by-day {
+  display: flex;
+  flex-direction: column;
+  margin: 1rem;
+}
+
 .timeslot {
   display: flex;
 }

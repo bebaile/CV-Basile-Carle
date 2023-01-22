@@ -10,6 +10,7 @@ router.post("/users/create", userControllers.add);
 router.post("/auth", authControllers.session);
 router.post("/logout", authControllers.logout);
 router.post("/availability", availabilityControllers.add);
+router.get("/availability", availabilityControllers.browse);
 
 module.exports = router;
 
