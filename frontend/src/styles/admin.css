@@ -21,10 +21,54 @@
   align-items: center;
 }
 .day-title {
-  background-color: var(--button-color-3);
-  margin: 1rem;
+  background-color: var(--title-color);
+  margin: 0.5rem;
   padding: 0.25rem 1rem;
   border-radius: 5px;
   color: white;
   width: 10ch;
+}
+
+.dispo-by-day {
+  display: flex;
+  flex-direction: column;
+  margin: 1rem;
+}
+
+#delete-availability {
+  background-color: black;
+  color: white;
+  border: 0;
+  width: 2ch;
+  height: 2ch;
+  border-radius: 50%;
+  padding: 0.1rem;
+  margin: 0 0.5rem;
+}
+
+.timeslot {
+  display: flex;
+}
+
+label {
+  margin: 0;
+  display: flex;
+  align-items: center;
+}
+
+.add-timeslot-btn {
+  margin: 1rem;
+  padding: 0.25rem 1rem;
+  border-radius: 5px;
+  color: white;
+  border: 0px;
+  background-color: var(--button-color-3);
+  border-radius: 5px;
+}
+
+@media screen and (max-width: 736px) {
+  .day-box {
+    flex-direction: column;
+    flex-wrap: wrap;
+  }
 }
