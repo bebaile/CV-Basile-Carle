@@ -65,8 +65,9 @@ const add = (req, res) => {
 
 // TODO validations (length, format...)
 const destroy = (req, res) => {
+  const id = parseInt(req.params.id, 10);
   models.availability
-    .delete(req.params.id)
+    .deleteAvailability(id)
     .then(([result]) => {
       if (result.affectedRows === 0) {
         res.sendStatus(404);

@@ -1,8 +1,11 @@
 import React, { useEffect, useState } from "react";
 import api from "@services/services";
 
-function AvailabilitySlot({ day }) {
-  console.error(day);
+function AvailabilitySlot({
+  day,
+  setIsAvailabilityModified,
+  isAvailabilityModified,
+}) {
   const [timeslotStart, setTimeslotStart] = useState();
   const [timeslotEnd, setTimeslotEnd] = useState();
 
@@ -24,6 +27,7 @@ function AvailabilitySlot({ day }) {
     api.post("/availability", availability).then((result) => {
       if (result.status === 201) {
         console.error("disponibilité ajouté avec succès");
+        setIsAvailabilityModified(!isAvailabilityModified);
       } else {
         console.error("Erreur lors de la création de la disponibilité");
       }

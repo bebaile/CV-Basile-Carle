@@ -11,6 +11,7 @@ router.post("/auth", authControllers.session);
 router.post("/logout", authControllers.logout);
 router.post("/availability", availabilityControllers.add);
 router.get("/availability", availabilityControllers.browse);
+router.delete("/availability/:id", availabilityControllers.destroy);
 
 module.exports = router;
 

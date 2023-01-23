@@ -35,6 +35,17 @@
   margin: 1rem;
 }
 
+#delete-availability {
+  background-color: black;
+  color: white;
+  border: 0;
+  width: 2ch;
+  height: 2ch;
+  border-radius: 50%;
+  padding: 0.1rem;
+  margin: 0 0.5rem;
+}
+
 .timeslot {
   display: flex;
 }
@@ -53,4 +64,11 @@ label {
   border: 0px;
   background-color: var(--button-color-3);
   border-radius: 5px;
+}
+
+@media screen and (max-width: 736px) {
+  .day-box {
+    flex-direction: column;
+    flex-wrap: wrap;
+  }
 }

@@ -7,13 +7,13 @@ function Admin() {
   // récupère les préférences de disponibilités
   const [availabilities, setAvailabilities] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [isAvailabilityModified, setIsAvailabilityModified] = useState();
 
   useEffect(() => {
     api.get("/availability").then((result) => {
       setAvailabilities(result.data);
-      console.error(result.data);
     });
-  }, []);
+  }, [isAvailabilityModified]);
 
   useEffect(() => {
     setIsLoading(false);
@@ -40,6 +40,8 @@ function Admin() {
                     day={day}
                     key={day}
                     availability={availability}
+                    setIsAvailabilityModified={setIsAvailabilityModified}
+                    isAvailabilityModified={isAvailabilityModified}
                   />
                 </div>
               );
