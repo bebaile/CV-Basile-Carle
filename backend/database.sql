@@ -128,6 +128,7 @@ CREATE TABLE IF NOT EXISTS `my_cv`.`user` (
   `password` VARCHAR(255) NOT NULL,
   `create_time` TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
   `company` VARCHAR(45) NULL,
+  `type` VARCHAR(15),
   `id_user` BINARY(48) NOT NULL,
   PRIMARY KEY (`id_user`),
   UNIQUE INDEX `id_user_UNIQUE` (`id_user` ASC) VISIBLE);

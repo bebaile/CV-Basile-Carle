@@ -81,7 +81,7 @@ function Login() {
               id="inscription"
               role="button"
               onClick={handleClick}
-              onKeyDown={handleClick}
+              onKeyDown={null}
               tabIndex="0"
             >
               {isSubscribing

@@ -9,7 +9,6 @@ function Admin() {
   const [availabilities, setAvailabilities] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isAvailabilityModified, setIsAvailabilityModified] = useState();
-  const [areUsersModified, setAreUsersModified] = useState();
 
   useEffect(() => {
     api.get("/availability").then((result) => {

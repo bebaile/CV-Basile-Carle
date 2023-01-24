@@ -6,20 +6,25 @@ import editIcon from "@assets/edit.png";
 function UsersList() {
   const [users, setUsers] = useState();
   const [areUsersModified, setAreUsersModified] = useState();
+  const [isLoading, setIsLoading] = useState(true);
+  const [isEdited, setIsEdited] = useState({ email: "", visible: false });
 
   useEffect(() => {
     api.get("/users").then((result) => {
       if (result.status === 500) {
         console.error("Erreur de communication avec la base de données");
       } else {
-        console.error(result.data);
         setUsers(result.data);
       }
     });
   }, [areUsersModified]);
 
+  useEffect(() => {
+    if (typeof users !== "undefined" && typeof isEdited !== "undefined")
+      setIsLoading(false);
+  }, [users, isEdited]);
+
   const handleDelete = (email) => {
-    console.error(email);
     api.delete(`/users/${email}`).then((result) => {
       console.error(result);
       setAreUsersModified(true);
@@ -27,62 +32,172 @@ function UsersList() {
   };
 
   const handleEdit = (email) => {
-    console.error(email);
+    setIsEdited({
+      email,
+      visible: !isEdited.visible,
+    });
+    if (isEdited.visible === true) {
+      api
+        .put(`/users/${email}`, {
+          username: document.querySelector("#login").value,
+          email: document.querySelector("#email").value,
+          company: document.querySelector("#company").value,
+        })
+        .then((result) => {
+          if (result.status === 404 || result.status === 500) {
+            console.error(`Erreur ${result.status} : utilisateur non modifié`);
+          } else {
+            console.error(`Utilisateur bien modifié`);
+            setAreUsersModified(true);
+          }
+          console.error(result);
+        });
+    }
   };
 
   return (
     <div>
-      <table>
-        <thead>
-          <tr>
-            <th>Login</th>
-            <th>Courriel</th>
-            <th>Entreprise</th>
-            <th># Messages</th>
-            <th>Edit</th>
-            <th>X</th>
-          </tr>
-        </thead>
-        {users.map((user) => {
-          return (
+      {isLoading ? (
+        "Chargement ..."
+      ) : (
+        <table>
+          <thead>
             <tr>
-              <td>{user.username}</td>
-              <td>{user.email}</td>
-              <td>{user.company}</td>
-              <td>nbre de messages (tbi)</td>
-              <td className="edit">
-                <div
-                  name={user.id_user}
-                  role="button"
-                  onClick={() => handleEdit(user.email)}
-                  onKeyDown={null}
-                  tabIndex="0"
-                >
-                  <img
-                    src={editIcon}
-                    id="edit-icn"
-                    alt="Delete by mim studio from Noun Project"
-                  />
-                </div>
-              </td>
-              <td className="delete">
-                <div
-                  role="button"
-                  onClick={() => handleDelete(user.email)}
-                  onKeyDown={null}
-                  tabIndex="0"
-                >
-                  <img
-                    src={deleteIcon}
-                    id="delete-icn"
-                    alt="Delete by mim studio from Noun Project"
-                  />
-                </div>
-              </td>
+              <th>Login</th>
+              <th>Courriel</th>
+              <th>Entreprise</th>
+              <th># Messages</th>
+              <th>Edit</th>
+              <th>X</th>
             </tr>
-          );
-        })}
-      </table>
+          </thead>
+          <tbody>
+            {users.map((user) => {
+              return (
+                <tr key={user.email}>
+                  <td>
+                    <span
+                      className={
+                        isEdited.email === user.email &&
+                        isEdited.visible === true
+                          ? "_edit"
+                          : null
+                      }
+                    >
+                      {user.username}
+                    </span>
+                    <span
+                      className={
+                        isEdited.email === user.email &&
+                        isEdited.visible === true
+                          ? null
+                          : "_edit"
+                      }
+                    >
+                      <input
+                        type="text"
+                        name="login"
+                        id="login"
+                        defaultValue={user.username}
+                      />
+                    </span>
+                  </td>
+                  <td>
+                    <span
+                      className={
+                        isEdited.email === user.email &&
+                        isEdited.visible === true
+                          ? "_edit"
+                          : null
+                      }
+                    >
+                      {user.email}
+                    </span>
+                    <span
+                      className={
+                        isEdited.email === user.email &&
+                        isEdited.visible === true
+                          ? null
+                          : "_edit"
+                      }
+                    >
+                      <input
+                        type="text"
+                        name="email"
+                        id="email"
+                        defaultValue={user.email}
+                      />
+                    </span>
+                  </td>
+                  <td>
+                    <span
+                      className={
+                        isEdited.email === user.email &&
+                        isEdited.visible === true
+                          ? "_edit"
+                          : null
+                      }
+                    >
+                      {user.company}
+                    </span>
+                    <span
+                      className={
+                        isEdited.email === user.email &&
+                        isEdited.visible === true
+                          ? null
+                          : "_edit"
+                      }
+                    >
+                      <input
+                        type="text"
+                        name="company"
+                        id="company"
+                        defaultValue={user.company}
+                      />
+                    </span>
+                  </td>
+                  <td>nbre de messages (tbi)</td>
+                  <td className="edit">
+                    <div
+                      name={user.id_user}
+                      role="button"
+                      onClick={() => handleEdit(user.email)}
+                      onKeyDown={null}
+                      tabIndex="0"
+                      className={
+                        isEdited.visible === true &&
+                        isEdited.email === user.email
+                          ? "edited"
+                          : null
+                      }
+                    >
+                      <img
+                        src={editIcon}
+                        id="edit-icn"
+                        alt="Delete by mim studio from Noun Project"
+                      />
+                    </div>
+                  </td>
+                  <td className="delete">
+                    <div
+                      role="button"
+                      onClick={() => handleDelete(user.email)}
+                      onKeyDown={null}
+                      tabIndex="0"
+                    >
+                      <img
+                        src={deleteIcon}
+                        id="delete-icn"
+                        alt="Delete by mim studio from Noun Project"
+                      />
+                    </div>
+                  </td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+      )}
     </div>
   );
 }

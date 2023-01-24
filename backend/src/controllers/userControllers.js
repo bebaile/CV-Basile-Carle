@@ -34,7 +34,7 @@ const edit = (req, res) => {
 
   // TODO validations (length, format...)
 
-  item.id = parseInt(req.params.id, 10);
+  item.id = req.params.id;
 
   models.user
     .update(item)

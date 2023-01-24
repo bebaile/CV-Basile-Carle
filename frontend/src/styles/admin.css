@@ -112,6 +112,23 @@ td {
   padding: 0.5rem 0.25rem;
 }
 
+._edit {
+  display: none;
+}
+
+#login {
+  width: 10ch;
+}
+
+#email {
+  width: 25ch;
+}
+
+#company {
+  min-width: 5ch;
+  max-width: 10ch;
+}
+
 .edit,
 .delete {
   text-align: center;
@@ -125,4 +142,13 @@ td {
 #delete-icn,
 #edit-icn {
   width: 1rem;
+}
+
+.edited {
+  background-color: var(--button-color-3);
+  padding: 0.25rem;
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
