@@ -23,9 +23,17 @@ function DaysAvailability({
     <div className="day-box">
       <div className="dispo-by-day">
         {availability.map((dispo) => {
+          const { start, end } = dispo;
+          const debut = start.split("");
+          debut.splice(5, 3);
+          const fin = end.split("");
+          fin.splice(5, 3);
+
+          console.error(debut, fin);
+
           return (
             <div key={dispo.idavailability}>
-              De {dispo.start} à {dispo.end}
+              De {debut.join("")} à {fin.join("")}
               <button
                 id="delete-availability"
                 type="button"
