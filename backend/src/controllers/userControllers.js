@@ -71,7 +71,7 @@ const add = (req, res) => {
 
 const destroy = (req, res) => {
   models.user
-    .delete(req.params.id)
+    .deleteByEmail(req.params.id)
     .then(([result]) => {
       if (result.affectedRows === 0) {
         res.sendStatus(404);

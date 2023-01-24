@@ -28,6 +28,12 @@ class UserManager extends AbstractManager {
       [login]
     );
   }
+
+  deleteByEmail(id) {
+    return this.connection.query(`DELETE FROM ${this.table} WHERE email = ?`, [
+      id,
+    ]);
+  }
 }
 
 module.exports = UserManager;

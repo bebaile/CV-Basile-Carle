@@ -29,8 +29,6 @@ function DaysAvailability({
           const fin = end.split("");
           fin.splice(5, 3);
 
-          console.error(debut, fin);
-
           return (
             <div key={dispo.idavailability}>
               De {debut.join("")} à {fin.join("")}
