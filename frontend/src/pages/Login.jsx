@@ -6,7 +6,7 @@ import Context from "../context/Context";
 import "../styles/login.css";
 
 function Login() {
-  const { setIsConnected } = useContext(Context);
+  const { setIsConnected, setInfoUser } = useContext(Context);
   const [isSubscribing, setIsSubscribing] = useState(false);
   const [arePasswordEqual, setArePasswordEqual] = useState(true);
 
@@ -58,9 +58,21 @@ function Login() {
           password: document.querySelector("#password").value,
         })
         .then((result) => {
-          console.error(result.data);
           setIsConnected(true);
-          navigate("/");
+          setInfoUser({
+            email: result.data.email,
+            company: result.data.company,
+            type: result.data.type,
+          });
+          sessionStorage.setItem("email", result.data.email);
+          sessionStorage.setItem("company", result.data.company);
+          sessionStorage.setItem("type", result.data.type);
+          sessionStorage.setItem("isConnected", true);
+          if (result.data.type === "admin") {
+            navigate("/admin");
+          } else {
+            navigate("/");
+          }
         });
     }
   };

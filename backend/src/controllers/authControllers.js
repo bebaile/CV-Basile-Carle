@@ -11,8 +11,8 @@ const session = (req, res) => {
       } else {
         verifyPassword(password, rows[0][0].password).then((isVerified) => {
           if (isVerified) {
-            const { username, email, company } = rows[0][0];
-            const token = createToken({ username, email, company });
+            const { username, email, company, type } = rows[0][0];
+            const token = createToken({ username, email, company, type });
             res
               .status(201)
               .cookie("user_token", token, {
@@ -24,6 +24,7 @@ const session = (req, res) => {
                 cookie: token,
                 email,
                 company,
+                type,
               });
           } else {
             res.status(401).send("Login ou mot de passe incorrect(s)");

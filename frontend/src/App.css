@@ -52,6 +52,17 @@
   color: var(--title-color);
 }
 
+#name {
+  display: flex;
+  align-items: center;
+}
+
+#cv-img {
+  width: 1rem;
+  float: left;
+  margin-right: 0.5rem;
+}
+
 .title h1 {
   font-size: 1.5rem;
 }
