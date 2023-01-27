@@ -27,6 +27,7 @@
   text-align: center;
   font-weight: bold;
   color: rgba(0, 0, 0, 0.313);
+  padding: 1rem;
 }
 
 #inscription:hover {
@@ -34,14 +35,18 @@
   cursor: pointer;
 }
 
+form {
+  margin: 0 1rem;
+}
+
 label {
+  margin: 1rem;
   display: flex;
   justify-content: space-between;
-  margin: 1rem;
 }
 
 input {
-  margin: 0 1rem;
+  margin: 0.25rem;
   border-radius: 5px;
   padding: 0.1rem;
 }
@@ -71,7 +76,7 @@ input {
   font-weight: 600;
   line-height: 20px;
   padding: 1px 10px;
-  margin: 0;
+  margin: 1rem;
   position: relative;
   text-align: center;
   text-decoration: none;

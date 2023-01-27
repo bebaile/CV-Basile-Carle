@@ -34,7 +34,7 @@ const edit = (req, res) => {
 
   // TODO validations (length, format...)
 
-  item.id = parseInt(req.params.id, 10);
+  item.id = req.params.id;
 
   models.user
     .update(item)
@@ -71,7 +71,7 @@ const add = (req, res) => {
 
 const destroy = (req, res) => {
   models.user
-    .delete(req.params.id)
+    .deleteByEmail(req.params.id)
     .then(([result]) => {
       if (result.affectedRows === 0) {
         res.sendStatus(404);

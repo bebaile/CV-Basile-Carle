@@ -30,10 +30,10 @@ function Login() {
       } else {
         api
           .post("/users/create", {
-            username: document.querySelector("#login").value,
-            email: document.querySelector("#email").value,
+            username: document.querySelector("#log-in").value,
+            email: document.querySelector("#courriel").value,
             password: document.querySelector("#password").value,
-            company: document.querySelector("#company").value,
+            company: document.querySelector("#entreprise").value,
           })
           .then((result) => {
             if (result.data === "Created") {
@@ -54,7 +54,7 @@ function Login() {
     else {
       api
         .post("/auth", {
-          login: document.querySelector("#login").value,
+          login: document.querySelector("#log-in").value,
           password: document.querySelector("#password").value,
         })
         .then((result) => {
@@ -81,7 +81,7 @@ function Login() {
               id="inscription"
               role="button"
               onClick={handleClick}
-              onKeyDown={handleClick}
+              onKeyDown={null}
               tabIndex="0"
             >
               {isSubscribing
@@ -89,24 +89,24 @@ function Login() {
                 : "> Je souhaite m'inscrire"}
             </div>
             <form>
-              <label htmlFor="login">
+              <label htmlFor="log-in">
                 <div>Login :</div>
                 <div>
-                  <input type="text" id="login" name="login" />
+                  <input type="text" id="log-in" name="log-in" />
                 </div>
               </label>
               {isSubscribing ? (
                 <div>
-                  <label htmlFor="email">
+                  <label htmlFor="courriel">
                     <div>Courriel :</div>
                     <div>
-                      <input type="text" id="email" name="email" />
+                      <input type="text" id="courriel" name="courriel" />
                     </div>
                   </label>
-                  <label htmlFor="company">
+                  <label htmlFor="entreprise">
                     <div>Entreprise :</div>
                     <div>
-                      <input type="text" id="company" name="company" />
+                      <input type="text" id="entreprise" name="entreprise" />
                     </div>
                   </label>
                 </div>

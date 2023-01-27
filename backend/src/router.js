@@ -7,6 +7,8 @@ const router = express.Router();
 
 router.get("/users", userControllers.browse);
 router.post("/users/create", userControllers.add);
+router.delete("/users/:id", userControllers.destroy);
+router.put("/users/:id", userControllers.edit);
 router.post("/auth", authControllers.session);
 router.post("/logout", authControllers.logout);
 router.post("/availability", availabilityControllers.add);

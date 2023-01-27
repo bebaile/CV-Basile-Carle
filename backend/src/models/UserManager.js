@@ -17,8 +17,8 @@ class UserManager extends AbstractManager {
 
   update(item) {
     return this.connection.query(
-      `update ${this.table} set title = ? where id = ?`,
-      [item.title, item.id]
+      `update ${this.table} SET username = ?, email = ?, company = ? WHERE email = ?`,
+      [item.username, item.email, item.company, item.id]
     );
   }
 
@@ -27,6 +27,12 @@ class UserManager extends AbstractManager {
       `SELECT * FROM ${this.table} WHERE username = ?`,
       [login]
     );
+  }
+
+  deleteByEmail(id) {
+    return this.connection.query(`DELETE FROM ${this.table} WHERE email = ?`, [
+      id,
+    ]);
   }
 }
 

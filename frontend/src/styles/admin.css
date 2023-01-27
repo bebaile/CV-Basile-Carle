@@ -2,9 +2,10 @@
   --content-width: clamp(375px, 1024px, 100vw - 1rem);
 }
 
-.availability-pref {
+.availability-pref,
+.user-admin {
   width: var(--content-width);
-  border: 1px solid gray;
+  border: 1px solid rgba(128, 128, 128, 0.594);
   width: var(--content-width);
   min-width: 375px - 1rem;
   max-width: 1024px;
@@ -13,9 +14,7 @@
   padding: 1rem;
 }
 
-#select-availability-box {
-}
-
+/* Partie availability */
 .day-box {
   display: flex;
   align-items: center;
@@ -56,7 +55,9 @@ label {
   align-items: center;
 }
 
-.add-timeslot-btn {
+.add-timeslot-btn,
+.cancel-delete-btn,
+.confirm-delete-btn {
   margin: 1rem;
   padding: 0.25rem 1rem;
   border-radius: 5px;
@@ -71,4 +72,95 @@ label {
     flex-direction: column;
     flex-wrap: wrap;
   }
+}
+
+/* Partie userlist */
+
+table {
+  table-layout: fixed;
+  margin: 1rem auto;
+  padding: 0.25rem;
+  width: 100%;
+  text-align: left;
+  border-collapse: collapse;
+  border: 1px solid var(--title-color);
+}
+
+thead {
+  background-color: var(--title-color);
+  color: white;
+}
+
+thead th:nth-child(1) {
+  width: 10ch;
+}
+thead th:nth-child(2) {
+  width: 25ch;
+}
+thead th:nth-child(5) {
+  width: 2.5rem;
+  text-align: center;
+}
+thead th:nth-child(6) {
+  text-align: center;
+  width: 2rem;
+}
+
+th {
+  padding: 0.25rem;
+}
+
+td {
+  padding: 0.5rem 0.25rem;
+}
+
+._edit {
+  display: none;
+}
+
+#login {
+  width: 10ch;
+}
+
+#email {
+  width: 25ch;
+}
+
+#company {
+  min-width: 5ch;
+  max-width: 10ch;
+}
+
+.edit,
+.delete {
+  text-align: center;
+}
+
+.edit:hover,
+.delete:hover {
+  cursor: pointer;
+}
+
+#delete-icn,
+#edit-icn {
+  width: 1rem;
+}
+
+.edited {
+  background-color: var(--button-color-3);
+  padding: 0.25rem;
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.delete-msg {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.confirm-delete-btn {
+  background-color: var(--button-color);
 }
