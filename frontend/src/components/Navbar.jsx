@@ -24,8 +24,11 @@ function Navbar() {
       navigate("/login");
     } else {
       api.post("/logout").then((result) => {
-        setIsConnected(false);
         console.error(result);
+        setIsConnected(false);
+        sessionStorage.clear("email");
+        sessionStorage.clear("company");
+        sessionStorage.clear("type");
       });
     }
   };
