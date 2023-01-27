@@ -44,7 +44,7 @@ function Navbar() {
               id="login-btn"
               role="button"
               onClick={handleLogin}
-              onKeyDown={handleLogin}
+              onKeyDown={null}
               tabIndex="0"
             >
               <img
