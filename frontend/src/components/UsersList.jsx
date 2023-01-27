@@ -2,12 +2,16 @@ import React, { useEffect, useState } from "react";
 import api from "@services/services";
 import deleteIcon from "@assets/delete.png";
 import editIcon from "@assets/edit.png";
+import ConfirmDeleteUser from "./ConfirmDeleteUser";
 
 function UsersList() {
   const [users, setUsers] = useState();
   const [areUsersModified, setAreUsersModified] = useState();
   const [isLoading, setIsLoading] = useState(true);
   const [isEdited, setIsEdited] = useState({ email: "", visible: false });
+  const [isDeleteConfirmationDisplayed, setIsDeleteConfirmationDisplayed] =
+    useState(false);
+  const [userToDelete, setUserToDelete] = useState("");
 
   useEffect(() => {
     api.get("/users").then((result) => {
@@ -24,9 +28,21 @@ function UsersList() {
       setIsLoading(false);
   }, [users, isEdited]);
 
-  const handleDelete = (email) => {
+  const displayDeleteConfirmation = (email) => {
+    setIsDeleteConfirmationDisplayed(true);
+    setUserToDelete(email);
+  };
+
+  const handleCancelDelete = () => {
+    setIsDeleteConfirmationDisplayed(false);
+  };
+
+  const handleDelete = (e) => {
+    const email = e.currentTarget.getAttribute("data-value");
+    console.error(email);
     api.delete(`/users/${email}`).then((result) => {
       console.error(result);
+      setIsDeleteConfirmationDisplayed(false);
       setAreUsersModified(true);
     });
   };
@@ -181,7 +197,7 @@ function UsersList() {
                   <td className="delete">
                     <div
                       role="button"
-                      onClick={() => handleDelete(user.email)}
+                      onClick={() => displayDeleteConfirmation(user.email)}
                       onKeyDown={null}
                       tabIndex="0"
                     >
@@ -197,6 +213,15 @@ function UsersList() {
             })}
           </tbody>
         </table>
+      )}
+      {isDeleteConfirmationDisplayed ? (
+        <ConfirmDeleteUser
+          userToDelete={userToDelete}
+          handleDelete={handleDelete}
+          handleCancelDelete={handleCancelDelete}
+        />
+      ) : (
+        ""
       )}
     </div>
   );

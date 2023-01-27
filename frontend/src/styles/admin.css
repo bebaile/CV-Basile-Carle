@@ -55,7 +55,9 @@ label {
   align-items: center;
 }
 
-.add-timeslot-btn {
+.add-timeslot-btn,
+.cancel-delete-btn,
+.confirm-delete-btn {
   margin: 1rem;
   padding: 0.25rem 1rem;
   border-radius: 5px;
@@ -151,4 +153,14 @@ td {
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+.delete-msg {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.confirm-delete-btn {
+  background-color: var(--button-color);
 }
