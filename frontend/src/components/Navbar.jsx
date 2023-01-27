@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import api from "@services/services";
 import login from "@assets/login.png";
 import logout from "@assets/logout.png";
+import cv from "@assets/cv.png";
 import Context from "../context/Context";
 
 function Navbar() {
@@ -29,6 +30,8 @@ function Navbar() {
         sessionStorage.clear("email");
         sessionStorage.clear("company");
         sessionStorage.clear("type");
+        sessionStorage.clear("isConnected");
+        navigate("/");
       });
     }
   };
@@ -38,8 +41,19 @@ function Navbar() {
       <div id={isNavBarVisible ? "opacity-navbar" : null} />
       <div className={isNavBarVisible ? "navbar" : "hidden-navbar"}>
         <strong className="title">
-          <div>
-            <h1>Basile CARLE</h1>
+          <div id="name">
+            <div>
+              <a href="/">
+                <img
+                  src={cv}
+                  alt="retour à la page de présentation du cv - CV by Uswa KDT from Noun Project"
+                  id="cv-img"
+                />
+              </a>
+            </div>
+            <div>
+              <h1>Basile CARLE</h1>
+            </div>
           </div>
           <div id="rightPart-navbar">
             <div>Développeur junior Fullstack</div>

@@ -67,7 +67,12 @@ function Login() {
           sessionStorage.setItem("email", result.data.email);
           sessionStorage.setItem("company", result.data.company);
           sessionStorage.setItem("type", result.data.type);
-          navigate("/");
+          sessionStorage.setItem("isConnected", true);
+          if (result.data.type === "admin") {
+            navigate("/admin");
+          } else {
+            navigate("/");
+          }
         });
     }
   };
