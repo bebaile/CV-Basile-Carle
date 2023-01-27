@@ -1,5 +1,5 @@
 import React, { useState, useContext } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import api from "@services/services";
 import login from "@assets/login.png";
 import logout from "@assets/logout.png";
@@ -8,6 +8,8 @@ import Context from "../context/Context";
 
 function Navbar() {
   const { isConnected, setIsConnected } = useContext(Context);
+  const location = useLocation();
+  console.error(location);
 
   // cache la barre de navigation quand l'utilisateur défile
   const [isNavBarVisible, setIsNavBarVisible] = useState(true);
@@ -20,6 +22,7 @@ function Navbar() {
 
   const navigate = useNavigate();
 
+  // Si l'utilisateur est connecté, déconnexion, sinon, direction page de login
   const handleLogin = () => {
     if (!isConnected) {
       navigate("/login");
@@ -43,13 +46,18 @@ function Navbar() {
         <strong className="title">
           <div id="name">
             <div>
-              <a href="/">
-                <img
-                  src={cv}
-                  alt="retour à la page de présentation du cv - CV by Uswa KDT from Noun Project"
-                  id="cv-img"
-                />
-              </a>
+              {location.pathname === "/" ? null : (
+                <>
+                  <a href="/">
+                    <img
+                      src={cv}
+                      alt="retour à la page de présentation du cv - CV by Uswa KDT from Noun Project"
+                      id="cv-img"
+                    />
+                  </a>
+                  <span>Retour au CV</span>
+                </>
+              )}
             </div>
             <div>
               <h1>Basile CARLE</h1>
