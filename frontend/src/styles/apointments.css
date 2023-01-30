@@ -1,0 +1,78 @@
+.user-interaction {
+  border: var(--border-area-style);
+  border-radius: 5px;
+  width: var(--content-width);
+  padding: 1rem;
+  margin: 1rem;
+  min-width: 375px - 1rem;
+  max-width: 1024px;
+}
+
+#input-area {
+  display: flex;
+}
+
+.interaction-box {
+  margin: 0 0.5rem;
+}
+
+h2 {
+  font-weight: bold;
+  font-size: 1rem;
+  margin-bottom: 0.5rem;
+  padding-left: 0.2rem;
+  color: var(--button-color-3);
+}
+
+input {
+  border: var(--border-area-style);
+}
+
+/* messages area */
+
+.references {
+  width: 10ch;
+  border: var(--border-area-style);
+  padding: 0.2rem;
+}
+
+.interaction-box form {
+  margin: 0;
+}
+
+#messages form {
+  display: grid;
+  grid-template-columns: repeat(3, 10ch);
+  grid-template-rows: 1fr 2fr;
+}
+
+[for="message-input"] {
+  grid-column-start: 1;
+  grid-column-end: 4;
+}
+
+#message-input {
+  margin: 0 0.2rem;
+  width: 100%;
+  height: 100%;
+  border-radius: 5px;
+  padding: 0.5rem;
+  border: var(--border-area-style);
+}
+
+/* Calendrier */
+
+#calender,
+#messages,
+#timeslot {
+  padding: 0.25rem;
+}
+
+/* gestion des étapes */
+
+#next-step {
+  padding: 0.2rem 0.5rem;
+  margin: 1rem;
+  font-size: 0.8rem;
+  font-weight: normal;
+}
