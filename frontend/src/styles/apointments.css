@@ -1,8 +1,8 @@
 .user-interaction {
   border: var(--border-area-style);
   border-radius: 5px;
-  width: var(--content-width);
-  padding: 1rem;
+  width: calc(var(--content-width)- 0.5rem);
+  padding: 0.5rem 0;
   margin: 1rem;
   min-width: 375px - 1rem;
   max-width: 1024px;
@@ -71,8 +71,12 @@ input {
 /* gestion des étapes */
 
 #next-step {
-  padding: 0.2rem 0.5rem;
+  padding: 0 0.5rem;
   margin: 1rem;
   font-size: 0.8rem;
   font-weight: normal;
+}
+
+.invisible {
+  display: none;
 }

@@ -43,7 +43,7 @@ function Navbar() {
       <div id={isNavBarVisible ? "opacity-navbar" : null} />
       <div className={isNavBarVisible ? "navbar" : "hidden-navbar"}>
         <strong className="title">
-          <div id="name">
+          <div id="name-title">
             <div>
               {location.pathname === "/" ? null : (
                 <>

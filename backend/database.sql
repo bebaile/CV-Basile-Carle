@@ -72,7 +72,7 @@ CREATE TABLE IF NOT EXISTS `my_cv`.`messages` (
   `username` VARCHAR(16) NULL,
   `create_time` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `meeting_request_idmeeting_request` INT NOT NULL,
-  `user_id_user` BINARY(16) NOT NULL,
+  `user_id_user` BINARY(48) NOT NULL,
   PRIMARY KEY (`id`, `user_id_user`),
   UNIQUE INDEX `id_UNIQUE` (`id` ASC) VISIBLE,
   INDEX `fk_messages_meeting_request1_idx` (`meeting_request_idmeeting_request` ASC) VISIBLE,

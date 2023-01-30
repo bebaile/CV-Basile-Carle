@@ -53,7 +53,7 @@
   color: var(--title-color);
 }
 
-#name {
+#name-title {
   display: flex;
   align-items: center;
 }
