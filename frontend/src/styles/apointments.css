@@ -31,7 +31,7 @@ input {
 /* messages area */
 
 .references {
-  width: 10ch;
+  width: 12ch;
   border: var(--border-area-style);
   padding: 0.2rem;
 }
@@ -42,18 +42,18 @@ input {
 
 #messages form {
   display: grid;
-  grid-template-columns: repeat(3, 10ch);
-  grid-template-rows: 1fr 2fr;
+  grid-template-columns: repeat(2, 12ch);
+  grid-template-rows: 1fr 1fr;
 }
 
 [for="message-input"] {
   grid-column-start: 1;
-  grid-column-end: 4;
+  grid-column-end: 3;
 }
 
 #message-input {
-  margin: 0 0.2rem;
-  width: 100%;
+  margin: 1rem 0.2rem 0 0.2rem;
+  width: calc(100% - 0.6rem);
   height: 100%;
   border-radius: 5px;
   padding: 0.5rem;

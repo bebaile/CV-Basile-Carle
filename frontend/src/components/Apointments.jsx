@@ -21,9 +21,7 @@ function Apointments() {
 
   //   on attend que availability soit chargé pour le rendering
   useEffect(() => {
-    if (typeof availability === "undefined") {
-      console.error("Disponibilités en cours de chargement");
-    } else {
+    if (typeof availability !== "undefined") {
       setIsAvailabilityLoading(false);
     }
   }, [availability]);
@@ -32,14 +30,32 @@ function Apointments() {
     console.error({
       name: document.querySelector("#name").value,
       firstname: document.querySelector("#firstname").value,
-      company: document.querySelector("#company").value,
+      company: document.querySelector("#entreprise").value,
       message: document.querySelector("#message-input").value,
       next_step: 2,
     });
+    api
+      .post("/messages", {
+        name: document.querySelector("#name").value,
+        firstname: document.querySelector("#firstname").value,
+        lastname: document.querySelector("#name").value,
+        email: document.querySelector("#courriel").value,
+        company: document.querySelector("#entreprise").value,
+        message: document.querySelector("#message-input").value,
+      })
+      .then((result) => {
+        if (result.status === 201) {
+          console.error("Le message a bien été envoyé");
+        }
+        if (result.status === 201) {
+          console.error("Le message a bien été envoyé");
+        }
+      });
     setMessage({
       name: document.querySelector("#name").value,
       firstname: document.querySelector("#firstname").value,
-      company: document.querySelector("#company").value,
+      email: document.querySelector("#courriel").value,
+      company: document.querySelector("#entreprise").value,
       message: document.querySelector("#message-input").value,
       next_step: 2,
     });
@@ -111,7 +127,7 @@ function Apointments() {
                   type="text"
                   id="name"
                   name="name"
-                  placeholder="Nom"
+                  defaultValue={sessionStorage.getItem("lastname") ?? "Nom"}
                   className="references"
                 />
               </label>
@@ -120,16 +136,27 @@ function Apointments() {
                   type="text"
                   id="firstname"
                   name="firstname"
-                  placeholder="Prénom"
+                  defaultValue={sessionStorage.getItem("firstname") ?? "Prénom"}
                   className="references"
                 />
               </label>
-              <label htmlFor="company">
+              <label htmlFor="courriel">
                 <input
                   type="text"
-                  id="company"
-                  name="company"
-                  placeholder="Entreprise"
+                  id="courriel"
+                  name="courriel"
+                  defaultValue={sessionStorage.getItem("email") ?? "email"}
+                  className="references"
+                />
+              </label>
+              <label htmlFor="entreprise">
+                <input
+                  type="text"
+                  id="entreprise"
+                  name="entreprise"
+                  defaultValue={
+                    sessionStorage.getItem("company") ?? "Entreprise"
+                  }
                   className="references"
                 />
               </label>

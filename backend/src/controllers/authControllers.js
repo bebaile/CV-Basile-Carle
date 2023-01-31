@@ -6,7 +6,7 @@ const session = (req, res) => {
   models.user
     .findByLogin(email)
     .then((rows) => {
-      if (rows === 0) {
+      if (rows === 0 || rows[0][0].type === "guest") {
         res.status(401).send("login ou mot de passe incorrect");
       } else {
         verifyPassword(password, rows[0][0].password).then((isVerified) => {

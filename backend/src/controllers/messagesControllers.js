@@ -1,4 +1,5 @@
 const models = require("../models");
+const { hashPassword, returnUuid } = require("../helpers/auth");
 
 const browse = (req, res) => {
   models.messages
@@ -51,24 +52,57 @@ const edit = (req, res) => {
 };
 
 const add = (req, res) => {
-  // Dans ce req.body, on a message, un objet constitué de
-  // {
-  //  name, firstname, company => table user
-  //  message => table message
-  //    INSERT INTO THIS TABLE (message)
-  //  date, timeslot => datetime => + duration + location (default values pour le moment) => messages
-  //
+  const { firstname, lastname, email, company, message } = req.body;
 
-  const { name, firstname, company, message, date, timeslot } = req.body;
-  models.messages
-    .insert(messages)
-    .then(([result]) => {
-      res.location(`/messagess/${result.insertId}`).sendStatus(201);
-    })
-    .catch((err) => {
-      console.error(err);
-      res.sendStatus(500);
-    });
+  models.user.findIdByEmail(email).then((result) => {
+    if (result[0][0] == null) {
+      // si aucun id n'est retourné, c'est que l'utilisateur n'existe pas,
+      // on va donc créer un utilisateur mais qui ne pourra
+      // pas se loguer
+
+      hashPassword(firstname + email).then((defaultPassword) => {
+        const idUser = returnUuid();
+        const user = {
+          id: idUser,
+          password: defaultPassword,
+          firstname,
+          lastname,
+          email,
+          company,
+          type: "guest",
+        };
+        models.user.insertGuest(user).then((reponse) => {
+          if (reponse[0].affectedRows === 1) {
+            models.messages
+              .insert({ message, idUser })
+              .then(([createdUser]) => {
+                res
+                  .location(`/messages/${createdUser.insertId}`)
+                  .sendStatus(201);
+              });
+          } else {
+            res.sendStatus(404);
+          }
+        });
+      });
+    } else {
+      const idUser = result[0][0].id_user;
+      models.messages.insert({ message, idUser }).then(([reponse]) => {
+        console.error(reponse);
+        res.location(`/messages/${result.insertId}`).sendStatus(201);
+      });
+    }
+  });
+
+  // models.messages
+  //   .insert(req.body)
+  //   .then(([result]) => {
+  //     res.location(`/messagess/${result.insertId}`).sendStatus(201);
+  //   })
+  //   .catch((err) => {
+  //     console.error(err);
+  //     res.sendStatus(500);
+  //   });
 };
 
 // TODO validations (length, format...)

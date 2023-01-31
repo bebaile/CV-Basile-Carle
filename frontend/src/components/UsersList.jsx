@@ -53,9 +53,10 @@ function UsersList() {
       visible: !isEdited.visible,
     });
     if (isEdited.visible === true) {
+      console.error(document.querySelector("#prenom").value);
       api
         .put(`/users/${email}`, {
-          username: document.querySelector("#login").value,
+          firstname: document.querySelector("#prenom").value,
           email: document.querySelector("#email").value,
           company: document.querySelector("#company").value,
         })
@@ -79,7 +80,7 @@ function UsersList() {
         <table>
           <thead>
             <tr>
-              <th>Login</th>
+              <th>Prénom</th>
               <th>Courriel</th>
               <th>Entreprise</th>
               <th># Messages</th>
@@ -100,7 +101,7 @@ function UsersList() {
                           : null
                       }
                     >
-                      {user.username}
+                      {user.firstname}
                     </span>
                     <span
                       className={
@@ -112,9 +113,9 @@ function UsersList() {
                     >
                       <input
                         type="text"
-                        name="login"
-                        id="login"
-                        defaultValue={user.username}
+                        name="prenom"
+                        id="prenom"
+                        defaultValue={user.firstname}
                       />
                     </span>
                   </td>

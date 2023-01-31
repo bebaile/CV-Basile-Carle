@@ -8,8 +8,8 @@ class MessagesManager extends AbstractManager {
   // création d'un utilisateur
   insert(item) {
     return this.connection.query(
-      `insert into ${this.table} (id_user, username, email, password, company) values (?,?,?,?,?)`,
-      [uuid, item.username, item.email, item.password, item.company]
+      `insert into ${this.table} (message, user_id_user) values (?,?)`,
+      [item.message, item.idUser]
     );
   }
 
