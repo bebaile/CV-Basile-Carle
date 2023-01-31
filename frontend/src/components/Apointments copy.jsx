@@ -4,9 +4,8 @@ import "../styles/apointments.css";
 
 function Apointments() {
   const [availability, setAvailability] = useState();
-  const [isAvailabilityLoading, setIsAvailabilityLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(true);
   const [message, setMessage] = useState({ next_step: 1 });
-  const [isVisible, setIsVisible] = useState({ visible: false, id: "" });
 
   // récupère les disponibilités
   useEffect(() => {
@@ -21,12 +20,12 @@ function Apointments() {
 
   //   on attend que availability soit chargé pour le rendering
   useEffect(() => {
-    if (typeof availability === "undefined") {
-      console.error("Disponibilités en cours de chargement");
-    } else {
-      setIsAvailabilityLoading(false);
-    }
+    setIsLoading(false);
   }, [availability]);
+
+  const test = () => {
+    console.error("jlhbljhbjhl");
+  };
 
   const handleMessage = () => {
     console.error({
@@ -66,17 +65,6 @@ function Apointments() {
     });
   };
 
-  const handleDisplayTimeSelection = (e) => {
-    console.error(typeof e.target.value);
-    setIsVisible({ visible: true, id: parseInt(e.target.value, 10) });
-  };
-
-  const handleSubmit = () => {
-    api.post("/message", message).then((result) => {
-      console.error(result);
-    });
-  };
-
   const handleDispatch = () => {
     console.error("dispatch");
     switch (message.next_step) {
@@ -88,9 +76,6 @@ function Apointments() {
         break;
       case 3:
         handleTimeslot();
-        break;
-      case 4:
-        handleSubmit();
         break;
       default:
         break;
@@ -161,40 +146,32 @@ function Apointments() {
           <div className="interaction-box" id="timeslot">
             <h2>Sélection créneau</h2>
             <form>
-              {isAvailabilityLoading
+              {isLoading
                 ? "Chargement des dispos ..."
                 : availability.map((avail) => {
                     const { idavailability, day, start, end } = avail;
 
                     return (
-                      <div key={idavailability}>
+                      <>
                         <label htmlFor={idavailability}>
                           <input
                             type="radio"
-                            name="disponibilité"
+                            name={idavailability}
                             id={idavailability}
                             value={idavailability}
-                            onChange={handleDisplayTimeSelection}
+                            onChange={test}
                           />
                           {day} : De {formatDate(start)} à {formatDate(end)}
                         </label>
-                        <label
-                          htmlFor={`proposed-timeslot-${idavailability}`}
-                          className={
-                            isVisible.visible === true &&
-                            isVisible.id === idavailability
-                              ? "visible"
-                              : "invisible"
-                          }
-                        >
+                        <label htmlFor={`proposed-timeslot-${idavailability}`}>
                           <input
                             type="time"
                             id={`proposed-timeslot-${idavailability}`}
                             name={`proposed-timeslot-${idavailability}`}
+                            className="invisible"
                           />
-                          <span>Créneau de 30 minutes</span>
                         </label>
-                      </div>
+                      </>
                     );
                   })}
             </form>

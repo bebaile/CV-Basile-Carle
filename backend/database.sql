@@ -69,7 +69,6 @@ DROP TABLE IF EXISTS `my_cv`.`messages` ;
 CREATE TABLE IF NOT EXISTS `my_cv`.`messages` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `message` VARCHAR(1024) NOT NULL,
-  `username` VARCHAR(16) NULL,
   `create_time` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `meeting_request_idmeeting_request` INT NOT NULL,
   `user_id_user` BINARY(48) NOT NULL,
@@ -123,12 +122,13 @@ ENGINE = InnoDB;
 DROP TABLE IF EXISTS `my_cv`.`user` ;
 
 CREATE TABLE IF NOT EXISTS `my_cv`.`user` (
-  `username` VARCHAR(16) NOT NULL,
   `email` VARCHAR(255) NULL,
   `password` VARCHAR(255) NOT NULL,
   `create_time` TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
   `company` VARCHAR(45) NULL,
   `type` VARCHAR(15),
+  `firstname` VARCHAR(25),
+  `lastname` VARCHAR(25),
   `id_user` BINARY(48) NOT NULL,
   PRIMARY KEY (`id_user`),
   UNIQUE INDEX `id_user_UNIQUE` (`id_user` ASC) VISIBLE);

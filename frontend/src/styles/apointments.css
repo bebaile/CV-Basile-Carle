@@ -80,3 +80,7 @@ input {
 .invisible {
   display: none;
 }
+
+.visible input {
+  margin: 0.5rem 1rem;
+}

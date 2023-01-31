@@ -2,6 +2,7 @@ const express = require("express");
 const userControllers = require("./controllers/userControllers");
 const authControllers = require("./controllers/authControllers");
 const availabilityControllers = require("./controllers/availabilityControllers");
+const messagesController = require("./controllers/messagesControllers");
 
 const router = express.Router();
 
@@ -15,6 +16,7 @@ router.post("/auth", authControllers.session);
 router.post("/logout", authControllers.logout);
 router.post("/availability", availabilityControllers.add);
 router.delete("/availability/:id", availabilityControllers.destroy);
+router.post("/messages", messagesController.add);
 
 module.exports = router;
 

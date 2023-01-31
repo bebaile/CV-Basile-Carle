@@ -1,8 +1,7 @@
 const models = require("../models");
-const { hashPassword } = require("../helpers/auth");
 
 const browse = (req, res) => {
-  models.user
+  models.messages
     .findAll()
     .then(([rows]) => {
       res.send(rows);
@@ -14,7 +13,7 @@ const browse = (req, res) => {
 };
 
 const read = (req, res) => {
-  models.user
+  models.messages
     .find(req.params.id)
     .then(([rows]) => {
       if (rows[0] == null) {
@@ -34,9 +33,9 @@ const edit = (req, res) => {
 
   // TODO validations (length, format...)
 
-  item.id = req.params.id;
+  item.id = parseInt(req.params.id, 10);
 
-  models.user
+  models.messages
     .update(item)
     .then(([result]) => {
       if (result.affectedRows === 0) {
@@ -52,24 +51,31 @@ const edit = (req, res) => {
 };
 
 const add = (req, res) => {
-  hashPassword(req.body.password).then((hashedPassword) => {
-    req.body.password = hashedPassword;
-    const user = req.body;
-    models.user
-      .insert(user)
-      .then(([result]) => {
-        res.location(`/users/${result.insertId}`).sendStatus(201);
-      })
-      .catch((err) => {
-        console.error(err);
-        res.sendStatus(500);
-      });
-  });
+  // Dans ce req.body, on a message, un objet constitué de
+  // {
+  //  name, firstname, company => table user
+  //  message => table message
+  //    INSERT INTO THIS TABLE (message)
+  //  date, timeslot => datetime => + duration + location (default values pour le moment) => messages
+  //
+
+  const { name, firstname, company, message, date, timeslot } = req.body;
+  models.messages
+    .insert(messages)
+    .then(([result]) => {
+      res.location(`/messagess/${result.insertId}`).sendStatus(201);
+    })
+    .catch((err) => {
+      console.error(err);
+      res.sendStatus(500);
+    });
 };
 
+// TODO validations (length, format...)
 const destroy = (req, res) => {
-  models.user
-    .deleteByEmail(req.params.id)
+  const id = parseInt(req.params.id, 10);
+  models.messages
+    .deletemessages(id)
     .then(([result]) => {
       if (result.affectedRows === 0) {
         res.sendStatus(404);

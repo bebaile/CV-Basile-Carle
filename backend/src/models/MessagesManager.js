@@ -1,24 +1,15 @@
 const AbstractManager = require("./AbstractManager");
-const { returnUuid } = require("../helpers/auth");
 
-class UserManager extends AbstractManager {
+class MessagesManager extends AbstractManager {
   constructor() {
-    super({ table: "user" });
+    super({ table: "messages" });
   }
 
   // création d'un utilisateur
   insert(item) {
-    const uuid = returnUuid();
     return this.connection.query(
-      `insert into ${this.table} (id_user, email, firstname, lastname, company, password) values (?,?,?,?,?,?)`,
-      [
-        uuid,
-        item.email,
-        item.firstname,
-        item.lastname,
-        item.company,
-        item.password,
-      ]
+      `insert into ${this.table} (id_user, username, email, password, company) values (?,?,?,?,?)`,
+      [uuid, item.username, item.email, item.password, item.company]
     );
   }
 
@@ -29,10 +20,10 @@ class UserManager extends AbstractManager {
     );
   }
 
-  findByLogin(email) {
+  findByLogin(login) {
     return this.connection.query(
-      `SELECT * FROM ${this.table} WHERE email = ?`,
-      [email]
+      `SELECT * FROM ${this.table} WHERE username = ?`,
+      [login]
     );
   }
 
@@ -43,4 +34,4 @@ class UserManager extends AbstractManager {
   }
 }
 
-module.exports = UserManager;
+module.exports = MessagesManager;
