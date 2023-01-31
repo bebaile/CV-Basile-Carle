@@ -22,16 +22,31 @@ class UserManager extends AbstractManager {
     );
   }
 
+  insertGuest(user) {
+    const uuid = returnUuid();
+    return this.connection.query(
+      `insert into ${this.table} (id_user, email, firstname, lastname, company, type) values (?,?,?,?,?,?)`,
+      [uuid, user.email, user.firstname, user.lastname, user.company, user.type]
+    );
+  }
+
   update(item) {
     return this.connection.query(
-      `update ${this.table} SET username = ?, email = ?, company = ? WHERE email = ?`,
-      [item.username, item.email, item.company, item.id]
+      `update ${this.table} SET firstname = ?, email = ?, company = ? WHERE email = ?`,
+      [item.firstname, item.email, item.company, item.id]
     );
   }
 
   findByLogin(email) {
     return this.connection.query(
       `SELECT * FROM ${this.table} WHERE email = ?`,
+      [email]
+    );
+  }
+
+  findIdByEmail(email) {
+    return this.connection.query(
+      `SELECT id_user FROM ${this.table} WHERE email = ?`,
       [email]
     );
   }
