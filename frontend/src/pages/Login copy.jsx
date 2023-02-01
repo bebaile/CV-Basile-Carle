@@ -30,11 +30,10 @@ function Login() {
       } else {
         api
           .post("/users/create", {
+            username: document.querySelector("#log-in").value,
             email: document.querySelector("#courriel").value,
-            firstname: document.querySelector("#firstname").value,
-            lastname: document.querySelector("#lastname").value,
-            company: document.querySelector("#entreprise").value,
             password: document.querySelector("#password").value,
+            company: document.querySelector("#entreprise").value,
           })
           .then((result) => {
             if (result.data === "Created") {
@@ -55,30 +54,24 @@ function Login() {
     else {
       api
         .post("/auth", {
-          email: document.querySelector("#courriel").value,
+          login: document.querySelector("#log-in").value,
           password: document.querySelector("#password").value,
         })
         .then((result) => {
-          if (result.status === 401 || result.status === 500) {
-            console.error("erreur de connexion");
+          setIsConnected(true);
+          setInfoUser({
+            email: result.data.email,
+            company: result.data.company,
+            type: result.data.type,
+          });
+          sessionStorage.setItem("email", result.data.email);
+          sessionStorage.setItem("company", result.data.company);
+          sessionStorage.setItem("type", result.data.type);
+          sessionStorage.setItem("isConnected", true);
+          if (result.data.type === "admin") {
+            navigate("/admin");
           } else {
-            setIsConnected(true);
-            setInfoUser({
-              email: result.data.email,
-              company: result.data.company,
-              type: result.data.type,
-            });
-            sessionStorage.setItem("email", result.data.email);
-            sessionStorage.setItem("firstname", result.data.firstname);
-            sessionStorage.setItem("lastname", result.data.lastname);
-            sessionStorage.setItem("company", result.data.company);
-            sessionStorage.setItem("isConnected", true);
-            if (result.data.type === "admin") {
-              sessionStorage.setItem("type", result.data.type);
-              navigate("/admin");
-            } else {
-              navigate("/");
-            }
+            navigate("/");
           }
         });
     }
@@ -108,24 +101,18 @@ function Login() {
                 : "> Je souhaite m'inscrire"}
             </div>
             <form>
-              <label htmlFor="courriel">
-                <div>Courriel :</div>
+              <label htmlFor="log-in">
+                <div>Login :</div>
                 <div>
-                  <input type="text" id="courriel" name="courriel" />
+                  <input type="text" id="log-in" name="log-in" />
                 </div>
               </label>
               {isSubscribing ? (
                 <div>
-                  <label htmlFor="firstname">
-                    <div>Prénom :</div>
+                  <label htmlFor="courriel">
+                    <div>Courriel :</div>
                     <div>
-                      <input type="text" id="firstname" name="firstname" />
-                    </div>
-                  </label>
-                  <label htmlFor="lastname">
-                    <div>Nom :</div>
-                    <div>
-                      <input type="text" id="lastname" name="lastname" />
+                      <input type="text" id="courriel" name="courriel" />
                     </div>
                   </label>
                   <label htmlFor="entreprise">

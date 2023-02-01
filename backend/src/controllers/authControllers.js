@@ -2,17 +2,23 @@ const models = require("../models");
 const { verifyPassword, createToken } = require("../helpers/auth");
 
 const session = (req, res) => {
-  const { login, password } = req.body;
+  const { email, password } = req.body;
   models.user
-    .findByLogin(login)
+    .findByLogin(email)
     .then((rows) => {
-      if (rows === 0) {
+      if (rows === 0 || rows[0][0].type === "guest") {
         res.status(401).send("login ou mot de passe incorrect");
       } else {
         verifyPassword(password, rows[0][0].password).then((isVerified) => {
           if (isVerified) {
-            const { username, email, company, type } = rows[0][0];
-            const token = createToken({ username, email, company, type });
+            const { firstname, lastname, company, type } = rows[0][0];
+            const token = createToken({
+              firstname,
+              lastname,
+              email,
+              company,
+              type,
+            });
             res
               .status(201)
               .cookie("user_token", token, {
@@ -23,6 +29,8 @@ const session = (req, res) => {
                 message: "utilisateur authentifié",
                 cookie: token,
                 email,
+                firstname,
+                lastname,
                 company,
                 type,
               });

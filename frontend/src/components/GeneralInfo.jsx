@@ -31,7 +31,11 @@ function GeneralInfo() {
           </p>
 
           <p>
-            <button type="button" className="download-vcard-btn">
+            <button
+              type="button"
+              className="validation-btn"
+              id="download-vcard-btn"
+            >
               <a href="http://bebaile.free.fr/cvbc/BasileCarle.vcf">
                 Télécharger ma carte de contacts
               </a>

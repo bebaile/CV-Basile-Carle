@@ -8,6 +8,7 @@
   --button-color-2: hsla(13, 36%, 31%, 0.4);
   --button-color-3: #e1662b;
   --bar-background-color: hsla(0, 0%, 50%, 0.195);
+  --border-area-style: 1px solid rgba(128, 128, 128, 0.594);
 }
 
 .container {
@@ -52,7 +53,7 @@
   color: var(--title-color);
 }
 
-#name {
+#name-title {
   display: flex;
   align-items: center;
 }
@@ -206,12 +207,12 @@ a:hover ~ span {
   display: initial;
 }
 
-.download-vcard-btn a {
+.validation-btn a {
   text-decoration: none;
   color: white;
 }
 
-.download-vcard-btn {
+.validation-btn {
   appearance: none;
   background-color: var(--button-color);
   border: 1px solid rgba(27, 31, 35, 0.15);
@@ -238,28 +239,28 @@ a:hover ~ span {
   white-space: nowrap;
 }
 
-.download-vcard-btn:focus:not(:focus-visible):not(.focus-visible) {
+.validation-btn:focus:not(:focus-visible):not(.focus-visible) {
   box-shadow: none;
   outline: none;
 }
 
-.download-vcard-btn:hover {
+.validation-btn:hover {
   background-color: #2c974b;
 }
 
-.download-vcard-btn:focus {
+.validation-btn:focus {
   box-shadow: rgba(46, 164, 79, 0.4) 0 0 0 3px;
   outline: none;
 }
 
-.download-vcard-btn:disabled {
+.validation-btn:disabled {
   background-color: #94d3a2;
   border-color: rgba(27, 31, 35, 0.1);
   color: rgba(255, 255, 255, 0.8);
   cursor: default;
 }
 
-.download-vcard-btn:active {
+.validation-btn:active {
   background-color: #298e46;
   box-shadow: rgba(20, 70, 32, 0.2) 0 1px 0 inset;
 }

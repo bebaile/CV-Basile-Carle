@@ -65,8 +65,6 @@ const add = (req, res) => {
         res.sendStatus(500);
       });
   });
-
-  // TODO validations (length, format...)
 };
 
 const destroy = (req, res) => {
