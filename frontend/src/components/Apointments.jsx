@@ -275,9 +275,13 @@ function Apointments() {
               name="next-step"
               onClick={handleDispatch}
             >
+<<<<<<< HEAD
               {message.next_step === 3
                 ? "Envoyer la demande"
                 : "> Passer à l'étape suivante"}
+=======
+              {">"} Passer à l'étape suivante
+>>>>>>> 5ab4f555072939fe656e88df37c4825f0bc657c3
             </button>
           </div>
         </div>
