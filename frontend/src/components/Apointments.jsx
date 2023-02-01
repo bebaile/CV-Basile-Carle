@@ -36,7 +36,6 @@ function Apointments() {
     });
     api
       .post("/messages", {
-        name: document.querySelector("#name").value,
         firstname: document.querySelector("#firstname").value,
         lastname: document.querySelector("#name").value,
         email: document.querySelector("#courriel").value,
@@ -52,8 +51,8 @@ function Apointments() {
         }
       });
     setMessage({
-      name: document.querySelector("#name").value,
       firstname: document.querySelector("#firstname").value,
+      lastname: document.querySelector("#name").value,
       email: document.querySelector("#courriel").value,
       company: document.querySelector("#entreprise").value,
       message: document.querySelector("#message-input").value,
