@@ -145,51 +145,39 @@ a:hover ~ span {
   margin: 1rem;
 }
 
-/* ------------------- */
-
-.general-info {
-  width: var(--content-width);
-  min-width: 375px - 1rem;
-  max-width: 1024px;
-  margin: 1rem;
-  display: flex;
-  align-items: center;
+.spacer-subnavbar-bgd {
+  width: 16px;
+  height: 16px;
 }
 
-#basile {
-  width: 5rem;
-}
-
-.social-networks {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-around;
-  padding: 1rem;
-}
-
-.social-networks img {
-  width: 2rem;
-}
-
-.contacts {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-}
-
-.contacts p a {
-  text-decoration: none;
-}
-
-#sub-navbar {
+#sub-navbar,
+#sub-navbar-bgd,
+#sub-navbar-bgd-2 {
   background-color: var(--bar-background-color);
   border-radius: 5px;
   min-width: 20ch;
   margin: auto;
   padding: 1rem;
   opacity: 80%;
-  position: relative;
+  position: absolute;
+  top: 7rem;
+  right: 5rem;
   animation: display-subnav-bar 2s;
+  z-index: 7;
+}
+
+#sub-navbar-bgd,
+#sub-navbar-bgd-2 {
+  background-color: white;
+  opacity: 100%;
+  z-index: 6;
+  width: 11.75rem;
+  height: 4.37rem;
+}
+
+#sub-navbar-bgd-2 {
+  width: 12.13rem;
+  height: 5.5rem;
 }
 
 @keyframes display-subnav-bar {
@@ -243,6 +231,42 @@ a:hover ~ span {
 #sub-navbar-list div img {
   width: 1rem;
   margin-right: 0.5rem;
+}
+
+/* ------------------- */
+
+.general-info {
+  width: var(--content-width);
+  min-width: 375px - 1rem;
+  max-width: 1024px;
+  margin: 1rem;
+  display: flex;
+  align-items: center;
+}
+
+#basile {
+  width: 5rem;
+}
+
+.social-networks {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  padding: 1rem;
+}
+
+.social-networks img {
+  width: 2rem;
+}
+
+.contacts {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.contacts p a {
+  text-decoration: none;
 }
 
 .qrcode {

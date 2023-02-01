@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Navbar from "@components/Navbar";
 import MyCV from "@pages/MyCV";
@@ -11,12 +11,24 @@ import "./App.css";
 
 function App() {
   const { infoUser } = useContext(Context);
+  const [isApointmentDisplayed, setIsApointmentDisplayed] = useState(false);
   return (
     <Router>
       <div className="App">
-        <Navbar />
+        <Navbar
+          isApointmentDisplayed={isApointmentDisplayed}
+          setIsApointmentDisplayed={setIsApointmentDisplayed}
+        />
         <Routes>
-          <Route path="/" element={<MyCV />} />
+          <Route
+            path="/"
+            element={
+              <MyCV
+                isApointmentDisplayed={isApointmentDisplayed}
+                setIsApointmentDisplayed={setIsApointmentDisplayed}
+              />
+            }
+          />
           <Route path="/login" element={<Login />} />
           <Route
             path="/admin"
