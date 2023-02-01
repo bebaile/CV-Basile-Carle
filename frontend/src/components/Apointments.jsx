@@ -34,6 +34,19 @@ function Apointments() {
       message: document.querySelector("#message-input").value,
       next_step: 2,
     });
+
+    setMessage({
+      firstname: document.querySelector("#firstname").value,
+      lastname: document.querySelector("#name").value,
+      email: document.querySelector("#courriel").value,
+      company: document.querySelector("#entreprise").value,
+      message: document.querySelector("#message-input").value,
+      next_step: 2,
+    });
+  };
+
+  const postMessage = () => {
+    // envoie le message à la fin de toutes les étapes
     api
       .post("/messages", {
         firstname: document.querySelector("#firstname").value,
@@ -50,14 +63,6 @@ function Apointments() {
           console.error("Le message a bien été envoyé");
         }
       });
-    setMessage({
-      firstname: document.querySelector("#firstname").value,
-      lastname: document.querySelector("#name").value,
-      email: document.querySelector("#courriel").value,
-      company: document.querySelector("#entreprise").value,
-      message: document.querySelector("#message-input").value,
-      next_step: 2,
-    });
   };
 
   const handleDate = () => {
@@ -81,15 +86,18 @@ function Apointments() {
     });
   };
 
+  const postAppointment = () => {
+    // poste la demande d'entretien
+  };
+
   const handleDisplayTimeSelection = (e) => {
     console.error(typeof e.target.value);
     setIsVisible({ visible: true, id: parseInt(e.target.value, 10) });
   };
 
   const handleSubmit = () => {
-    api.post("/message", message).then((result) => {
-      console.error(result);
-    });
+    postMessage();
+    postAppointment();
   };
 
   const handleDispatch = () => {
@@ -112,13 +120,22 @@ function Apointments() {
     }
   };
 
+  const handlePreviousStep = () => {
+    setMessage({ ...message, next_step: message.next_step - 1 });
+  };
+
   return (
     <div className="container">
       <div className="user-interaction">
         <div id="input-area">
           <div className="interaction-box" id="messages">
             <div>
-              <h2>Remplissez votre message</h2>
+              <h2>
+                <span className={message.next_step === 1 ? null : "invisible"}>
+                  {message.next_step}
+                </span>
+                Remplissez votre message
+              </h2>
             </div>
             <form>
               <label htmlFor="name">
@@ -171,7 +188,12 @@ function Apointments() {
           </div>
           <div className="interaction-box" id="calender">
             <div>
-              <h2>Sélectionnez une date</h2>
+              <h2>
+                <span className={message.next_step === 2 ? null : "invisible"}>
+                  {message.next_step}
+                </span>
+                Sélectionnez une date
+              </h2>
             </div>
             <form>
               <label htmlFor="date">
@@ -185,7 +207,12 @@ function Apointments() {
             </form>
           </div>
           <div className="interaction-box" id="timeslot">
-            <h2>Sélection créneau</h2>
+            <h2>
+              <span className={message.next_step === 3 ? null : "invisible"}>
+                {message.next_step}
+              </span>
+              Sélection créneau
+            </h2>
             <form>
               {isAvailabilityLoading
                 ? "Chargement des dispos ..."
@@ -226,16 +253,31 @@ function Apointments() {
             </form>
           </div>
         </div>
-        <div>
-          <button
-            type="button"
-            className="validation-btn"
-            id="next-step"
-            name="next-step"
-            onClick={handleDispatch}
-          >
-            {">"} Passer à l'étape suivante
-          </button>
+        <div className="step-hider" id={`step-${message.next_step}`} />
+        <div id="steps-control-area">
+          <div>
+            {message.next_step === 1 ? null : (
+              <button
+                type="button"
+                className="validation-btn"
+                id="prev-step"
+                onClick={handlePreviousStep}
+              >
+                {"< "}Revenir en arrière
+              </button>
+            )}
+          </div>
+          <div>
+            <button
+              type="button"
+              className="validation-btn"
+              id="next-step"
+              name="next-step"
+              onClick={handleDispatch}
+            >
+              {">"} Passer à l'étape suivante
+            </button>
+          </div>
         </div>
       </div>
     </div>

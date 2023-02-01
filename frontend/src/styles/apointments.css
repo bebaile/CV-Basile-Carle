@@ -6,7 +6,33 @@
   margin: 1rem;
   min-width: 375px - 1rem;
   max-width: 1024px;
+  position: relative;
 }
+
+/* voile occultant les différentes étapes */
+.step-hider {
+  position: absolute;
+  width: 23.5rem;
+  height: 11.5rem;
+  background-color: white;
+  top: 0.5rem;
+  left: 13.5rem;
+  opacity: 80%;
+}
+
+#step-2 {
+  left: 26rem;
+  width: 12rem;
+  transition: all 0.5s ease-out;
+}
+
+#step-3 {
+  left: 37rem;
+  width: 0;
+  transition: all 0.5s ease-out;
+}
+
+/* fin de la partie voile occultant */
 
 #input-area {
   display: flex;
@@ -22,6 +48,18 @@ h2 {
   margin-bottom: 0.5rem;
   padding-left: 0.2rem;
   color: var(--button-color-3);
+}
+
+h2 span {
+  display: inline-block;
+  border: 1px solid;
+  border-radius: 50%;
+  width: 1rem;
+  height: 1rem;
+  margin-right: 0.2rem;
+  font-size: 0.8rem;
+  text-align: center;
+  transition: all 2s ease;
 }
 
 input {
@@ -70,11 +108,22 @@ input {
 
 /* gestion des étapes */
 
-#next-step {
+#steps-control-area {
+  display: flex;
+  justify-content: flex-end;
+}
+
+#next-step,
+#prev-step {
   padding: 0 0.5rem;
-  margin: 1rem;
+  margin: 1rem 0.5rem 0.5rem 1rem;
   font-size: 0.8rem;
   font-weight: normal;
+}
+
+#prev-step {
+  background-color: var(--button-color-3);
+  margin-right: 0;
 }
 
 .invisible {
