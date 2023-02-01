@@ -12,8 +12,13 @@ import { Link, useNavigate } from "react-router-dom";
 import Context from "../context/Context";
 
 function GeneralInfo({ isApointmentDisplayed, setIsApointmentDisplayed }) {
-  const { isSubNavBarVisible, isConnected, setIsConnected, infoUser } =
-    useContext(Context);
+  const {
+    isSubNavBarVisible,
+    setIsSubNavBarVisible,
+    isConnected,
+    setIsConnected,
+    infoUser,
+  } = useContext(Context);
 
   const displayApointment = () => {
     setIsApointmentDisplayed(!isApointmentDisplayed);
@@ -121,6 +126,17 @@ function GeneralInfo({ isApointmentDisplayed, setIsApointmentDisplayed }) {
               </div>
             </li>
           </ul>
+          <div
+            className="close-btn"
+            role="button"
+            onClick={() => {
+              setIsSubNavBarVisible(false);
+            }}
+            onKeyDown={null}
+            tabIndex="0"
+          >
+            <div>x</div>
+          </div>
         </div>
       </div>
       <div className="qrcode">

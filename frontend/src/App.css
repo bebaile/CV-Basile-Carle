@@ -101,26 +101,41 @@ a:hover ~ span {
   position: relative;
 }
 
+.burger-line > span {
+  display: block;
+  width: 1.5rem;
+  height: 0.2rem;
+  background-color: var(--button-color-3);
+  margin: 0.2rem 0.5rem;
+  transition: all 0.3s ease-out;
+}
+
+.burger-line:hover,
+.subnav-bar-opened {
+  transform: rotate(-90deg);
+  transition: transform 0.3s ease-out;
+}
+
 #login-btn:hover {
   cursor: pointer;
 }
 
-#login-btn span {
+.label {
   display: none;
   color: black;
   font-weight: normal;
   font-size: 0.8rem;
   position: absolute;
   width: 13ch;
-  left: -25px;
-  bottom: -1rem;
+  left: -5rem;
+  bottom: -3rem;
   background-color: rgba(255, 255, 0, 0.534);
   padding: 0.1rem;
   border-radius: 5px;
   text-align: center;
 }
 
-#login-btn:hover > span {
+#login-btn:hover > .label {
   display: initial;
 }
 
@@ -173,6 +188,25 @@ a:hover ~ span {
   margin: auto;
   padding: 1rem;
   opacity: 80%;
+  position: relative;
+}
+
+.close-btn {
+  border: 1px solid hsla(0, 0%, 0%, 0.5);
+  background-color: white;
+  border-radius: 50%;
+  padding: 0;
+  width: 1.5rem;
+  height: 1.5rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 1rem;
+  position: absolute;
+  top: -0.4rem;
+  right: -0.4rem;
+  cursor: pointer;
+  opacity: 90%;
 }
 
 #sub-navbar-list {
@@ -183,6 +217,7 @@ a:hover ~ span {
 #sub-navbar-list a:visited:hover {
   font-weight: bold;
   color: var(--title-color);
+  cursor: pointer;
 }
 
 #sub-navbar-list a {

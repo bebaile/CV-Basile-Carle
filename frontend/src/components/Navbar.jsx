@@ -60,16 +60,18 @@ function Navbar() {
               onKeyDown={null}
               tabIndex="0"
             >
-              <img
-                src={isConnected ? logout : login}
-                alt={
-                  isConnected
-                    ? "logout by Cetha Studio from Noun Project"
-                    : "Login by Aman from Noun Project"
+              <div
+                className={
+                  isSubNavBarVisible
+                    ? "burger-line subnav-bar-opened"
+                    : "burger-line"
                 }
-                id="login-img"
-              />
-              <span>{isConnected ? "Se déconnecter" : "Se connecter"}</span>
+              >
+                <span />
+                <span />
+                <span />
+              </div>
+              <span className="label">Cliquez pour maintenir le menu</span>
             </div>
           </div>
         </strong>
