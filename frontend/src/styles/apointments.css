@@ -7,6 +7,7 @@
   min-width: 375px - 1rem;
   max-width: 1024px;
   position: relative;
+  animation: display-subnav-bar 2s;
 }
 
 /* voile occultant les différentes étapes */
