@@ -189,6 +189,16 @@ a:hover ~ span {
   padding: 1rem;
   opacity: 80%;
   position: relative;
+  animation: display-subnav-bar 2s;
+}
+
+@keyframes display-subnav-bar {
+  from {
+    opacity: 0%;
+  }
+  to {
+    opacity: 100%;
+  }
 }
 
 .close-btn {

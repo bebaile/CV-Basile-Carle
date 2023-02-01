@@ -57,6 +57,7 @@ function Navbar() {
               id="login-btn"
               role="button"
               onClick={handleSubNavBar}
+              onMouseEnter={handleSubNavBar}
               onKeyDown={null}
               tabIndex="0"
             >
