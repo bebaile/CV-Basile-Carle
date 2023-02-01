@@ -7,7 +7,9 @@ import cv from "@assets/cv.png";
 import Context from "../context/Context";
 
 function Navbar() {
-  const { isConnected, setIsConnected } = useContext(Context);
+  const { isConnected, isSubNavBarVisible, setIsSubNavBarVisible } =
+    useContext(Context);
+
   const location = useLocation();
 
   // cache la barre de navigation quand l'utilisateur défile
@@ -19,24 +21,11 @@ function Navbar() {
     }, 1000);
   });
 
-  const navigate = useNavigate();
+  const handleSubNavBar = () => {
+    setIsSubNavBarVisible(!isSubNavBarVisible);
+  };
 
   // Si l'utilisateur est connecté, déconnexion, sinon, direction page de login
-  const handleLogin = () => {
-    if (!isConnected) {
-      navigate("/login");
-    } else {
-      api.post("/logout").then((result) => {
-        console.error(result);
-        setIsConnected(false);
-        sessionStorage.clear("email");
-        sessionStorage.clear("company");
-        sessionStorage.clear("type");
-        sessionStorage.clear("isConnected");
-        navigate("/");
-      });
-    }
-  };
 
   return (
     <div className="container">
@@ -67,7 +56,7 @@ function Navbar() {
             <div
               id="login-btn"
               role="button"
-              onClick={handleLogin}
+              onClick={handleSubNavBar}
               onKeyDown={null}
               tabIndex="0"
             >

@@ -129,6 +129,7 @@ a:hover ~ span {
   padding: 0.5rem;
   margin: 1rem;
 }
+
 /* ------------------- */
 
 .general-info {
@@ -163,6 +164,40 @@ a:hover ~ span {
 
 .contacts p a {
   text-decoration: none;
+}
+
+#sub-navbar {
+  background-color: var(--bar-background-color);
+  border-radius: 5px;
+  min-width: 20ch;
+  margin: auto;
+  padding: 1rem;
+  opacity: 80%;
+}
+
+#sub-navbar-list {
+  list-style: none;
+}
+
+#sub-navbar-list li:hover,
+#sub-navbar-list a:visited:hover {
+  font-weight: bold;
+  color: var(--title-color);
+}
+
+#sub-navbar-list a {
+  text-decoration: none;
+}
+
+#sub-navbar-list a:visited {
+  text-decoration: none;
+  color: black;
+}
+
+#sub-navbar-list a img,
+#sub-navbar-list div img {
+  width: 1rem;
+  margin-right: 0.5rem;
 }
 
 .qrcode {

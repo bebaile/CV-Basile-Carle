@@ -1,10 +1,39 @@
-import React from "react";
+import React, { useContext } from "react";
+import api from "@services/services";
+import login from "@assets/login.png";
+import logout from "@assets/logout.png";
+import admin from "@assets/admin.png";
+import appointments from "@assets/appointment.png";
 import basile from "@assets/basileCarle.png";
 import github from "@assets/github.png";
 import linkedin from "@assets/linkedin.png";
 import qrcode from "@assets/qrcode.png";
+import { Link, useNavigate } from "react-router-dom";
+import Context from "../context/Context";
 
-function GeneralInfo() {
+function GeneralInfo({ isApointmentDisplayed, setIsApointmentDisplayed }) {
+  const { isSubNavBarVisible, isConnected, setIsConnected, infoUser } =
+    useContext(Context);
+
+  const displayApointment = () => {
+    setIsApointmentDisplayed(!isApointmentDisplayed);
+  };
+
+  const navigate = useNavigate();
+
+  const handleDisconnect = () => {
+    api.post("/logout").then((result) => {
+      setIsConnected(false);
+      console.error(result);
+      sessionStorage.clear("email");
+      sessionStorage.clear("company");
+      sessionStorage.clear("type");
+      sessionStorage.clear("isConnected");
+      navigate("/");
+      return { isConnected: false };
+    });
+  };
+
   return (
     <div className="container">
       <div className="general-info">
@@ -41,6 +70,57 @@ function GeneralInfo() {
               </a>
             </button>
           </p>
+        </div>
+        <div
+          id="sub-navbar"
+          className={isSubNavBarVisible ? null : "hidden-navbar"}
+        >
+          <ul id="sub-navbar-list">
+            <li>
+              {isConnected ? (
+                <div
+                  role="button"
+                  onClick={handleDisconnect}
+                  onKeyDown={null}
+                  tabIndex="0"
+                >
+                  <img
+                    src={logout}
+                    alt="logout by Cetha Studio from Noun Project"
+                  />
+                  Se déconnecter
+                </div>
+              ) : (
+                <Link to="/login">
+                  <img src={login} alt="Login by Aman from Noun Project" />
+                  Se connecter
+                </Link>
+              )}
+            </li>
+            {sessionStorage.getItem("type") === "admin" ? (
+              <li>
+                <Link to="/admin">
+                  <img src={admin} alt="admin by LAFS from Noun Project" />
+                  Page d'administration
+                </Link>
+              </li>
+            ) : null}
+
+            <li>
+              <div
+                role="button"
+                onClick={displayApointment}
+                onKeyDown={null}
+                tabIndex="0"
+              >
+                <img
+                  src={appointments}
+                  alt="appointment by 4B Icons from Noun Project"
+                />
+                Prendre rendez-vous{" "}
+              </div>
+            </li>
+          </ul>
         </div>
       </div>
       <div className="qrcode">

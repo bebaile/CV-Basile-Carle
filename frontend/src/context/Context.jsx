@@ -14,10 +14,20 @@ export function ContextProvider({ children }) {
     company: sessionStorage.getItem("company"),
     type: sessionStorage.getItem("type"),
   });
+
+  const [isSubNavBarVisible, setIsSubNavBarVisible] = useState(false);
+
   return (
     <Context.Provider
       // eslint-disable-next-line react/jsx-no-constructed-context-values
-      value={{ isConnected, setIsConnected, infoUser, setInfoUser }}
+      value={{
+        isConnected,
+        setIsConnected,
+        infoUser,
+        setInfoUser,
+        isSubNavBarVisible,
+        setIsSubNavBarVisible,
+      }}
     >
       {children}
     </Context.Provider>
