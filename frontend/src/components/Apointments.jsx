@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import api, { formatDate } from "@services/services";
 import "../styles/apointments.css";
 
-function Apointments() {
+function Apointments({ setIsApointmentDisplayed }) {
   const [availability, setAvailability] = useState();
   const [isAvailabilityLoading, setIsAvailabilityLoading] = useState(true);
   const [message, setMessage] = useState({ next_step: 1 });
@@ -280,6 +280,17 @@ function Apointments() {
                 : "> Passer à l'étape suivante"}
             </button>
           </div>
+        </div>
+        <div
+          className="close-btn"
+          role="button"
+          onClick={() => {
+            setIsApointmentDisplayed(false);
+          }}
+          onKeyDown={null}
+          tabIndex="0"
+        >
+          <div>x</div>
         </div>
       </div>
     </div>

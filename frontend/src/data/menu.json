@@ -1,0 +1,27 @@
+[
+  {
+    "page": "cv",
+    "user": "admin",
+    "data": ["page d'administration", "Prendre rendez-vous"]
+  },
+  {
+    "page": "cv",
+    "user": "user",
+    "data": ["Accéder à mon espace", "Prendre rendez-vous"]
+  },
+  {
+    "page": "cv",
+    "user": "guest",
+    "data": ["S'inscrire", "Prendre rendez-vous"]
+  },
+  {
+    "page": "admin",
+    "user": "admin",
+    "data": ["Mon CV"]
+  },
+  {
+    "page": "login",
+    "user": "all",
+    "data": ["se déconnecter"]
+  }
+]
