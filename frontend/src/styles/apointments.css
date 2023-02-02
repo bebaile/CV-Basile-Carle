@@ -20,6 +20,9 @@
   top: 0.5rem;
   left: 13.5rem;
   opacity: 80%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 #step-2 {
@@ -28,10 +31,26 @@
   transition: all 0.5s ease-out;
 }
 
-#step-3 {
+#step-3,
+#step-4 {
   left: 37rem;
   width: 0;
   transition: all 0.5s ease-out;
+}
+
+#step-5 {
+  left: 0;
+  top: 0;
+  opacity: 100%;
+  width: 100%;
+  height: 220px;
+  border-radius: 5px;
+  z-index: 1;
+  color: var(--button-color);
+  font-weight: bold;
+  animation: display-subnav-bar 2s;
+  padding: 0 8rem;
+  text-align: center;
 }
 
 /* fin de la partie voile occultant */
@@ -108,7 +127,8 @@ input {
   padding: 0.25rem;
 }
 
-#day {
+#day,
+#duree {
   font-size: 0.9rem;
 }
 
@@ -123,12 +143,17 @@ input {
   justify-content: flex-end;
 }
 
-#alert {
+#alert,
+#check {
   margin: 0.75rem;
   color: red;
   width: 11.375rem;
   text-align: center;
   float: inline-start;
+}
+
+#check {
+  color: var(--button-color);
 }
 
 #next-step,
