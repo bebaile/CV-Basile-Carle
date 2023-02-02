@@ -114,10 +114,18 @@ input {
   justify-content: flex-end;
 }
 
+#alert {
+  margin: 0.75rem;
+  color: red;
+  width: 11.375rem;
+  text-align: center;
+  float: inline-start;
+}
+
 #next-step,
 #prev-step {
   padding: 0 0.5rem;
-  margin: 1rem 0.5rem 0.5rem 1rem;
+  margin: 0.5rem;
   font-size: 0.8rem;
   font-weight: normal;
 }

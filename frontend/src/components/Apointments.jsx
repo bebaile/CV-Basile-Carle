@@ -7,42 +7,70 @@ function Apointments({ setIsApointmentDisplayed }) {
   const [isAvailabilityLoading, setIsAvailabilityLoading] = useState(true);
   const [message, setMessage] = useState({ next_step: 1 });
   const [isVisible, setIsVisible] = useState({ visible: false, id: "" });
+  const [alert, setAlert] = useState("");
 
   // récupère les disponibilités
-  useEffect(() => {
-    api.get("/availability").then((result) => {
-      if (result.status === 500) {
+  const handleAvailabilities = (day) => {
+    const days = [
+      "Dimanche",
+      "Lundi",
+      "Mardi",
+      "Mercredi",
+      "Jeudi",
+      "Vendredi",
+      "Samedi",
+    ];
+    api.get(`/availability/${days[day]}`).then((result) => {
+      if (result.status === 404) {
+        console.error("Pas de disponibilité ce jour là");
+      } else if (result.status === 5000) {
         console.error("impossible de récupérer les disponibilités");
       } else {
         setAvailability(result.data);
       }
     });
-  }, []);
+  };
 
   //   on attend que availability soit chargé pour le rendering
   useEffect(() => {
     if (typeof availability !== "undefined") {
+      console.error(availability);
       setIsAvailabilityLoading(false);
     }
   }, [availability]);
 
   const handleMessage = () => {
-    console.error({
-      name: document.querySelector("#name").value,
-      firstname: document.querySelector("#firstname").value,
-      company: document.querySelector("#entreprise").value,
-      message: document.querySelector("#message-input").value,
-      next_step: 2,
-    });
+    const name = document.querySelector("#name").value;
+    const firstname = document.querySelector("#firstname").value;
+    const email = document.querySelector("#courriel").value;
+    const company = document.querySelector("#entreprise").value;
+    const request = document.querySelector("#message-input").value;
 
-    setMessage({
-      firstname: document.querySelector("#firstname").value,
-      lastname: document.querySelector("#name").value,
-      email: document.querySelector("#courriel").value,
-      company: document.querySelector("#entreprise").value,
-      message: document.querySelector("#message-input").value,
-      next_step: 2,
-    });
+    // vérifie que tous les champs sont remplis
+
+    if (
+      name.length === 0 ||
+      name === "Nom" ||
+      firstname.length === 0 ||
+      firstname === "Prénom" ||
+      email.length === 0 ||
+      email === "email" ||
+      company.length === 0 ||
+      company === "Entreprise" ||
+      request.length === 0
+    ) {
+      console.error("alerte");
+      setAlert("Valeur manquante");
+    } else {
+      setMessage({
+        firstname: document.querySelector("#firstname").value,
+        lastname: document.querySelector("#name").value,
+        email: document.querySelector("#courriel").value,
+        company: document.querySelector("#entreprise").value,
+        message: document.querySelector("#message-input").value,
+        next_step: 2,
+      });
+    }
   };
 
   const postMessage = () => {
@@ -66,16 +94,19 @@ function Apointments({ setIsApointmentDisplayed }) {
   };
 
   const handleDate = () => {
-    console.error({
-      ...message,
-      next_step: 3,
-      date: document.querySelector("#date").value,
-    });
-    setMessage({
-      ...message,
-      next_step: 3,
-      date: document.querySelector("#date").value,
-    });
+    const selectedDate = document.querySelector("#date").value;
+    // on vérifie que la date a bien été saisie
+    if (!selectedDate) {
+      setAlert("Sélectionnez une date");
+    } else {
+      const date = new Date(selectedDate);
+      handleAvailabilities(date.getDay());
+      setMessage({
+        ...message,
+        next_step: 3,
+        date,
+      });
+    }
   };
 
   const handleTimeslot = () => {
@@ -182,6 +213,9 @@ function Apointments({ setIsApointmentDisplayed }) {
                   id="message-input"
                   name="message-input"
                   placeholder="Votre message"
+                  onChange={() => {
+                    setAlert("");
+                  }}
                 />
               </label>
             </form>
@@ -202,6 +236,9 @@ function Apointments({ setIsApointmentDisplayed }) {
                   id="date"
                   name="date"
                   placeholder={new Date()}
+                  onChange={() => {
+                    setAlert("");
+                  }}
                 />
               </label>
             </form>
@@ -254,6 +291,7 @@ function Apointments({ setIsApointmentDisplayed }) {
           </div>
         </div>
         <div className="step-hider" id={`step-${message.next_step}`} />
+        <div id="alert">{alert}</div>
         <div id="steps-control-area">
           <div>
             {message.next_step === 1 ? null : (
