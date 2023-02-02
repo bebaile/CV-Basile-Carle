@@ -20,11 +20,10 @@ class UserManager extends AbstractManager {
     );
   }
 
-  findByLogin(login) {
-    return this.connection.query(
-      `SELECT * FROM ${this.table} WHERE username = ?`,
-      [login]
-    );
+  findByDay(day) {
+    return this.connection.query(`SELECT * FROM ${this.table} WHERE day = ?`, [
+      day,
+    ]);
   }
 
   deleteAvailability(id) {

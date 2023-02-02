@@ -1,23 +1,15 @@
 import React, { useEffect, useState } from "react";
-import api, { formatDate } from "@services/services";
+import api, { formatDate, whichDayString } from "@services/services";
 import "../styles/apointments.css";
 
 function Apointments({ setIsApointmentDisplayed }) {
   const [availability, setAvailability] = useState();
   const [isAvailabilityLoading, setIsAvailabilityLoading] = useState(true);
-  const [message, setMessage] = useState({ next_step: 1 });
   const [isVisible, setIsVisible] = useState({ visible: false, id: "" });
-
-  // récupère les disponibilités
-  useEffect(() => {
-    api.get("/availability").then((result) => {
-      if (result.status === 500) {
-        console.error("impossible de récupérer les disponibilités");
-      } else {
-        setAvailability(result.data);
-      }
-    });
-  }, []);
+  const [jour, setJour] = useState("");
+  const [alert, setAlert] = useState("");
+  const [selectedTimeSlot, setSelectedTimeSlot] = useState();
+  const [message, setMessage] = useState({ next_step: 1 });
 
   //   on attend que availability soit chargé pour le rendering
   useEffect(() => {
@@ -26,26 +18,119 @@ function Apointments({ setIsApointmentDisplayed }) {
     }
   }, [availability]);
 
+  // on récupère les données du messages
   const handleMessage = () => {
-    console.error({
-      name: document.querySelector("#name").value,
-      firstname: document.querySelector("#firstname").value,
-      company: document.querySelector("#entreprise").value,
-      message: document.querySelector("#message-input").value,
-      next_step: 2,
-    });
+    const name = document.querySelector("#name").value;
+    const firstname = document.querySelector("#firstname").value;
+    const email = document.querySelector("#courriel").value;
+    const company = document.querySelector("#entreprise").value;
+    const request = document.querySelector("#message-input").value;
 
-    setMessage({
-      firstname: document.querySelector("#firstname").value,
-      lastname: document.querySelector("#name").value,
-      email: document.querySelector("#courriel").value,
-      company: document.querySelector("#entreprise").value,
-      message: document.querySelector("#message-input").value,
-      next_step: 2,
+    // vérifie que tous les champs sont remplis
+
+    if (
+      name.length === 0 ||
+      name === "Nom" ||
+      firstname.length === 0 ||
+      firstname === "Prénom" ||
+      email.length === 0 ||
+      email === "email" ||
+      company.length === 0 ||
+      company === "Entreprise" ||
+      request.length === 0
+    ) {
+      setAlert("Valeur manquante");
+    } else {
+      // puis on passe les données pour la prochaine étape
+      setMessage({
+        firstname: document.querySelector("#firstname").value,
+        lastname: document.querySelector("#name").value,
+        email: document.querySelector("#courriel").value,
+        company: document.querySelector("#entreprise").value,
+        message: document.querySelector("#message-input").value,
+        next_step: 2,
+      });
+    }
+  };
+
+  // récupère les disponibilités
+  const handleAvailabilities = (day) => {
+    const days = whichDayString(day);
+    setJour(days);
+    api.get(`/availability/${days}`).then((result) => {
+      if (result.status === 404) {
+        console.error("Pas de disponibilité ce jour là");
+      } else if (result.status === 5000) {
+        console.error("impossible de récupérer les disponibilités");
+      } else {
+        setAvailability(result.data);
+      }
     });
   };
 
-  const postMessage = () => {
+  const handleDate = () => {
+    const selectedDate = document.querySelector("#date").value;
+    // on vérifie que la date a bien été saisie
+    if (!selectedDate) {
+      setAlert("Sélectionnez une date");
+    } else {
+      const date = new Date(selectedDate);
+      handleAvailabilities(date.getDay());
+      setMessage({
+        ...message,
+        next_step: 3,
+        date,
+      });
+    }
+  };
+
+  // affiche le jour associé à la date sélection (input onChange)
+  const displayDay = (e) => {
+    setAlert("");
+    const selectedDate = new Date(e.target.value);
+    setJour(whichDayString(selectedDate.getDay()));
+  };
+
+  const handleDisplayTimeSelection = (e) => {
+    setIsVisible({ visible: true, id: parseInt(e.target.value, 10) });
+  };
+
+  // on met à jour l'heure choisie dans l'état avec le créneau associé (via onChange)
+  const handleSelectedTimeSlot = (e) => {
+    setAlert("");
+    setSelectedTimeSlot({ id: e.target.name, data: e.target.value });
+  };
+
+  // récupère l'heure choisie et la transmet à l'étape suivante (envoi)
+  const handleTimeslot = () => {
+    // on vérifie que tout a été bien rempli
+    if (!selectedTimeSlot) {
+      setAlert("Rentrez un créneau");
+    } else {
+      // on ajoute l'heure retenue à la date
+      const tmpDate = new Date(message.date);
+      const tmpHour = selectedTimeSlot.data.split("").splice(0, 2).join("");
+      const tmpMin = selectedTimeSlot.data.split("").splice(3, 2).join("");
+      tmpDate.setHours(tmpHour);
+      tmpDate.setMinutes(tmpMin);
+      // on met à jour le message qui va être transmis au back
+      setMessage({
+        ...message,
+        date: tmpDate,
+        next_step: 4,
+        timeslot: selectedTimeSlot,
+      });
+      setAlert("Vérifiez avant envoi");
+    }
+  };
+
+  const endApointment = () => {
+    setTimeout(() => {
+      setIsApointmentDisplayed(false);
+    }, 3000);
+  };
+
+  const postMessage = (idApointment) => {
     // envoie le message à la fin de toutes les étapes
     api
       .post("/messages", {
@@ -54,10 +139,15 @@ function Apointments({ setIsApointmentDisplayed }) {
         email: document.querySelector("#courriel").value,
         company: document.querySelector("#entreprise").value,
         message: document.querySelector("#message-input").value,
+        idApointment,
       })
       .then((result) => {
         if (result.status === 201) {
-          console.error("Le message a bien été envoyé");
+          setMessage({ ...message, next_step: 5 });
+          setAlert(
+            "Message bien envoyé, merci pour votre celui-ci, je ne manquerai pas de revenir vers vous par mail !"
+          );
+          endApointment();
         }
         if (result.status === 201) {
           console.error("Le message a bien été envoyé");
@@ -65,43 +155,27 @@ function Apointments({ setIsApointmentDisplayed }) {
       });
   };
 
-  const handleDate = () => {
-    console.error({
-      ...message,
-      next_step: 3,
-      date: document.querySelector("#date").value,
-    });
-    setMessage({
-      ...message,
-      next_step: 3,
-      date: document.querySelector("#date").value,
-    });
-  };
-
-  const handleTimeslot = () => {
-    setMessage({
-      ...message,
-      next_step: 4,
-      timeslot: document.querySelector("#proposed-timeslot").value,
-    });
-  };
-
   const postAppointment = () => {
     // poste la demande d'entretien
-  };
-
-  const handleDisplayTimeSelection = (e) => {
-    console.error(typeof e.target.value);
-    setIsVisible({ visible: true, id: parseInt(e.target.value, 10) });
+    api
+      .post("/apointment", { timeslot: message.timeslot, date: message.date })
+      .then((result) => {
+        if (result.status === 500) {
+          console.error(
+            "serveur injoignable, la demande n'a pas pu être transmise"
+          );
+        } else {
+          // transmet l'id de la demande de rendez vous pour l'insérer dans la création de message
+          postMessage(result.data);
+        }
+      });
   };
 
   const handleSubmit = () => {
-    postMessage();
     postAppointment();
   };
 
   const handleDispatch = () => {
-    console.error("dispatch");
     switch (message.next_step) {
       case 1:
         handleMessage();
@@ -122,6 +196,9 @@ function Apointments({ setIsApointmentDisplayed }) {
 
   const handlePreviousStep = () => {
     setMessage({ ...message, next_step: message.next_step - 1 });
+    setIsAvailabilityLoading(true);
+    setAvailability();
+    setAlert("");
   };
 
   return (
@@ -182,6 +259,9 @@ function Apointments({ setIsApointmentDisplayed }) {
                   id="message-input"
                   name="message-input"
                   placeholder="Votre message"
+                  onChange={() => {
+                    setAlert("");
+                  }}
                 />
               </label>
             </form>
@@ -202,7 +282,9 @@ function Apointments({ setIsApointmentDisplayed }) {
                   id="date"
                   name="date"
                   placeholder={new Date()}
+                  onChange={displayDay}
                 />
+                <span id="day">{jour}</span>
               </label>
             </form>
           </div>
@@ -214,13 +296,14 @@ function Apointments({ setIsApointmentDisplayed }) {
               Sélection créneau
             </h2>
             <form>
+              {/* on s'assure que availability a bien été défini avant de charger quoi que ce soit */}
               {isAvailabilityLoading
-                ? "Chargement des dispos ..."
+                ? ""
                 : availability.map((avail) => {
-                    const { idavailability, day, start, end } = avail;
+                    const { idavailability, start, end } = avail;
 
                     return (
-                      <div key={idavailability}>
+                      <div key={idavailability} className="availabilities">
                         <label htmlFor={idavailability}>
                           <input
                             type="radio"
@@ -229,7 +312,7 @@ function Apointments({ setIsApointmentDisplayed }) {
                             value={idavailability}
                             onChange={handleDisplayTimeSelection}
                           />
-                          {day} : De {formatDate(start)} à {formatDate(end)}
+                          De {formatDate(start)} à {formatDate(end)}
                         </label>
                         <label
                           htmlFor={`proposed-timeslot-${idavailability}`}
@@ -242,10 +325,14 @@ function Apointments({ setIsApointmentDisplayed }) {
                         >
                           <input
                             type="time"
+                            min={formatDate(start)}
+                            max={formatDate(end)}
+                            defaultValue={formatDate(start)}
                             id={`proposed-timeslot-${idavailability}`}
                             name={`proposed-timeslot-${idavailability}`}
+                            onChange={handleSelectedTimeSlot}
                           />
-                          <span>Créneau de 30 minutes</span>
+                          <span id="duree">30 min</span>
                         </label>
                       </div>
                     );
@@ -253,7 +340,12 @@ function Apointments({ setIsApointmentDisplayed }) {
             </form>
           </div>
         </div>
-        <div className="step-hider" id={`step-${message.next_step}`} />
+        <div className="step-hider" id={`step-${message.next_step}`}>
+          {message.next_step === 5 ? alert : ""}
+        </div>
+        <div id={message.next_step === 4 ? "check" : "alert"}>
+          {message.next_step === 5 ? "" : alert}
+        </div>
         <div id="steps-control-area">
           <div>
             {message.next_step === 1 ? null : (
@@ -275,7 +367,7 @@ function Apointments({ setIsApointmentDisplayed }) {
               name="next-step"
               onClick={handleDispatch}
             >
-              {message.next_step === 3
+              {message.next_step === 4
                 ? "Envoyer la demande"
                 : "> Passer à l'étape suivante"}
             </button>

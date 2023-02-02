@@ -52,7 +52,8 @@ const edit = (req, res) => {
 };
 
 const add = (req, res) => {
-  const { firstname, lastname, email, company, message } = req.body;
+  const { firstname, lastname, email, company, message, idApointment } =
+    req.body;
 
   models.user.findIdByEmail(email).then((result) => {
     if (result[0][0] == null) {
@@ -74,7 +75,7 @@ const add = (req, res) => {
         models.user.insertGuest(user).then((reponse) => {
           if (reponse[0].affectedRows === 1) {
             models.messages
-              .insert({ message, idUser })
+              .insert({ message, idUser, idApointment })
               .then(([createdUser]) => {
                 res
                   .location(`/messages/${createdUser.insertId}`)
@@ -87,10 +88,11 @@ const add = (req, res) => {
       });
     } else {
       const idUser = result[0][0].id_user;
-      models.messages.insert({ message, idUser }).then(([reponse]) => {
-        console.error(reponse);
-        res.location(`/messages/${result.insertId}`).sendStatus(201);
-      });
+      models.messages
+        .insert({ message, idUser, idApointment })
+        .then(([reponse]) => {
+          res.location(`/messages/${reponse.insertId}`).sendStatus(201);
+        });
     }
   });
 

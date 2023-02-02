@@ -1,7 +1,7 @@
 const models = require("../models");
 
 const browse = (req, res) => {
-  models.availability
+  models.meetingRequest
     .findAll()
     .then(([rows]) => {
       res.send(rows);
@@ -13,14 +13,13 @@ const browse = (req, res) => {
 };
 
 const read = (req, res) => {
-  const day = req.params.id;
-  models.availability
-    .findByDay(day)
+  models.meetingrequest
+    .find(req.params.id)
     .then(([rows]) => {
       if (rows[0] == null) {
         res.sendStatus(404);
       } else {
-        res.send(rows);
+        res.send(rows[0]);
       }
     })
     .catch((err) => {
@@ -34,9 +33,9 @@ const edit = (req, res) => {
 
   // TODO validations (length, format...)
 
-  item.id = parseInt(req.params.id, 10);
+  item.id = req.params.id;
 
-  models.availability
+  models.meetingRequest
     .update(item)
     .then(([result]) => {
       if (result.affectedRows === 0) {
@@ -52,11 +51,18 @@ const edit = (req, res) => {
 };
 
 const add = (req, res) => {
-  const availability = req.body;
-  models.availability
-    .insert(availability)
+  const { date } = req.body;
+  const tmpDate = new Date(date);
+  const location = "non implémenté";
+  const duration = "30";
+
+  models.meetingrequest
+    .insert({ date: tmpDate, location, duration })
     .then(([result]) => {
-      res.location(`/availabilitys/${result.insertId}`).sendStatus(201);
+      res
+        .location(`/apointment/${result.insertId}`)
+        .status(201)
+        .send(result.insertId.toString());
     })
     .catch((err) => {
       console.error(err);
@@ -64,11 +70,9 @@ const add = (req, res) => {
     });
 };
 
-// TODO validations (length, format...)
 const destroy = (req, res) => {
-  const id = parseInt(req.params.id, 10);
-  models.availability
-    .deleteAvailability(id)
+  models.meetingRequest
+    .deleteByEmail(req.params.id)
     .then(([result]) => {
       if (result.affectedRows === 0) {
         res.sendStatus(404);
