@@ -205,6 +205,7 @@ a:hover ~ span {
   right: -0.4rem;
   cursor: pointer;
   opacity: 90%;
+  z-index: 2;
 }
 
 #sub-navbar-list {
