@@ -1,26 +1,20 @@
 import React, { useEffect, useState } from "react";
-import api, { formatDate } from "@services/services";
+import api, { formatDate, whichDayString } from "@services/services";
 import "../styles/apointments.css";
 
 function Apointments({ setIsApointmentDisplayed }) {
   const [availability, setAvailability] = useState();
   const [isAvailabilityLoading, setIsAvailabilityLoading] = useState(true);
-  const [message, setMessage] = useState({ next_step: 1 });
   const [isVisible, setIsVisible] = useState({ visible: false, id: "" });
+  const [message, setMessage] = useState({ next_step: 1 });
+  const [jour, setJour] = useState("");
   const [alert, setAlert] = useState("");
 
   // récupère les disponibilités
   const handleAvailabilities = (day) => {
-    const days = [
-      "Dimanche",
-      "Lundi",
-      "Mardi",
-      "Mercredi",
-      "Jeudi",
-      "Vendredi",
-      "Samedi",
-    ];
-    api.get(`/availability/${days[day]}`).then((result) => {
+    const days = whichDayString(day);
+    setJour(days);
+    api.get(`/availability/${days}`).then((result) => {
       if (result.status === 404) {
         console.error("Pas de disponibilité ce jour là");
       } else if (result.status === 5000) {
@@ -100,6 +94,7 @@ function Apointments({ setIsApointmentDisplayed }) {
       setAlert("Sélectionnez une date");
     } else {
       const date = new Date(selectedDate);
+
       handleAvailabilities(date.getDay());
       setMessage({
         ...message,
@@ -107,6 +102,12 @@ function Apointments({ setIsApointmentDisplayed }) {
         date,
       });
     }
+  };
+
+  const displayDay = (e) => {
+    setAlert("");
+    const selectedDate = new Date(e.target.value);
+    setJour(whichDayString(selectedDate.getDay()));
   };
 
   const handleTimeslot = () => {
@@ -153,6 +154,8 @@ function Apointments({ setIsApointmentDisplayed }) {
 
   const handlePreviousStep = () => {
     setMessage({ ...message, next_step: message.next_step - 1 });
+    setIsAvailabilityLoading(true);
+    setAvailability();
   };
 
   return (
@@ -236,10 +239,9 @@ function Apointments({ setIsApointmentDisplayed }) {
                   id="date"
                   name="date"
                   placeholder={new Date()}
-                  onChange={() => {
-                    setAlert("");
-                  }}
+                  onChange={displayDay}
                 />
+                <span id="day">{jour}</span>
               </label>
             </form>
           </div>
@@ -252,12 +254,12 @@ function Apointments({ setIsApointmentDisplayed }) {
             </h2>
             <form>
               {isAvailabilityLoading
-                ? "Chargement des dispos ..."
+                ? ""
                 : availability.map((avail) => {
-                    const { idavailability, day, start, end } = avail;
+                    const { idavailability, start, end } = avail;
 
                     return (
-                      <div key={idavailability}>
+                      <div key={idavailability} className="availabilities">
                         <label htmlFor={idavailability}>
                           <input
                             type="radio"
@@ -266,7 +268,7 @@ function Apointments({ setIsApointmentDisplayed }) {
                             value={idavailability}
                             onChange={handleDisplayTimeSelection}
                           />
-                          {day} : De {formatDate(start)} à {formatDate(end)}
+                          De {formatDate(start)} à {formatDate(end)}
                         </label>
                         <label
                           htmlFor={`proposed-timeslot-${idavailability}`}
@@ -282,7 +284,7 @@ function Apointments({ setIsApointmentDisplayed }) {
                             id={`proposed-timeslot-${idavailability}`}
                             name={`proposed-timeslot-${idavailability}`}
                           />
-                          <span>Créneau de 30 minutes</span>
+                          <span>30 min</span>
                         </label>
                       </div>
                     );

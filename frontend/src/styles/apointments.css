@@ -14,6 +14,7 @@
 .step-hider {
   position: absolute;
   width: 23.5rem;
+  width: 20.3rem;
   height: 11.5rem;
   background-color: white;
   top: 0.5rem;
@@ -23,7 +24,7 @@
 
 #step-2 {
   left: 26rem;
-  width: 12rem;
+  width: 8.5rem;
   transition: all 0.5s ease-out;
 }
 
@@ -107,6 +108,14 @@ input {
   padding: 0.25rem;
 }
 
+#day {
+  font-size: 0.9rem;
+}
+
+.availabilities {
+  padding: 0.3rem;
+}
+
 /* gestion des étapes */
 
 #steps-control-area {
@@ -140,5 +149,5 @@ input {
 }
 
 .visible input {
-  margin: 0.5rem 1rem;
+  margin: 0.5rem;
 }

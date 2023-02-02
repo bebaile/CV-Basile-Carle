@@ -12,4 +12,17 @@ export const formatDate = (date) => {
   return tmpDate.join("");
 };
 
+export const whichDayString = (date) => {
+  const days = [
+    "Dimanche",
+    "Lundi",
+    "Mardi",
+    "Mercredi",
+    "Jeudi",
+    "Vendredi",
+    "Samedi",
+  ];
+  return days[date];
+};
+
 export default api;
