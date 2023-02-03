@@ -79,17 +79,18 @@ label {
 
 #admin-table {
   overflow-x: auto;
+  border: 1px solid var(--title-color);
+  border-radius: 5px;
+  margin-top: 1rem;
 }
 
 table {
   table-layout: fixed;
-  margin: 1rem auto;
+  margin: 0 auto;
   padding: 0.25rem;
   width: 100%;
   text-align: left;
   border-collapse: collapse;
-  border: 1px solid var(--title-color);
-  border-radius: 5px;
 }
 
 thead {
@@ -101,7 +102,10 @@ thead th:nth-child(1) {
   width: 10ch;
 }
 thead th:nth-child(2) {
-  width: 25ch;
+  width: 20ch;
+}
+thead th:nth-child(3) {
+  width: 10ch;
 }
 thead th:nth-child(4) {
   width: 5ch;
@@ -111,7 +115,7 @@ thead th:nth-child(5) {
   text-align: center;
 }
 thead th:nth-child(6) {
-  text-align: center;
+  text-align: right;
   width: 2rem;
 }
 
@@ -121,6 +125,11 @@ th {
 
 td {
   padding: 0.5rem 0.25rem;
+}
+
+.user-line {
+  margin: 1rem auto;
+  width: 100%;
 }
 
 .user-line:hover {
@@ -157,6 +166,9 @@ td {
   text-align: center;
 }
 
+.delete {
+  text-align: right;
+}
 .edit:hover,
 .delete:hover {
   cursor: pointer;
@@ -180,6 +192,7 @@ td {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  padding-left: 1rem;
 }
 
 .confirm-delete-btn {
@@ -202,18 +215,32 @@ td {
 }
 
 .details thead tr th:nth-child(1) {
-  width: 4ch;
+  width: 1ch;
 }
 .details thead tr th:nth-child(2) {
-  width: 10ch;
+  width: 3ch;
 }
 
 .details thead tr th:nth-child(4) {
-  width: 10ch;
+  width: 3ch;
+}
+.details thead tr th:nth-child(5) {
+  width: 1ch;
 }
 
-#replyImg {
+#replyImg,
+#replyImg2 {
   width: 1rem;
+}
+
+#reply-area {
+  width: 10px;
+}
+
+#reply-message {
+  border-radius: 5px;
+  width: 100%;
+  border: 0;
 }
 
 .details tbody tr:nth-child(2n + 1) {
