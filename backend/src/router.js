@@ -24,6 +24,7 @@ router.put("/users/:id", userControllers.edit);
 router.post("/availability", availabilityControllers.add);
 router.delete("/availability/:id", availabilityControllers.destroy);
 router.get("/messages/", messagesController.browse);
+router.get("/apointment", apointmentController.browse);
 
 module.exports = router;
 

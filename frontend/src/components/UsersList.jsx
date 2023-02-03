@@ -1,13 +1,15 @@
 import React, { useEffect, useState } from "react";
-import api from "@services/services";
+import api, { formatDateDMY } from "@services/services";
 import deleteIcon from "@assets/delete.png";
 import editIcon from "@assets/edit.png";
-import email from "@assets/email.png";
+import emailImg from "@assets/email.png";
+import replyImg from "@assets/reply.png";
 import ConfirmDeleteUser from "./ConfirmDeleteUser";
 
 function UsersList() {
   const [users, setUsers] = useState();
   const [messages, setMessages] = useState();
+  const [apointments, setApointments] = useState();
   const [areUsersModified, setAreUsersModified] = useState();
   const [isLoading, setIsLoading] = useState(true);
   const [isEdited, setIsEdited] = useState({ email: "", visible: false });
@@ -15,8 +17,8 @@ function UsersList() {
     useState(false);
   const [userToDelete, setUserToDelete] = useState("");
 
-  // récupère la liste de tous les utilisateurs pour les afficher
   useEffect(() => {
+    // récupère la liste de tous les utilisateurs pour les afficher
     api.get("/users").then((result) => {
       if (result.status === 500) {
         console.error("Erreur de communication avec la base de données");
@@ -24,11 +26,21 @@ function UsersList() {
         setUsers(result.data);
       }
     });
+    // on récupère les messages
     api.get("/messages").then((result) => {
       if (result.status === 500) {
         console.error("impossible de récupérer les messages");
       } else {
         setMessages(result.data);
+      }
+    });
+    // on récupère les demandes de rendez-vous
+    api.get("/apointment").then((result) => {
+      if (result.status === 500) {
+        console.error("impossible de récupérer les demandes d'entretien");
+      } else {
+        console.error(result.data);
+        setApointments(result.data);
       }
     });
   }, [areUsersModified]);
@@ -38,11 +50,14 @@ function UsersList() {
     if (
       typeof users !== "undefined" &&
       typeof isEdited !== "undefined" &&
-      typeof messages !== "undefined"
+      typeof messages !== "undefined" &&
+      typeof apointments !== "undefined"
     ) {
       setIsLoading(false);
     }
   }, [users, isEdited]);
+
+  useEffect(() => {}, []);
 
   // affiche demande de confirmation d'utilisateur
   const displayDeleteConfirmation = (email) => {
@@ -93,7 +108,7 @@ function UsersList() {
   };
 
   return (
-    <div>
+    <div id="admin-table">
       {isLoading ? (
         "Chargement ..."
       ) : (
@@ -106,7 +121,7 @@ function UsersList() {
               <th>
                 #{" "}
                 <img
-                  src={email}
+                  src={emailImg}
                   alt="Email by Mira iconic from Noun Project"
                   id="email-img"
                 />
@@ -118,133 +133,190 @@ function UsersList() {
           <tbody>
             {users.map((user) => {
               return (
-                <tr key={user.email}>
-                  <td>
-                    <span
-                      className={
-                        isEdited.email === user.email &&
-                        isEdited.visible === true
-                          ? "_edit"
-                          : null
+                <>
+                  <tr key={user.email}>
+                    <td>
+                      <span
+                        className={
+                          isEdited.email === user.email &&
+                          isEdited.visible === true
+                            ? "_edit"
+                            : null
+                        }
+                      >
+                        {user.firstname}
+                      </span>
+                      <span
+                        className={
+                          isEdited.email === user.email &&
+                          isEdited.visible === true
+                            ? null
+                            : "_edit"
+                        }
+                      >
+                        <input
+                          type="text"
+                          name="prenom"
+                          id="prenom"
+                          defaultValue={user.firstname}
+                        />
+                      </span>
+                    </td>
+                    <td>
+                      <span
+                        className={
+                          isEdited.email === user.email &&
+                          isEdited.visible === true
+                            ? "_edit"
+                            : null
+                        }
+                      >
+                        {user.email}
+                      </span>
+                      <span
+                        className={
+                          isEdited.email === user.email &&
+                          isEdited.visible === true
+                            ? null
+                            : "_edit"
+                        }
+                      >
+                        <input
+                          type="text"
+                          name="email"
+                          id="email"
+                          defaultValue={user.email}
+                        />
+                      </span>
+                    </td>
+                    <td>
+                      <span
+                        className={
+                          isEdited.email === user.email &&
+                          isEdited.visible === true
+                            ? "_edit"
+                            : null
+                        }
+                      >
+                        {user.company}
+                      </span>
+                      <span
+                        className={
+                          isEdited.email === user.email &&
+                          isEdited.visible === true
+                            ? null
+                            : "_edit"
+                        }
+                      >
+                        <input
+                          type="text"
+                          name="company"
+                          id="company"
+                          defaultValue={user.company}
+                        />
+                      </span>
+                    </td>
+                    <td>
+                      {/* affiche le nombre de messages envoyés par cet utilisateur */}
+                      {
+                        messages.filter(
+                          (message) =>
+                            message.user_id_user.data.join("") ===
+                            user.id_user.data.join("")
+                        ).length
                       }
-                    >
-                      {user.firstname}
-                    </span>
-                    <span
-                      className={
-                        isEdited.email === user.email &&
-                        isEdited.visible === true
-                          ? null
-                          : "_edit"
-                      }
-                    >
-                      <input
-                        type="text"
-                        name="prenom"
-                        id="prenom"
-                        defaultValue={user.firstname}
-                      />
-                    </span>
-                  </td>
-                  <td>
-                    <span
-                      className={
-                        isEdited.email === user.email &&
-                        isEdited.visible === true
-                          ? "_edit"
-                          : null
-                      }
-                    >
-                      {user.email}
-                    </span>
-                    <span
-                      className={
-                        isEdited.email === user.email &&
-                        isEdited.visible === true
-                          ? null
-                          : "_edit"
-                      }
-                    >
-                      <input
-                        type="text"
-                        name="email"
-                        id="email"
-                        defaultValue={user.email}
-                      />
-                    </span>
-                  </td>
-                  <td>
-                    <span
-                      className={
-                        isEdited.email === user.email &&
-                        isEdited.visible === true
-                          ? "_edit"
-                          : null
-                      }
-                    >
-                      {user.company}
-                    </span>
-                    <span
-                      className={
-                        isEdited.email === user.email &&
-                        isEdited.visible === true
-                          ? null
-                          : "_edit"
-                      }
-                    >
-                      <input
-                        type="text"
-                        name="company"
-                        id="company"
-                        defaultValue={user.company}
-                      />
-                    </span>
-                  </td>
-                  <td>
-                    {
-                      messages.filter(
-                        (message) =>
-                          message.user_id_user.data.join("") ===
-                          user.id_user.data.join("")
-                      ).length
-                    }
-                  </td>
-                  <td className="edit">
-                    <div
-                      name={user.id_user}
-                      role="button"
-                      onClick={() => handleEdit(user.email)}
-                      onKeyDown={null}
-                      tabIndex="0"
-                      className={
-                        isEdited.visible === true &&
-                        isEdited.email === user.email
-                          ? "edited"
-                          : null
-                      }
-                    >
-                      <img
-                        src={editIcon}
-                        id="edit-icn"
-                        alt="Delete by mim studio from Noun Project"
-                      />
+                    </td>
+                    <td className="edit">
+                      <div
+                        name={user.id_user}
+                        role="button"
+                        onClick={() => handleEdit(user.email)}
+                        onKeyDown={null}
+                        tabIndex="0"
+                        className={
+                          isEdited.visible === true &&
+                          isEdited.email === user.email
+                            ? "edited"
+                            : null
+                        }
+                      >
+                        <img
+                          src={editIcon}
+                          id="edit-icn"
+                          alt="Delete by mim studio from Noun Project"
+                        />
+                      </div>
+                    </td>
+                    <td className="delete">
+                      <div
+                        role="button"
+                        onClick={() => displayDeleteConfirmation(user.email)}
+                        onKeyDown={null}
+                        tabIndex="0"
+                      >
+                        <img
+                          src={deleteIcon}
+                          id="delete-icn"
+                          alt="Delete by mim studio from Noun Project"
+                        />
+                      </div>
+                    </td>
+                  </tr>
+                  <td colSpan="6">
+                    <div>
+                      <table className="details">
+                        <thead>
+                          <tr>
+                            <th>#</th>
+                            <th>Envoi</th>
+                            <th>Contenu</th>
+                            <th>RDV</th>
+                            <th>
+                              <img
+                                src={replyImg}
+                                alt="Reply by Bernd Lakenbrink from Noun Project"
+                                id="replyImg"
+                              />
+                            </th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {messages
+                            .filter(
+                              (message) =>
+                                message.user_id_user.data.join("") ===
+                                user.id_user.data.join("")
+                            )
+                            .map((message, index) => {
+                              return (
+                                <tr key={message.id}>
+                                  <td>{index + 1}</td>
+                                  <td>{formatDateDMY(message.create_time)}</td>
+                                  <td>{message.message}</td>
+                                  <td>
+                                    {formatDateDMY(
+                                      apointments.filter(
+                                        (apointment) =>
+                                          apointment.idmeeting_request ===
+                                          message.meeting_request_idmeeting_request
+                                      )[0].day
+                                    )}
+                                  </td>
+                                  <td>
+                                    <img
+                                      src={replyImg}
+                                      alt="Reply by Bernd Lakenbrink from Noun Project"
+                                      id="replyImg"
+                                    />
+                                  </td>
+                                </tr>
+                              );
+                            })}
+                        </tbody>
+                      </table>
                     </div>
                   </td>
-                  <td className="delete">
-                    <div
-                      role="button"
-                      onClick={() => displayDeleteConfirmation(user.email)}
-                      onKeyDown={null}
-                      tabIndex="0"
-                    >
-                      <img
-                        src={deleteIcon}
-                        id="delete-icn"
-                        alt="Delete by mim studio from Noun Project"
-                      />
-                    </div>
-                  </td>
-                </tr>
+                </>
               );
             })}
           </tbody>

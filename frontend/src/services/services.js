@@ -12,6 +12,14 @@ export const formatDate = (date) => {
   return tmpDate.join("");
 };
 
+export const formatDateDMY = (date) => {
+  const tmpDate = new Date(date);
+  const formattedDate = `${tmpDate.getDate()}/${
+    tmpDate.getMonth() + 1
+  }/${tmpDate.getFullYear()}`;
+  return formattedDate;
+};
+
 export const whichDayString = (date) => {
   const days = [
     "Dimanche",

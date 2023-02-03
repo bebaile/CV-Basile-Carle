@@ -3,7 +3,6 @@ import basile from "@assets/basileCarle.png";
 import github from "@assets/github.png";
 import linkedin from "@assets/linkedin.png";
 import qrcode from "@assets/qrcode.png";
-import { useNavigate } from "react-router-dom";
 
 function GeneralInfo() {
   return (
