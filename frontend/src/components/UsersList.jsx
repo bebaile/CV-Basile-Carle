@@ -2,10 +2,12 @@ import React, { useEffect, useState } from "react";
 import api from "@services/services";
 import deleteIcon from "@assets/delete.png";
 import editIcon from "@assets/edit.png";
+import email from "@assets/email.png";
 import ConfirmDeleteUser from "./ConfirmDeleteUser";
 
 function UsersList() {
   const [users, setUsers] = useState();
+  const [messages, setMessages] = useState();
   const [areUsersModified, setAreUsersModified] = useState();
   const [isLoading, setIsLoading] = useState(true);
   const [isEdited, setIsEdited] = useState({ email: "", visible: false });
@@ -13,6 +15,7 @@ function UsersList() {
     useState(false);
   const [userToDelete, setUserToDelete] = useState("");
 
+  // récupère la liste de tous les utilisateurs pour les afficher
   useEffect(() => {
     api.get("/users").then((result) => {
       if (result.status === 500) {
@@ -21,22 +24,38 @@ function UsersList() {
         setUsers(result.data);
       }
     });
+    api.get("/messages").then((result) => {
+      if (result.status === 500) {
+        console.error("impossible de récupérer les messages");
+      } else {
+        setMessages(result.data);
+      }
+    });
   }, [areUsersModified]);
 
+  // on attend le chargement des utilisateurs pour faire un rendering
   useEffect(() => {
-    if (typeof users !== "undefined" && typeof isEdited !== "undefined")
+    if (
+      typeof users !== "undefined" &&
+      typeof isEdited !== "undefined" &&
+      typeof messages !== "undefined"
+    ) {
       setIsLoading(false);
+    }
   }, [users, isEdited]);
 
+  // affiche demande de confirmation d'utilisateur
   const displayDeleteConfirmation = (email) => {
     setIsDeleteConfirmationDisplayed(true);
     setUserToDelete(email);
   };
 
+  // si l'utilisateur décide finalement de ne pas supprimer l'utilisateur
   const handleCancelDelete = () => {
     setIsDeleteConfirmationDisplayed(false);
   };
 
+  // suppression de l'utilisateur dans le back
   const handleDelete = (e) => {
     const email = e.currentTarget.getAttribute("data-value");
     console.error(email);
@@ -47,6 +66,7 @@ function UsersList() {
     });
   };
 
+  // gestion de la mise à jour d'un utilisateur dans le back
   const handleEdit = (email) => {
     setIsEdited({
       email,
@@ -83,7 +103,14 @@ function UsersList() {
               <th>Prénom</th>
               <th>Courriel</th>
               <th>Entreprise</th>
-              <th># Messages</th>
+              <th>
+                #{" "}
+                <img
+                  src={email}
+                  alt="Email by Mira iconic from Noun Project"
+                  id="email-img"
+                />
+              </th>
               <th>Edit</th>
               <th>X</th>
             </tr>
@@ -173,7 +200,15 @@ function UsersList() {
                       />
                     </span>
                   </td>
-                  <td>nbre de messages (tbi)</td>
+                  <td>
+                    {
+                      messages.filter(
+                        (message) =>
+                          message.user_id_user.data.join("") ===
+                          user.id_user.data.join("")
+                      ).length
+                    }
+                  </td>
                   <td className="edit">
                     <div
                       name={user.id_user}

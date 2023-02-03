@@ -13,6 +13,13 @@ class MessagesManager extends AbstractManager {
     );
   }
 
+  findById(id) {
+    return this.connection.query(
+      `SELECT * FROM ${this.table} WHERE user_id_user = ?`,
+      [id]
+    );
+  }
+
   update(item) {
     return this.connection.query(
       `update ${this.table} SET username = ?, email = ?, company = ? WHERE email = ?`,

@@ -98,6 +98,9 @@ thead th:nth-child(1) {
 thead th:nth-child(2) {
   width: 25ch;
 }
+thead th:nth-child(4) {
+  width: 5ch;
+}
 thead th:nth-child(5) {
   width: 2.5rem;
   text-align: center;
@@ -117,6 +120,12 @@ td {
 
 ._edit {
   display: none;
+}
+
+#email-img {
+  width: 1rem;
+  background-color: white;
+  border-radius: 5px;
 }
 
 #prenom {

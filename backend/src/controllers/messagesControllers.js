@@ -14,9 +14,11 @@ const browse = (req, res) => {
 };
 
 const read = (req, res) => {
+  const { id } = req.body;
   models.messages
-    .find(req.params.id)
+    .findById(id)
     .then(([rows]) => {
+      console.error(rows);
       if (rows[0] == null) {
         res.sendStatus(404);
       } else {
