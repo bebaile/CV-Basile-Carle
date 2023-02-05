@@ -48,6 +48,7 @@ function Apointments({ setIsApointmentDisplayed }) {
         email: document.querySelector("#courriel").value,
         company: document.querySelector("#entreprise").value,
         message: document.querySelector("#message-input").value,
+        recipient: "",
         next_step: 2,
       });
     }
@@ -140,6 +141,7 @@ function Apointments({ setIsApointmentDisplayed }) {
         company: document.querySelector("#entreprise").value,
         message: document.querySelector("#message-input").value,
         idApointment,
+        recipient: message.recipient,
       })
       .then((result) => {
         if (result.status === 201) {
