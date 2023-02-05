@@ -1,22 +1,31 @@
 import React, { useEffect, useState } from "react";
+import DOMPurify from "dompurify";
+import HTMLReactParser from "html-react-parser";
 import api, { formatDateDMY } from "@services/services";
 import deleteIcon from "@assets/delete.png";
 import editIcon from "@assets/edit.png";
 import emailImg from "@assets/email.png";
 import replyImg from "@assets/reply.png";
 import replyImg2 from "@assets/reply2.png";
+import send from "@assets/send.png";
 import ConfirmDeleteUser from "./ConfirmDeleteUser";
 
 function UsersList() {
   const [users, setUsers] = useState();
   const [messages, setMessages] = useState();
   const [apointments, setApointments] = useState();
+  const [replyMessage, setReplyMessage] = useState({ id: "" });
   const [areUsersModified, setAreUsersModified] = useState();
   const [isLoading, setIsLoading] = useState(true);
   const [isEdited, setIsEdited] = useState({ email: "", visible: false });
   const [areUserDetailsDisplayed, setAreUserDetailsDisplayed] = useState(false);
   const [isDeleteConfirmationDisplayed, setIsDeleteConfirmationDisplayed] =
     useState({ email: "", visible: false });
+  const [isReplyDisplayed, setIsReplyDisplayed] = useState({
+    email: "",
+    message_id: "",
+    visible: "false",
+  });
   const [userToDelete, setUserToDelete] = useState("");
 
   useEffect(() => {
@@ -34,6 +43,7 @@ function UsersList() {
         console.error("impossible de récupérer les messages");
       } else {
         setMessages(result.data);
+        console.error(result.data);
       }
     });
     // on récupère les demandes de rendez-vous
@@ -41,7 +51,6 @@ function UsersList() {
       if (result.status === 500) {
         console.error("impossible de récupérer les demandes d'entretien");
       } else {
-        console.error(result.data);
         setApointments(result.data);
       }
     });
@@ -116,8 +125,36 @@ function UsersList() {
     });
   };
 
-  const handleReply = () => {
+  const handleDisplayReply = (email, messageId) => {
     // affiche une zone de réponse au message
+    setIsReplyDisplayed({
+      email,
+      message_id: messageId,
+      visible: !isReplyDisplayed.visible,
+    });
+  };
+
+  const handleSendReply = () => {
+    console.error("c'est parti pour l'envoi");
+    const firstname = sessionStorage.getItem("firstname");
+    const lastname = sessionStorage.getItem("lastname");
+    const email = sessionStorage.getItem("email");
+    const company = sessionStorage.getItem("company");
+    const message = document.querySelector(`#${replyMessage.id}`).innerHTML;
+    const { idApointment } = replyMessage;
+    console.error(firstname, lastname, email, company, message, replyMessage);
+    api
+      .post("/messages", {
+        firstname,
+        lastname,
+        email,
+        company,
+        message,
+        idApointment,
+      })
+      .then((result) => {
+        console.error(result);
+      });
   };
 
   return (
@@ -260,7 +297,6 @@ function UsersList() {
                           ).length
                         }
                       </td>
-
                       <td className="edit">
                         <div
                           name={user.id_user}
@@ -298,90 +334,151 @@ function UsersList() {
                       </td>
                     </tr>
                     <tr>
-                      <td
-                        colSpan="6"
-                        className={
-                          areUserDetailsDisplayed.visible === true &&
-                          areUserDetailsDisplayed.email === user.email
-                            ? ""
-                            : "user-details-hidden"
-                        }
-                      >
-                        <div>
-                          <table className="details">
-                            <thead>
-                              <tr>
-                                <th>#</th>
-                                <th>Envoi</th>
-                                <th>Contenu</th>
-                                <th>RDV</th>
-                                <th>
-                                  <img
-                                    src={replyImg}
-                                    alt="Reply by Bernd Lakenbrink from Noun Project"
-                                    id="replyImg"
-                                  />
-                                </th>
-                              </tr>
-                            </thead>
-                            <tbody>
-                              {messages
-                                .filter(
-                                  (message) =>
-                                    message.user_id_user.data.join("") ===
-                                    user.id_user.data.join("")
-                                )
-                                .map((message, index) => {
-                                  return (
-                                    <React.Fragment key={message.id}>
-                                      <tr>
-                                        <td>{index + 1}</td>
-                                        <td>
-                                          {formatDateDMY(message.create_time)}
-                                        </td>
-                                        <td>{message.message}</td>
-                                        <td>
-                                          {formatDateDMY(
-                                            apointments.filter(
-                                              (apointment) =>
-                                                apointment.idmeeting_request ===
-                                                message.meeting_request_idmeeting_request
-                                            )[0].day
-                                          )}
-                                        </td>
-                                        <td>
-                                          <img
-                                            src={replyImg2}
-                                            alt="Reply by Adrien Coquet from Noun Project"
-                                            id="replyImg2"
-                                            onClick={handleReply}
-                                            onKeyDown={null}
-                                            role="button"
-                                          />
-                                        </td>
-                                      </tr>
-                                      <tr>
-                                        <td id="reply-area">
-                                          <img
-                                            src={replyImg2}
-                                            alt="Reply by Adrien Coquet from Noun Project"
-                                            id="replyImg2"
-                                          />
-                                        </td>
-                                        <td>Date ajd</td>
-                                        <td>
-                                          <textarea id="reply-message" />
-                                        </td>
-                                        <td />
-                                        <td />
-                                      </tr>
-                                    </React.Fragment>
-                                  );
-                                })}
-                            </tbody>
-                          </table>
-                        </div>
-                      </td>
+                      {areUserDetailsDisplayed.visible === true &&
+                      areUserDetailsDisplayed.email === user.email ? (
+                        <td colSpan="6">
+                          <div>
+                            <table className="details">
+                              <thead>
+                                <tr>
+                                  <th>#</th>
+                                  <th>Envoi</th>
+                                  <th>Contenu</th>
+                                  <th>RDV</th>
+                                  <th>
+                                    <img
+                                      src={replyImg}
+                                      alt="Reply by Bernd Lakenbrink from Noun Project"
+                                      id="replyImg"
+                                    />
+                                  </th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                {messages
+                                  .filter(
+                                    (message) =>
+                                      message.user_id_user.data.join("") ===
+                                      user.id_user.data.join("")
+                                  )
+                                  .map((message, index) => {
+                                    const html = DOMPurify.sanitize(
+                                      message.message
+                                    );
+                                    return (
+                                      <React.Fragment key={message.id}>
+                                        <tr>
+                                          <td>{index + 1}</td>
+                                          <td>
+                                            {formatDateDMY(message.create_time)}
+                                          </td>
+                                          <td>{HTMLReactParser(html)} </td>
+                                          <td>
+                                            {formatDateDMY(
+                                              apointments.filter(
+                                                (apointment) =>
+                                                  apointment.idmeeting_request ===
+                                                  message.meeting_request_idmeeting_request
+                                              )[0].day
+                                            )}
+                                          </td>
+                                          <td id="reply-btn">
+                                            <img
+                                              src={replyImg2}
+                                              alt="Reply by Adrien Coquet from Noun Project"
+                                              id="replyImg2"
+                                              onClick={() => {
+                                                handleDisplayReply(
+                                                  user.email,
+                                                  message.id
+                                                );
+                                              }}
+                                              onKeyDown={null}
+                                              role="button"
+                                            />
+                                          </td>
+                                        </tr>
+                                        {isReplyDisplayed.email ===
+                                          user.email &&
+                                        isReplyDisplayed.message_id ===
+                                          message.id &&
+                                        isReplyDisplayed.visible === true ? (
+                                          <tr>
+                                            <td colSpan="5">
+                                              {isReplyDisplayed.email ===
+                                                user.email &&
+                                              isReplyDisplayed.message_id ===
+                                                message.id &&
+                                              isReplyDisplayed.visible ===
+                                                true ? (
+                                                <table id="reply-table">
+                                                  <tr>
+                                                    <td id="reply-area">
+                                                      <img
+                                                        src={replyImg2}
+                                                        alt="Reply by Adrien Coquet from Noun Project"
+                                                        id="replyImg2"
+                                                      />
+                                                    </td>
+                                                    <td>
+                                                      {formatDateDMY(Date())}
+                                                    </td>
+                                                    <td>
+                                                      <div
+                                                        contentEditable="true"
+                                                        className="reply-message"
+                                                        id={`reply-msg-${message.id}`}
+                                                        suppressContentEditableWarning
+                                                        onFocus={(e) => {
+                                                          setReplyMessage({
+                                                            id: e.target.id,
+                                                            idApointment:
+                                                              message.meeting_request_idmeeting_request,
+                                                          });
+                                                        }}
+                                                      >
+                                                        Rédigez votre réponse
+                                                        ici
+                                                      </div>
+                                                      {/* <textarea
+                                                    id="reply-message"
+                                                    placeholder="Rédigez votre réponse ici"
+                                                  /> */}
+                                                    </td>
+                                                    <td>
+                                                      <img
+                                                        src={send}
+                                                        alt="send by Alfan Zulkarnain from Noun Project"
+                                                        id="send-img"
+                                                        onClick={
+                                                          handleSendReply
+                                                        }
+                                                        onKeyDown={null}
+                                                        role="button"
+                                                        tabIndex={0}
+                                                      />
+                                                    </td>
+                                                  </tr>
+                                                </table>
+                                              ) : (
+                                                ""
+                                              )}
+                                            </td>
+                                            {/*  */}
+                                          </tr>
+                                        ) : (
+                                          ""
+                                        )}
+                                      </React.Fragment>
+                                    );
+                                  })}
+                              </tbody>
+                            </table>
+                          </div>
+                        </td>
+                      ) : (
+                        ""
+                      )}
                     </tr>
                   </React.Fragment>
                 );

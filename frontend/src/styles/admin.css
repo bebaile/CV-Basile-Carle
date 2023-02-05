@@ -229,17 +229,49 @@ td {
 }
 
 #replyImg,
-#replyImg2 {
+#replyImg2,
+#send-img {
   width: 1rem;
+}
+
+#reply-btn:hover {
+  cursor: pointer;
+}
+
+#reply-table {
+  table-layout: fixed;
+  width: 100%;
+  text-align: center;
+  vertical-align: middle;
+}
+
+#reply-table td:nth-child(1) {
+  width: 3ch;
+}
+
+#reply-table td:nth-child(2) {
+  width: 14ch;
+}
+#reply-table td:nth-child(4) {
+  width: 3ch;
 }
 
 #reply-area {
   width: 10px;
 }
 
-#reply-message {
+.reply-message {
   border-radius: 5px;
-  width: 100%;
+  width: calc(100% - 1rem);
+  border: 0;
+  padding: 1rem;
+  margin: 0.5rem;
+  color: black;
+  font-weight: smaller;
+  border: 3px solid var(--item-selected);
+}
+
+.reply-message:focus {
   border: 0;
 }
 
