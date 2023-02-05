@@ -1,5 +1,6 @@
 const models = require("../models");
 const { hashPassword, returnUuid } = require("../helpers/auth");
+require("dotenv").config();
 
 const browse = (req, res) => {
   models.messages
@@ -57,6 +58,11 @@ const add = (req, res) => {
   const { firstname, lastname, email, company, message, idApointment } =
     req.body;
 
+  let { recipient } = req.body;
+  if (recipient === "") {
+    recipient = process.env.ADMIN_EMAIL;
+  }
+
   models.user.findIdByEmail(email).then((result) => {
     if (result[0][0] == null) {
       // si aucun id n'est retourné, c'est que l'utilisateur n'existe pas,
@@ -91,7 +97,7 @@ const add = (req, res) => {
     } else {
       const idUser = result[0][0].id_user;
       models.messages
-        .insert({ message, idUser, idApointment })
+        .insert({ message, idUser, idApointment, recipient })
         .then(([reponse]) => {
           res.location(`/messages/${reponse.insertId}`).sendStatus(201);
         });

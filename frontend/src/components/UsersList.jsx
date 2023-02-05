@@ -15,6 +15,10 @@ function UsersList() {
   const [messages, setMessages] = useState();
   const [apointments, setApointments] = useState();
   const [replyMessage, setReplyMessage] = useState({ id: "" });
+  const [replyAlert, setReplyAlert] = useState({
+    idApointment: "",
+    message: "Rédigez votre réponse ici",
+  });
   const [areUsersModified, setAreUsersModified] = useState();
   const [isLoading, setIsLoading] = useState(true);
   const [isEdited, setIsEdited] = useState({ email: "", visible: false });
@@ -135,14 +139,19 @@ function UsersList() {
   };
 
   const handleSendReply = () => {
-    console.error("c'est parti pour l'envoi");
     const firstname = sessionStorage.getItem("firstname");
     const lastname = sessionStorage.getItem("lastname");
     const email = sessionStorage.getItem("email");
     const company = sessionStorage.getItem("company");
     const message = document.querySelector(`#${replyMessage.id}`).innerHTML;
     const { idApointment } = replyMessage;
-    console.error(firstname, lastname, email, company, message, replyMessage);
+
+    let { recipient } = replyMessage;
+    recipient = users.filter(
+      (user) => user.id_user.data.join("") === recipient.data.join("")
+    )[0].email;
+    console.error(recipient);
+
     api
       .post("/messages", {
         firstname,
@@ -151,9 +160,18 @@ function UsersList() {
         company,
         message,
         idApointment,
+        recipient,
       })
       .then((result) => {
-        console.error(result);
+        if (result.status === 500) {
+          console.error("la réponse n'a pas pu être envoyée");
+        } else {
+          setAreUsersModified(true);
+          setReplyAlert({ idApointment, messsage: "Réponse bien envoyée" });
+          setTimeout(() => {
+            setIsReplyDisplayed(false);
+          }, 3000);
+        }
       });
   };
 
@@ -343,6 +361,7 @@ function UsersList() {
                                 <tr>
                                   <th>#</th>
                                   <th>Envoi</th>
+                                  <th>Destinataire</th>
                                   <th>Contenu</th>
                                   <th>RDV</th>
                                   <th>
@@ -365,12 +384,16 @@ function UsersList() {
                                     const html = DOMPurify.sanitize(
                                       message.message
                                     );
+
                                     return (
                                       <React.Fragment key={message.id}>
                                         <tr>
                                           <td>{index + 1}</td>
                                           <td>
                                             {formatDateDMY(message.create_time)}
+                                          </td>
+                                          <td className="recipient">
+                                            {message.recipient_email}
                                           </td>
                                           <td>{HTMLReactParser(html)} </td>
                                           <td>
@@ -404,7 +427,7 @@ function UsersList() {
                                           message.id &&
                                         isReplyDisplayed.visible === true ? (
                                           <tr>
-                                            <td colSpan="5">
+                                            <td colSpan="6">
                                               {isReplyDisplayed.email ===
                                                 user.email &&
                                               isReplyDisplayed.message_id ===
@@ -434,16 +457,13 @@ function UsersList() {
                                                             id: e.target.id,
                                                             idApointment:
                                                               message.meeting_request_idmeeting_request,
+                                                            recipient:
+                                                              message.user_id_user,
                                                           });
                                                         }}
                                                       >
-                                                        Rédigez votre réponse
-                                                        ici
+                                                        {replyAlert.message}
                                                       </div>
-                                                      {/* <textarea
-                                                    id="reply-message"
-                                                    placeholder="Rédigez votre réponse ici"
-                                                  /> */}
                                                     </td>
                                                     <td>
                                                       <img
