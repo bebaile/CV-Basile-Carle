@@ -4,7 +4,7 @@ function ProfessionalObjectives() {
   return (
     <div className="container">
       <div className="professional-objectives">
-        <details open="true">
+        <details open="open">
           <summary>
             <h1>
               En recherche de contrat de professionnalisation d’un an à partir
@@ -17,12 +17,12 @@ function ProfessionalObjectives() {
             l’innovation technologique dans la réalisation de projets innovants
             au service d’un monde meilleur <strong>»</strong>
           </p>
-          {/* <button type="button" className="more-experience-btn">
+          <button type="button" className="more-experience-btn">
             <strong>
               {">"} En savoir plus sur mes 14 années de consultant Télécom
               mobile
             </strong>
-          </button> */}
+          </button>
         </details>
       </div>
     </div>

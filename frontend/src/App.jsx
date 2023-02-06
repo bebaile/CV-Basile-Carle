@@ -1,20 +1,46 @@
-import React from "react";
+import React, { useContext, useState } from "react";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Navbar from "@components/Navbar";
-import GeneralInfo from "@components/GeneralInfo";
-import GithubSummary from "@components/GithubSummary";
-import ProfessionalObjectives from "@components/ProfessionalObjectives";
-import CvSections from "@components/CvSections";
+import MyCV from "@pages/MyCV";
+import Login from "@pages/Login";
+import Admin from "@pages/Admin";
+import PrivateRoute from "@services/PrivateRoute";
+import Context from "./context/Context";
+
 import "./App.css";
 
 function App() {
+  const { infoUser } = useContext(Context);
+  const [isApointmentDisplayed, setIsApointmentDisplayed] = useState(false);
   return (
-    <div className="App">
-      <Navbar />
-      <GeneralInfo />
-      <GithubSummary />
-      <ProfessionalObjectives />
-      <CvSections />
-    </div>
+    <Router>
+      <div className="App">
+        <Navbar
+          isApointmentDisplayed={isApointmentDisplayed}
+          setIsApointmentDisplayed={setIsApointmentDisplayed}
+        />
+        <Routes>
+          <Route
+            path="/"
+            element={
+              <MyCV
+                isApointmentDisplayed={isApointmentDisplayed}
+                setIsApointmentDisplayed={setIsApointmentDisplayed}
+              />
+            }
+          />
+          <Route path="/login" element={<Login />} />
+          <Route
+            path="/admin"
+            element={
+              <PrivateRoute infoUser={infoUser}>
+                <Admin />
+              </PrivateRoute>
+            }
+          />
+        </Routes>
+      </div>
+    </Router>
   );
 }
 

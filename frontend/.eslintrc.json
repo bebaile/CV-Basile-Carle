@@ -17,6 +17,7 @@
   },
   "plugins": ["react", "import"],
   "rules": {
+    "react/prop-types": "off",
     "no-console": "off",
     "no-restricted-syntax": [
       "error",
@@ -42,7 +43,8 @@
           "@assets": "./src/assets",
           "@components": "./src/components",
           "@pages": "./src/pages",
-          "@services": "./src/services"
+          "@services": "./src/services",
+          "@styles": ".src/styles"
         },
         "extensions": [".js", ".jsx"]
       }

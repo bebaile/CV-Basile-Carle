@@ -1,0 +1,178 @@
+.user-interaction {
+  border: var(--border-area-style);
+  border-radius: 5px;
+  width: calc(var(--content-width)- 0.5rem);
+  padding: 0.5rem 0;
+  margin: 1rem;
+  min-width: 375px - 1rem;
+  max-width: 1024px;
+  position: relative;
+  animation: display-subnav-bar 2s;
+}
+
+/* voile occultant les différentes étapes */
+.step-hider {
+  position: absolute;
+  width: 23.5rem;
+  width: 20.3rem;
+  height: 11.5rem;
+  background-color: white;
+  top: 0.5rem;
+  left: 13.5rem;
+  opacity: 80%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#step-2 {
+  left: 26rem;
+  width: 8.5rem;
+  transition: all 0.5s ease-out;
+}
+
+#step-3,
+#step-4 {
+  left: 37rem;
+  width: 0;
+  transition: all 0.5s ease-out;
+}
+
+#step-5 {
+  left: 0;
+  top: 0;
+  opacity: 100%;
+  width: 100%;
+  height: 220px;
+  border-radius: 5px;
+  z-index: 1;
+  color: var(--button-color);
+  font-weight: bold;
+  animation: display-subnav-bar 2s;
+  padding: 0 8rem;
+  text-align: center;
+}
+
+/* fin de la partie voile occultant */
+
+#input-area {
+  display: flex;
+}
+
+.interaction-box {
+  margin: 0 0.5rem;
+}
+
+h2 {
+  font-weight: bold;
+  font-size: 1rem;
+  margin-bottom: 0.5rem;
+  padding-left: 0.2rem;
+  color: var(--button-color-3);
+}
+
+h2 span {
+  display: inline-block;
+  border: 1px solid;
+  border-radius: 50%;
+  width: 1rem;
+  height: 1rem;
+  margin-right: 0.2rem;
+  font-size: 0.8rem;
+  text-align: center;
+  transition: all 2s ease;
+}
+
+input {
+  border: var(--border-area-style);
+}
+
+/* messages area */
+
+.references {
+  width: 12ch;
+  border: var(--border-area-style);
+  padding: 0.2rem;
+}
+
+.interaction-box form {
+  margin: 0;
+}
+
+#messages form {
+  display: grid;
+  grid-template-columns: repeat(2, 12ch);
+  grid-template-rows: 1fr 1fr;
+}
+
+[for="message-input"] {
+  grid-column-start: 1;
+  grid-column-end: 3;
+}
+
+#message-input {
+  margin: 1rem 0.2rem 0 0.2rem;
+  width: calc(100% - 0.6rem);
+  height: 100%;
+  border-radius: 5px;
+  padding: 0.5rem;
+  border: var(--border-area-style);
+}
+
+/* Calendrier */
+
+#calender,
+#messages,
+#timeslot {
+  padding: 0.25rem;
+}
+
+#day,
+#duree {
+  font-size: 0.9rem;
+}
+
+.availabilities {
+  padding: 0.3rem;
+}
+
+/* gestion des étapes */
+
+#steps-control-area {
+  display: flex;
+  justify-content: flex-end;
+}
+
+#alert,
+#check {
+  margin: 0.75rem;
+  color: red;
+  width: 11.375rem;
+  text-align: center;
+  float: inline-start;
+}
+
+#check {
+  color: var(--button-color);
+}
+
+#next-step,
+#prev-step {
+  padding: 0 0.5rem;
+  margin: 0.5rem;
+  font-size: 0.8rem;
+  font-weight: normal;
+}
+
+#prev-step {
+  background-color: var(--button-color-3);
+  margin-right: 0;
+}
+
+.invisible {
+  display: none;
+}
+
+.visible input {
+  margin: 0.5rem;
+}

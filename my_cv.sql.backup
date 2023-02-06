@@ -1,0 +1,216 @@
+-- MySQL dump 10.13  Distrib 8.0.28, for macos11 (arm64)
+--
+-- Host: localhost    Database: my_cv
+-- ------------------------------------------------------
+-- Server version	8.0.28
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!50503 SET NAMES utf8mb4 */;
+/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
+/*!40103 SET TIME_ZONE='+00:00' */;
+/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
+/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
+/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
+/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
+
+--
+-- Table structure for table `availability`
+--
+
+DROP TABLE IF EXISTS `availability`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `availability` (
+  `idavailability` int NOT NULL AUTO_INCREMENT,
+  `day` varchar(10) NOT NULL,
+  `start` time NOT NULL,
+  `end` time NOT NULL,
+  PRIMARY KEY (`idavailability`)
+) ENGINE=InnoDB AUTO_INCREMENT=28 DEFAULT CHARSET=utf8mb3;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `availability`
+--
+
+LOCK TABLES `availability` WRITE;
+/*!40000 ALTER TABLE `availability` DISABLE KEYS */;
+INSERT INTO `availability` VALUES (20,'Mardi','14:00:00','17:00:00'),(23,'Lundi','09:00:00','12:00:00'),(25,'Lundi','14:00:00','18:00:00'),(26,'Lundi','19:00:00','19:30:00');
+/*!40000 ALTER TABLE `availability` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `contact_details`
+--
+
+DROP TABLE IF EXISTS `contact_details`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `contact_details` (
+  `idcontact_details` int NOT NULL,
+  `adress` varchar(45) NOT NULL,
+  `mail` varchar(45) NOT NULL,
+  `phone` varchar(45) NOT NULL,
+  `linkedin` varchar(45) NOT NULL,
+  `github` varchar(45) NOT NULL,
+  PRIMARY KEY (`idcontact_details`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `contact_details`
+--
+
+LOCK TABLES `contact_details` WRITE;
+/*!40000 ALTER TABLE `contact_details` DISABLE KEYS */;
+/*!40000 ALTER TABLE `contact_details` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `meeting_request`
+--
+
+DROP TABLE IF EXISTS `meeting_request`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `meeting_request` (
+  `idmeeting_request` int NOT NULL,
+  `day` datetime NOT NULL,
+  `duration` int NOT NULL DEFAULT '30',
+  `location` varchar(45) DEFAULT NULL,
+  PRIMARY KEY (`idmeeting_request`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `meeting_request`
+--
+
+LOCK TABLES `meeting_request` WRITE;
+/*!40000 ALTER TABLE `meeting_request` DISABLE KEYS */;
+/*!40000 ALTER TABLE `meeting_request` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `messages`
+--
+
+DROP TABLE IF EXISTS `messages`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `messages` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `message` varchar(1024) NOT NULL,
+  `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `meeting_request_idmeeting_request` int NOT NULL,
+  `user_id_user` binary(16) NOT NULL,
+  PRIMARY KEY (`id`,`user_id_user`),
+  UNIQUE KEY `id_UNIQUE` (`id`),
+  KEY `fk_messages_meeting_request1_idx` (`meeting_request_idmeeting_request`),
+  KEY `fk_messages_user1_idx` (`user_id_user`),
+  CONSTRAINT `fk_messages_meeting_request1` FOREIGN KEY (`meeting_request_idmeeting_request`) REFERENCES `meeting_request` (`idmeeting_request`),
+  CONSTRAINT `fk_messages_user1` FOREIGN KEY (`user_id_user`) REFERENCES `user` (`id_user`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `messages`
+--
+
+LOCK TABLES `messages` WRITE;
+/*!40000 ALTER TABLE `messages` DISABLE KEYS */;
+/*!40000 ALTER TABLE `messages` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `professional_objectives`
+--
+
+DROP TABLE IF EXISTS `professional_objectives`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `professional_objectives` (
+  `idprofessional_objectives` int NOT NULL,
+  `name` varchar(45) DEFAULT NULL,
+  `description` varchar(45) DEFAULT NULL,
+  PRIMARY KEY (`idprofessional_objectives`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `professional_objectives`
+--
+
+LOCK TABLES `professional_objectives` WRITE;
+/*!40000 ALTER TABLE `professional_objectives` DISABLE KEYS */;
+/*!40000 ALTER TABLE `professional_objectives` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `section_content`
+--
+
+DROP TABLE IF EXISTS `section_content`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `section_content` (
+  `idsection_content` int NOT NULL,
+  `category` varchar(45) NOT NULL,
+  `name` varchar(45) NOT NULL,
+  `description` varchar(200) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  PRIMARY KEY (`idsection_content`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `section_content`
+--
+
+LOCK TABLES `section_content` WRITE;
+/*!40000 ALTER TABLE `section_content` DISABLE KEYS */;
+/*!40000 ALTER TABLE `section_content` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `user`
+--
+
+DROP TABLE IF EXISTS `user`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `user` (
+  `email` varchar(255) DEFAULT NULL,
+  `password` varchar(255) NOT NULL,
+  `create_time` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  `company` varchar(45) DEFAULT NULL,
+  `id_user` binary(48) NOT NULL,
+  `type` varchar(15) DEFAULT NULL,
+  `firstname` varchar(25) DEFAULT NULL,
+  `lastname` varchar(25) DEFAULT NULL,
+  PRIMARY KEY (`id_user`),
+  UNIQUE KEY `id_user_UNIQUE` (`id_user`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `user`
+--
+
+LOCK TABLES `user` WRITE;
+/*!40000 ALTER TABLE `user` DISABLE KEYS */;
+INSERT INTO `user` VALUES ('nicolas@nicolas.fr','$argon2id$v=19$m=65536,t=5,p=1$ZrwsrrBGAXLxMenIO2f1ug$8TxD3WDVH6ctadiYRmXWt10izrUUdRPZyLIPdcSxDYE','2023-01-27 09:50:07','Nicolas Inc.',_binary '103b8646-5e5e-437f-8c5f-4ca563b66b47\0\0\0\0\0\0\0\0\0\0\0\0',NULL,'nicolas','dubouc'),('lyne@lyne.fr','$argon2id$v=19$m=65536,t=5,p=1$42QOTjnvNbcrwJu5ktmj7Q$9tyubGYAHtO8Z9nJfHpANDE3qZ+GjdB7soIRqupgJyI','2023-01-31 11:37:26','Lyne Inc',_binary '1f33fe93-8bb8-4d35-9b70-e0f37ba528da\0\0\0\0\0\0\0\0\0\0\0\0',NULL,'lyne','Marine-Vidal'),('basile.carle@edhec.com','$argon2id$v=19$m=65536,t=5,p=1$35KS1QfdaKB4Lt8hWkVpbw$+yR0rGj6Eg4uDfUBrb745G2TNzqx0sYcaxafvnTzHGA','2023-01-26 09:50:20','The Wireless Runner Company',_binary '52c6b01c-fd89-43fd-8af6-5e2270b1c7fd\0\0\0\0\0\0\0\0\0\0\0\0','admin','basile','carle'),('beranger@beranger.fr','$argon2id$v=19$m=65536,t=5,p=1$DlBGIFwoLDVDoti7StbTDg$yc24CpvR+tnBAIUJwiJtBTrEeQEIdAUI6HKcFxOsX0o','2023-01-31 11:05:29','Beranger Inc',_binary '78f2b47d-0a73-484e-9f3c-fcff4059da69\0\0\0\0\0\0\0\0\0\0\0\0',NULL,'beranger','Lamasse');
+/*!40000 ALTER TABLE `user` ENABLE KEYS */;
+UNLOCK TABLES;
+/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
+
+/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
+/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
+/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
+
+-- Dump completed on 2023-01-31 14:55:00
