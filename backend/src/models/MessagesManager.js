@@ -5,7 +5,7 @@ class MessagesManager extends AbstractManager {
     super({ table: "messages" });
   }
 
-  // création d'un utilisateur
+  // création d'un message
   insert(item) {
     return this.connection.query(
       `insert into ${this.table} (message, user_id_user, meeting_request_idmeeting_request, recipient_email) values (?,?,?,?)`,

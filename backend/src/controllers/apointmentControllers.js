@@ -53,6 +53,7 @@ const edit = (req, res) => {
 const add = (req, res) => {
   const { date } = req.body;
   const tmpDate = new Date(date);
+  // fonctionnalité encore non implémentée
   const location = "non implémenté";
   const duration = "30";
 
