@@ -7,7 +7,7 @@
   --button-color: #2ea44f;
   --button-color-2: hsla(13, 36%, 31%, 0.4);
   --button-color-3: #e1662b;
-  --bar-background-color: hsla(0, 0%, 50%, 0.195);
+  --bar-background-color: #80808032;
   --border-area-style: 1px solid rgba(128, 128, 128, 0.594);
   --item-selected: hsla(225, 100%, 50%, 0.413);
 }

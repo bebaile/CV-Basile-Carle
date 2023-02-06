@@ -1,5 +1,9 @@
 import React, { useEffect, useState } from "react";
-import api, { formatDate, whichDayString } from "@services/services";
+import api, {
+  formatDate,
+  formatDateTiret,
+  whichDayString,
+} from "@services/services";
 import "../styles/apointments.css";
 
 function Apointments({ setIsApointmentDisplayed }) {
@@ -125,11 +129,17 @@ function Apointments({ setIsApointmentDisplayed }) {
     }
   };
 
+  // Une fois l'appel au back terminé, on ferme la boite de dialogue
   const endApointment = () => {
     setTimeout(() => {
       setIsApointmentDisplayed(false);
     }, 3000);
   };
+
+  // La  création du rendez-vous se fait en deux étapes séparées.
+  // postMessage intervient après postAppointment, qui une fois le
+  // rendez vous créé transmet l'id nouvellement créé à la fonction
+  // chargée de créer le message associé
 
   const postMessage = (idApointment) => {
     // envoie le message à la fin de toutes les étapes
@@ -283,6 +293,7 @@ function Apointments({ setIsApointmentDisplayed }) {
                   type="date"
                   id="date"
                   name="date"
+                  min={formatDateTiret(new Date())}
                   placeholder={new Date()}
                   onChange={displayDay}
                 />
