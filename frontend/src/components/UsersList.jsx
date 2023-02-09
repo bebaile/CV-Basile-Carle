@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/no-noninteractive-element-to-interactive-role */
 import React, { useEffect, useState } from "react";
 import DOMPurify from "dompurify";
 import HTMLReactParser from "html-react-parser";
