@@ -122,7 +122,7 @@ function Navbar({ isApointmentDisplayed, setIsApointmentDisplayed }) {
             ) : (
               <Link to="/login">
                 <img src={login} alt="Login by Aman from Noun Project" />
-                Se connecter
+                Se connecter / créer un compte
               </Link>
             )}
           </li>
