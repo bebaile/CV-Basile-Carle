@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import api, {
   formatDate,
-  formatDateDMY,
   formatDateTiret,
   whichDayString,
 } from "@services/services";
@@ -63,15 +62,21 @@ function Apointments({ setIsApointmentDisplayed }) {
   const handleAvailabilities = (day) => {
     const days = whichDayString(day);
     setJour(days);
-    api.get(`/availability/${days}`).then((result) => {
-      if (result.status === 404) {
-        console.error("Pas de disponibilité ce jour là");
-      } else if (result.status === 5000) {
-        console.error("impossible de récupérer les disponibilités");
-      } else {
+    api
+      .get(`/availability/${days}`)
+      .then((result) => {
         setAvailability(result.data);
-      }
-    });
+      })
+      .catch((error) => {
+        console.error(error.response.data);
+        if (error.response.status === 404) {
+          setAlert("Pas de disponibilité");
+          setMessage({ ...message, next_step: 2 });
+        }
+        if (error.response.status === 404) {
+          console.error("impossible de récupérer les disponibilités");
+        }
+      });
   };
 
   const handleDate = () => {

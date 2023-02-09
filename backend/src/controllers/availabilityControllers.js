@@ -18,7 +18,7 @@ const read = (req, res) => {
     .findByDay(day)
     .then(([rows]) => {
       if (rows[0] == null) {
-        res.sendStatus(404);
+        res.status(404).send({ message: "Aucune disponibilité" });
       } else {
         res.send(rows);
       }
