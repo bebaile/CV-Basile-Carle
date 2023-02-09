@@ -11,6 +11,7 @@ const router = express.Router();
 router.get("/availability", availabilityControllers.browse);
 router.get("/availability/:id", availabilityControllers.read);
 router.post("/users/create", userControllers.add);
+router.get("/users/:id", userControllers.read);
 router.post("/auth", authControllers.session);
 router.post("/logout", authControllers.logout);
 router.post("/messages", messagesController.add);

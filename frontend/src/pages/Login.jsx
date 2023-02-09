@@ -17,6 +17,17 @@ function Login() {
     setArePasswordEqual(true);
   };
 
+  const checkEmail = (email) => {
+    api
+      .get(`/user/${email}`)
+      .then((result) => {
+        console.error(result);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  };
+
   const handleSubmit = () => {
     // si l'utilisateur veut créer un compte
     if (isSubscribing === true) {
@@ -111,7 +122,12 @@ function Login() {
               <label htmlFor="courriel">
                 <div>Courriel :</div>
                 <div>
-                  <input type="text" id="courriel" name="courriel" />
+                  <input
+                    type="text"
+                    id="courriel"
+                    name="courriel"
+                    onBlur={isSubscribing ? { checkEmail } : ""}
+                  />
                 </div>
               </label>
               {isSubscribing ? (
