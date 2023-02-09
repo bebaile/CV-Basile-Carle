@@ -13,7 +13,28 @@ const browse = (req, res) => {
     });
 };
 
+// utilisé pour vérifier l'existence d'un utilisateur
+const checkUserExist = (req, res) => {
+  models.user
+    .findByLogin(req.params.id)
+    .then(([rows]) => {
+      if (rows[0] == null) {
+        res
+          .status(404)
+          .send({ status: 404, message: "l'utilisateur n'existe pas" });
+      } else {
+        console.error("l'utilisateur existe");
+        res.sendStatus(200);
+      }
+    })
+    .catch((err) => {
+      console.error(err);
+      res.sendStatus(500);
+    });
+};
+
 const read = (req, res) => {
+  console.error(req.params.id);
   models.user
     .findByLogin(req.params.id)
     .then(([rows]) => {
@@ -86,6 +107,7 @@ const destroy = (req, res) => {
 module.exports = {
   browse,
   read,
+  checkUserExist,
   edit,
   add,
   destroy,

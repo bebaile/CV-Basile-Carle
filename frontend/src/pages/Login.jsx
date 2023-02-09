@@ -1,4 +1,5 @@
-import React, { useState, useContext } from "react";
+/* eslint-disable no-nested-ternary */
+import React, { useState, useContext, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "@services/services";
 import basile from "@assets/basileCarle.png";
@@ -9,6 +10,10 @@ function Login() {
   const { setIsConnected, setInfoUser } = useContext(Context);
   const [isSubscribing, setIsSubscribing] = useState(false);
   const [arePasswordEqual, setArePasswordEqual] = useState(true);
+  const [alert, setAlert] = useState({
+    type: "button",
+    message: "> Je souhaite m'inscrire",
+  });
 
   const navigate = useNavigate();
 
@@ -17,14 +22,31 @@ function Login() {
     setArePasswordEqual(true);
   };
 
-  const checkEmail = (email) => {
+  useEffect(() => {
+    switch (isSubscribing) {
+      case true:
+        setAlert({ type: "button", message: "> Je suis déjà inscrit" });
+        break;
+      case false:
+        setAlert({ type: "button", message: "> Je souhaite m'inscrire" });
+        break;
+      default:
+        break;
+    }
+  }, [isSubscribing]);
+
+  const checkEmail = (e) => {
     api
-      .get(`/user/${email}`)
+      .get(`/users/${e.target.value}`)
       .then((result) => {
-        console.error(result);
+        if (result.status === 200) {
+          setAlert({ type: "alert", message: "L'utilisateur existe déjà" });
+          e.target.value = "";
+        }
       })
       .catch((error) => {
-        console.error(error);
+        setAlert({ type: "button", message: "> Je souhaite m'inscrire" });
+        console.error(error.response.status);
       });
   };
 
@@ -36,8 +58,7 @@ function Login() {
         document.querySelector("#confirmed-password").value
       ) {
         setArePasswordEqual(false);
-        document.querySelector("#inscription").innerHTML =
-          "<span style='color:red'>Mots de passes différents</span>";
+        setAlert({ type: "alert", message: "Mots de passes différents" });
       } else {
         api
           .post("/users/create", {
@@ -49,8 +70,10 @@ function Login() {
           })
           .then((result) => {
             if (result.data === "Created") {
-              document.querySelector("#inscription").innerHTML =
-                "<span style='color:green'>Utilisateur créé avec succès</span>";
+              setAlert({
+                type: "announce",
+                message: "Utilisateur créé avec succès",
+              });
               setTimeout(() => {
                 setIsSubscribing(false);
               }, 3000);
@@ -114,9 +137,17 @@ function Login() {
               onKeyDown={null}
               tabIndex="0"
             >
-              {isSubscribing
-                ? "> Je suis déjà inscrit"
-                : "> Je souhaite m'inscrire"}
+              <span
+                className={
+                  alert.type === "alert"
+                    ? "alert"
+                    : alert.type === "announce"
+                    ? "announce"
+                    : ""
+                }
+              >
+                {alert.message}
+              </span>
             </div>
             <form>
               <label htmlFor="courriel">
@@ -126,7 +157,12 @@ function Login() {
                     type="text"
                     id="courriel"
                     name="courriel"
-                    onBlur={isSubscribing ? { checkEmail } : ""}
+                    onBlur={isSubscribing ? checkEmail : ""}
+                    className={
+                      alert.message === "L'utilisateur existe déjà"
+                        ? "incorrect"
+                        : ""
+                    }
                   />
                 </div>
               </label>
