@@ -98,68 +98,68 @@ function Navbar({ isApointmentDisplayed, setIsApointmentDisplayed }) {
             </div>
           </div>
         </strong>
-      </div>
-      <div id="spacer" />
-      <div
-        id="sub-navbar"
-        className={isSubNavBarVisible ? null : "hidden-navbar"}
-      >
-        <ul id="sub-navbar-list">
-          <li>
-            {isConnected ? (
+        <div
+          id="sub-navbar"
+          className={isSubNavBarVisible ? null : "hidden-navbar"}
+        >
+          <ul id="sub-navbar-list">
+            <li>
+              {isConnected ? (
+                <div
+                  role="button"
+                  onClick={handleDisconnect}
+                  onKeyDown={null}
+                  tabIndex="0"
+                >
+                  <img
+                    src={logout}
+                    alt="logout by Cetha Studio from Noun Project"
+                  />
+                  Se déconnecter
+                </div>
+              ) : (
+                <Link to="/login">
+                  <img src={login} alt="Login by Aman from Noun Project" />
+                  Se connecter / créer un compte
+                </Link>
+              )}
+            </li>
+            {sessionStorage.getItem("type") === "admin" ? (
+              <li>
+                <Link to="/admin">
+                  <img src={admin} alt="admin by LAFS from Noun Project" />
+                  Page d'administration
+                </Link>
+              </li>
+            ) : null}
+
+            <li>
               <div
                 role="button"
-                onClick={handleDisconnect}
+                onClick={displayApointment}
                 onKeyDown={null}
                 tabIndex="0"
               >
                 <img
-                  src={logout}
-                  alt="logout by Cetha Studio from Noun Project"
+                  src={appointments}
+                  alt="appointment by 4B Icons from Noun Project"
                 />
-                Se déconnecter
+                Prendre rendez-vous{" "}
               </div>
-            ) : (
-              <Link to="/login">
-                <img src={login} alt="Login by Aman from Noun Project" />
-                Se connecter / créer un compte
-              </Link>
-            )}
-          </li>
-          {sessionStorage.getItem("type") === "admin" ? (
-            <li>
-              <Link to="/admin">
-                <img src={admin} alt="admin by LAFS from Noun Project" />
-                Page d'administration
-              </Link>
             </li>
-          ) : null}
-
-          <li>
-            <div
-              role="button"
-              onClick={displayApointment}
-              onKeyDown={null}
-              tabIndex="0"
-            >
-              <img
-                src={appointments}
-                alt="appointment by 4B Icons from Noun Project"
-              />
-              Prendre rendez-vous{" "}
-            </div>
-          </li>
-        </ul>
-        <div
-          className="close-btn"
-          role="button"
-          onClick={handleSubNavBar}
-          onKeyDown={null}
-          tabIndex="0"
-        >
-          <div>x</div>
+          </ul>
+          <div
+            className="close-btn"
+            role="button"
+            onClick={handleSubNavBar}
+            onKeyDown={null}
+            tabIndex="0"
+          >
+            <div>x</div>
+          </div>
         </div>
       </div>
+      <div id="spacer" />
       <div
         id={
           sessionStorage.getItem("type") === "admin"
