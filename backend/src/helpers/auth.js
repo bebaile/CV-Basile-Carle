@@ -1,9 +1,10 @@
-require("dotenv").config();
-
-const { v4: uuidv4 } = require("uuid");
-
 const argon2 = require("argon2");
+const { v4: uuidv4 } = require("uuid");
 const jwt = require("jsonwebtoken");
+
+const models = require("../models");
+
+require("dotenv").config();
 
 const returnUuid = () => {
   return uuidv4();
@@ -28,4 +29,28 @@ const createToken = (data) => {
   return jwt.sign(data, process.env.PRIVATEKEY, { expiresIn: "15m" });
 };
 
-module.exports = { returnUuid, hashPassword, verifyPassword, createToken };
+const userExist = (req, res, next) => {
+  const { email } = req.body;
+  models.user
+    .findByLogin(email)
+    .then(([rows]) => {
+      if (rows[0] == null) {
+        console.error("l'identifiant n'existe pas, c'est bon");
+        next();
+      } else {
+        res.sendStatus(409).end();
+      }
+    })
+    .catch((error) => {
+      console.error(error);
+      res.sendStatus(409);
+    });
+};
+
+module.exports = {
+  returnUuid,
+  hashPassword,
+  verifyPassword,
+  createToken,
+  userExist,
+};

@@ -1,5 +1,4 @@
 const AbstractManager = require("./AbstractManager");
-const { returnUuid } = require("../helpers/auth");
 
 class UserManager extends AbstractManager {
   constructor() {
@@ -7,8 +6,7 @@ class UserManager extends AbstractManager {
   }
 
   // création d'un utilisateur
-  insert(item) {
-    const uuid = returnUuid();
+  insert(uuid, item) {
     return this.connection.query(
       `insert into ${this.table} (id_user, email, firstname, lastname, company, password) values (?,?,?,?,?,?)`,
       [

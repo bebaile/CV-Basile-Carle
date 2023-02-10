@@ -1,5 +1,5 @@
 const models = require("../models");
-const { hashPassword } = require("../helpers/auth");
+const { returnUuid, hashPassword } = require("../helpers/auth");
 
 const browse = (req, res) => {
   models.user
@@ -24,7 +24,7 @@ const checkUserExist = (req, res) => {
           .send({ status: 404, message: "l'utilisateur n'existe pas" });
       } else {
         console.error("l'utilisateur existe");
-        res.sendStatus(200);
+        res.sendStatus(409);
       }
     })
     .catch((err) => {
@@ -76,8 +76,9 @@ const add = (req, res) => {
   hashPassword(req.body.password).then((hashedPassword) => {
     req.body.password = hashedPassword;
     const user = req.body;
+    const uuid = returnUuid();
     models.user
-      .insert(user)
+      .insert(uuid, user)
       .then(([result]) => {
         res.location(`/users/${result.insertId}`).sendStatus(201);
       })

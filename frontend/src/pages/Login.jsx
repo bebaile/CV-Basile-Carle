@@ -37,16 +37,21 @@ function Login() {
 
   const checkEmail = (e) => {
     api
-      .get(`/users/${e.target.value}`)
+      .get(`/users/check/${e.target.value}`)
       .then((result) => {
-        if (result.status === 200) {
-          setAlert({ type: "alert", message: "L'utilisateur existe déjà" });
-          e.target.value = "";
-        }
+        setAlert({ type: "button", message: "> Je souhaite m'inscrire" });
+        console.error(result.status);
       })
       .catch((error) => {
-        setAlert({ type: "button", message: "> Je souhaite m'inscrire" });
         console.error(error.response.status);
+        if (error.response.status === 409) {
+          setAlert({ type: "alert", message: "L'utilisateur existe déjà" });
+          // e.target.value = "";
+        }
+        if (error.response.status === 404) {
+          setAlert({ type: "button", message: "> Je souhaite m'inscrire" });
+          console.error("Cet identifiant est disponible");
+        }
       });
   };
 
@@ -77,10 +82,11 @@ function Login() {
               setTimeout(() => {
                 setIsSubscribing(false);
               }, 3000);
-            } else {
-              console.error(
-                `L'utilisateur n'a pas pu être créé. Erreur ${result.status}`
-              );
+            }
+          })
+          .catch((error) => {
+            if (error.response.status === 409) {
+              setAlert({ type: "alert", message: "Utilisateur déjà existant" });
             }
           });
       }
@@ -157,7 +163,7 @@ function Login() {
                     type="text"
                     id="courriel"
                     name="courriel"
-                    onBlur={isSubscribing ? checkEmail : ""}
+                    onBlur={isSubscribing ? checkEmail : null}
                     className={
                       alert.message === "L'utilisateur existe déjà"
                         ? "incorrect"

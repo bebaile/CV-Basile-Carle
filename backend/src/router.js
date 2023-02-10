@@ -4,14 +4,15 @@ const authControllers = require("./controllers/authControllers");
 const availabilityControllers = require("./controllers/availabilityControllers");
 const messagesController = require("./controllers/messagesControllers");
 const apointmentController = require("./controllers/apointmentControllers");
+const { userExist } = require("./helpers/auth");
 
 const router = express.Router();
 
 // routes non sécurisées
 router.get("/availability", availabilityControllers.browse);
 router.get("/availability/:id", availabilityControllers.read);
-router.post("/users/create", userControllers.add);
-router.get("/users/:id", userControllers.checkUserExist);
+router.get("/users/check/:id", userControllers.checkUserExist);
+router.post("/users/create", userExist, userControllers.add);
 router.post("/auth", authControllers.session);
 router.post("/logout", authControllers.logout);
 router.post("/messages", messagesController.add);
