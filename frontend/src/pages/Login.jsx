@@ -1,4 +1,5 @@
-import React, { useState, useContext } from "react";
+/* eslint-disable no-nested-ternary */
+import React, { useState, useContext, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "@services/services";
 import basile from "@assets/basileCarle.png";
@@ -9,12 +10,49 @@ function Login() {
   const { setIsConnected, setInfoUser } = useContext(Context);
   const [isSubscribing, setIsSubscribing] = useState(false);
   const [arePasswordEqual, setArePasswordEqual] = useState(true);
+  const [alert, setAlert] = useState({
+    type: "button",
+    message: "> Je souhaite m'inscrire",
+  });
 
   const navigate = useNavigate();
 
   const handleClick = () => {
     setIsSubscribing(!isSubscribing);
     setArePasswordEqual(true);
+  };
+
+  useEffect(() => {
+    switch (isSubscribing) {
+      case true:
+        setAlert({ type: "button", message: "> Je suis déjà inscrit" });
+        break;
+      case false:
+        setAlert({ type: "button", message: "> Je souhaite m'inscrire" });
+        break;
+      default:
+        break;
+    }
+  }, [isSubscribing]);
+
+  const checkEmail = (e) => {
+    api
+      .get(`/users/check/${e.target.value}`)
+      .then((result) => {
+        setAlert({ type: "button", message: "> Je souhaite m'inscrire" });
+        console.error(result.status);
+      })
+      .catch((error) => {
+        console.error(error.response.status);
+        if (error.response.status === 409) {
+          setAlert({ type: "alert", message: "L'utilisateur existe déjà" });
+          // e.target.value = "";
+        }
+        if (error.response.status === 404) {
+          setAlert({ type: "button", message: "> Je souhaite m'inscrire" });
+          console.error("Cet identifiant est disponible");
+        }
+      });
   };
 
   const handleSubmit = () => {
@@ -25,8 +63,7 @@ function Login() {
         document.querySelector("#confirmed-password").value
       ) {
         setArePasswordEqual(false);
-        document.querySelector("#inscription").innerHTML =
-          "<span style='color:red'>Mots de passes différents</span>";
+        setAlert({ type: "alert", message: "Mots de passes différents" });
       } else {
         api
           .post("/users/create", {
@@ -38,15 +75,18 @@ function Login() {
           })
           .then((result) => {
             if (result.data === "Created") {
-              document.querySelector("#inscription").innerHTML =
-                "<span style='color:green'>Utilisateur créé avec succès</span>";
+              setAlert({
+                type: "announce",
+                message: "Utilisateur créé avec succès",
+              });
               setTimeout(() => {
                 setIsSubscribing(false);
               }, 3000);
-            } else {
-              console.error(
-                `L'utilisateur n'a pas pu être créé. Erreur ${result.status}`
-              );
+            }
+          })
+          .catch((error) => {
+            if (error.response.status === 409) {
+              setAlert({ type: "alert", message: "Utilisateur déjà existant" });
             }
           });
       }
@@ -103,15 +143,33 @@ function Login() {
               onKeyDown={null}
               tabIndex="0"
             >
-              {isSubscribing
-                ? "> Je suis déjà inscrit"
-                : "> Je souhaite m'inscrire"}
+              <span
+                className={
+                  alert.type === "alert"
+                    ? "alert"
+                    : alert.type === "announce"
+                    ? "announce"
+                    : ""
+                }
+              >
+                {alert.message}
+              </span>
             </div>
             <form>
               <label htmlFor="courriel">
                 <div>Courriel :</div>
                 <div>
-                  <input type="text" id="courriel" name="courriel" />
+                  <input
+                    type="text"
+                    id="courriel"
+                    name="courriel"
+                    onBlur={isSubscribing ? checkEmail : null}
+                    className={
+                      alert.message === "L'utilisateur existe déjà"
+                        ? "incorrect"
+                        : ""
+                    }
+                  />
                 </div>
               </label>
               {isSubscribing ? (

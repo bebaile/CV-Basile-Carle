@@ -2,6 +2,14 @@
   --content-width: clamp(375px, 1024px, 100vw - 1rem);
 }
 
+.alert {
+  color: red;
+}
+
+.announce {
+  color: green;
+}
+
 .login-section {
   width: var(--content-width);
   height: 100vh;
