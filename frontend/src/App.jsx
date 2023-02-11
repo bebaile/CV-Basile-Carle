@@ -1,16 +1,14 @@
-import React, { useContext, useState } from "react";
+import React, { useState } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Navbar from "@components/Navbar";
 import MyCV from "@pages/MyCV";
 import Login from "@pages/Login";
 import Admin from "@pages/Admin";
 import PrivateRoute from "@services/PrivateRoute";
-import Context from "./context/Context";
 
 import "./App.css";
 
 function App() {
-  const { infoUser } = useContext(Context);
   const [isApointmentDisplayed, setIsApointmentDisplayed] = useState(false);
   return (
     <Router>
@@ -33,7 +31,7 @@ function App() {
           <Route
             path="/admin"
             element={
-              <PrivateRoute infoUser={infoUser}>
+              <PrivateRoute>
                 <Admin />
               </PrivateRoute>
             }

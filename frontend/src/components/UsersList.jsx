@@ -48,7 +48,6 @@ function UsersList() {
         console.error("impossible de récupérer les messages");
       } else {
         setMessages(result.data);
-        console.error(result.data);
       }
     });
     // on récupère les demandes de rendez-vous
@@ -71,7 +70,7 @@ function UsersList() {
     ) {
       setIsLoading(false);
     }
-  }, [users, isEdited]);
+  }, [users, isEdited, messages, apointments]);
 
   useEffect(() => {}, []);
 

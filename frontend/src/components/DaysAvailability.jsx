@@ -9,7 +9,6 @@ function DaysAvailability({
   isAvailabilityModified,
 }) {
   const handleDelete = (e) => {
-    console.error(e.target.name);
     api.delete(`/availability/${e.target.name}`).then((result) => {
       if (result.status === 404) {
         console.error("la disponibilité n'a pas pu être détruite");
