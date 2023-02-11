@@ -88,6 +88,9 @@ function Login() {
             if (error.response.status === 409) {
               setAlert({ type: "alert", message: "Utilisateur déjà existant" });
             }
+            if (error.response.status === 422) {
+              console.error(error.response.statusText);
+            }
           });
       }
     }
@@ -114,6 +117,7 @@ function Login() {
             sessionStorage.setItem("company", result.data.company);
             sessionStorage.setItem("isConnected", true);
             if (result.data.type === "admin") {
+              console.error("on est admin");
               sessionStorage.setItem("type", result.data.type);
               navigate("/admin");
             } else {
