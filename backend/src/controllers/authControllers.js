@@ -47,7 +47,7 @@ const session = (req, res) => {
 };
 
 const logout = (req, res) => {
-  res.clearCookie(req.cookies.user_token).sendStatus(200);
+  res.cookie("user_token", "", { maxAge: 0 }).sendStatus(200);
 };
 
 const admin = (req, res) => {

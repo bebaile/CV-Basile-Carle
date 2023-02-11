@@ -48,14 +48,18 @@ const checkAdmin = (req, res, next) => {
     // si le cookie n'existe pas, on interdit l'accès aux routes suivantes
     res.status(401).end();
   }
-  verifyAccessToken(token).then((result) => {
-    if (result.type === "admin") {
-      req.type = "admin";
-      next();
-    } else {
-      res.status(401).end();
-    }
-  });
+  verifyAccessToken(token)
+    .then((result) => {
+      if (result.type === "admin") {
+        req.type = "admin";
+        next();
+      } else {
+        res.status(401).end();
+      }
+    })
+    .catch((error) => {
+      console.error(error);
+    });
 };
 
 // utilisé avant la création d'un utilisateur
