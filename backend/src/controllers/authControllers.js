@@ -23,6 +23,7 @@ const session = (req, res) => {
               .status(201)
               .cookie("user_token", token, {
                 httpOnly: true,
+                sameSite: "lax",
                 expires: new Date(Date.now() + 15 * 60 * 1000),
               })
               .json({

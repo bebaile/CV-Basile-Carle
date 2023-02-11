@@ -71,7 +71,7 @@ function UsersList() {
     ) {
       setIsLoading(false);
     }
-  }, [users, isEdited]);
+  }, [users, isEdited, messages, apointments]);
 
   useEffect(() => {}, []);
 
