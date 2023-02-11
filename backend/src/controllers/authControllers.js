@@ -23,7 +23,7 @@ const session = (req, res) => {
               .status(201)
               .cookie("user_token", token, {
                 httpOnly: true,
-                expires: new Date(Date.now + 60 * 60 * 24 * 10),
+                expires: new Date(Date.now() + 15 * 60 * 1000),
               })
               .json({
                 message: "utilisateur authentifié",
@@ -50,7 +50,14 @@ const logout = (req, res) => {
   res.clearCookie(req.cookies.user_token).sendStatus(200);
 };
 
+const admin = (req, res) => {
+  if (req.type === "admin") {
+    res.status(200).send("L'utilisateur est bien admin");
+  }
+};
+
 module.exports = {
   session,
   logout,
+  admin,
 };

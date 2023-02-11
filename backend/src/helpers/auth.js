@@ -29,6 +29,36 @@ const createToken = (data) => {
   return jwt.sign(data, process.env.PRIVATEKEY, { expiresIn: "15m" });
 };
 
+const verifyAccessToken = (token) => {
+  return new Promise((resolve, reject) => {
+    jwt.verify(token, process.env.PRIVATEKEY, (error, payload) => {
+      if (error) {
+        const message =
+          error.name === "JsonWebTokenError" ? "Unauthorized" : error.message;
+        reject(message);
+      }
+      resolve(payload);
+    });
+  });
+};
+
+const checkAdmin = (req, res, next) => {
+  const token = req.cookies.user_token;
+  if (!token) {
+    // si le cookie n'existe pas, on interdit l'accès aux routes suivantes
+    res.status(401).end();
+  }
+  verifyAccessToken(token).then((result) => {
+    if (result.type === "admin") {
+      req.type = "admin";
+      next();
+    } else {
+      res.status(401).end();
+    }
+  });
+};
+
+// utilisé avant la création d'un utilisateur
 const userExist = (req, res, next) => {
   const { email } = req.body;
   models.user
@@ -52,5 +82,7 @@ module.exports = {
   hashPassword,
   verifyPassword,
   createToken,
+  verifyAccessToken,
+  checkAdmin,
   userExist,
 };
