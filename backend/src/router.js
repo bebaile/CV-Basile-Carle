@@ -17,15 +17,17 @@ router.post("/auth", authControllers.session);
 router.post("/logout", authControllers.logout);
 router.post("/messages", messagesController.add);
 router.post("/apointment", apointmentController.add);
-router.get("/users", userControllers.browse);
-router.delete("/users/:id", userControllers.destroy);
-router.put("/users/:id", userControllers.edit);
 router.post("/availability", availabilityControllers.add);
-router.delete("/availability/:id", availabilityControllers.destroy);
-router.get("/messages/", messagesController.browse);
-router.get("/apointment", apointmentController.browse);
 
-// routes sécurisées
+// routes à sécuriser utilisateur
+router.get("/messages/", messagesController.browse);
+
+// routes sécurisées Admin
 router.get("/auth/admin", checkAdmin, authControllers.admin);
+router.delete("/users/:id", checkAdmin, userControllers.destroy);
+router.get("/users", checkAdmin, userControllers.browse);
+router.put("/users/:id", checkAdmin, userControllers.edit);
+router.delete("/availability/:id", checkAdmin, availabilityControllers.destroy);
+router.get("/apointment", checkAdmin, apointmentController.browse);
 
 module.exports = router;

@@ -62,6 +62,30 @@ const checkAdmin = (req, res, next) => {
     });
 };
 
+const checkUser = (req, res, next) => {
+  // on récupère le token
+  const token = req.cookies.user_token;
+  if (!token) {
+    res.status(401).end();
+  }
+  verifyAccessToken(token)
+    .then((result) => {
+      if (typeof result !== "undefined") {
+        req.firstname = result.firstname;
+        req.lastname = result.lastname;
+        req.company = result.company;
+        req.email = result.email;
+        req.type = result.type;
+        next();
+      } else {
+        res.status(401).end();
+      }
+    })
+    .catch((error) => {
+      console.error(error);
+    });
+};
+
 // utilisé avant la création d'un utilisateur
 const userExist = (req, res, next) => {
   const { email } = req.body;
@@ -87,6 +111,7 @@ module.exports = {
   verifyPassword,
   createToken,
   verifyAccessToken,
+  checkUser,
   checkAdmin,
   userExist,
 };
