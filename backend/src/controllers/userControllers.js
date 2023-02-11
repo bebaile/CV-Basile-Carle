@@ -1,3 +1,4 @@
+const Joi = require("joi");
 const models = require("../models");
 const { returnUuid, hashPassword } = require("../helpers/auth");
 
@@ -73,20 +74,39 @@ const edit = (req, res) => {
 };
 
 const add = (req, res) => {
-  hashPassword(req.body.password).then((hashedPassword) => {
-    req.body.password = hashedPassword;
-    const user = req.body;
-    const uuid = returnUuid();
-    models.user
-      .insert(uuid, user)
-      .then(([result]) => {
-        res.location(`/users/${result.insertId}`).sendStatus(201);
-      })
-      .catch((err) => {
-        console.error(err);
-        res.sendStatus(500);
-      });
-  });
+  const { email, firstname, lastname, company, password } = req.body;
+  const user = req.body;
+
+  const { error } = Joi.object({
+    email: Joi.string().email().max(255).required(),
+    firstname: Joi.string().max(20).required(),
+    lastname: Joi.string().max(20).required(),
+    company: Joi.string().max(45).required(),
+    password: Joi.string().max(255).required(),
+  }).validate(
+    { email, firstname, lastname, company, password },
+    { abortEarly: true }
+  );
+
+  if (error) {
+    res.status(422).json({ validationError: error.details });
+  } else {
+    hashPassword(req.body.password).then((hashedPassword) => {
+      req.body.password = hashedPassword;
+      const uuid = returnUuid();
+      models.user
+        .insert(uuid, user)
+        .then(([result]) => {
+          res.location(`/users/${result.insertId}`).sendStatus(201);
+        })
+        .catch((err) => {
+          console.error(err);
+          if (error) {
+            res.status(422).json({ validationError: error.details });
+          } else res.sendStatus(500);
+        });
+    });
+  }
 };
 
 const destroy = (req, res) => {

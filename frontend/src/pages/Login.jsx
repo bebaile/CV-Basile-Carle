@@ -88,6 +88,9 @@ function Login() {
             if (error.response.status === 409) {
               setAlert({ type: "alert", message: "Utilisateur déjà existant" });
             }
+            if (error.response.status === 422) {
+              console.error(error.response.statusText);
+            }
           });
       }
     }
