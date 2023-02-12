@@ -22,7 +22,7 @@ class MeetingrequestManager extends AbstractManager {
 
   findByDate(date) {
     return this.connection.query(
-      `SELECT idmeeting_request, day FROM ${this.table} WHERE DATE_FORMAT(day, '%Y-%m-%d') = DATE_FORMAT(?, '%Y-%m-%d')`,
+      `SELECT idmeeting_request, day FROM ${this.table} WHERE DATE_FORMAT(day, '%Y-%m-%d') = DATE_FORMAT(?, '%Y-%m-%d') ORDER BY day ASC`,
       [date]
     );
   }

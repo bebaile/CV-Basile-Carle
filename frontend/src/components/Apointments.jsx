@@ -66,6 +66,7 @@ function Apointments({ setIsApointmentDisplayed }) {
       try {
         const response = await api.get(`/apointment/${date}`);
         meetings.push(response.data);
+        console.error(response.data);
       } catch (error) {
         console.error("Aucun autre rendez vous prévu ce jour là");
       }
@@ -77,7 +78,15 @@ function Apointments({ setIsApointmentDisplayed }) {
       // tmpAvailabilities va être ce tableau
       const tmpAvailabilities = [];
 
+      // is Split sert à garder une trace au sein de la même boucle des créneaux qui ont
+      // déjà été splittés en deux pour un rendez vous et qui ne doivent donc pas être ajoutés
+      // au table tmpAvailabilities quand un autre rendez vous n'appartient pas à ce créneau
+      let isSplit = false;
+      let isCopied = false;
+
       for (let i = 0; i < availabilities.length; i += 1) {
+        isSplit = false;
+        isCopied = false;
         for (let j = 0; j < meetings[0].length; j += 1) {
           // ici on va préparer les dates pour pouvoir les comparer
           // on veut transformer l'heure de début ((tmpAvailabilities[i].start)
@@ -131,7 +140,11 @@ function Apointments({ setIsApointmentDisplayed }) {
             console.error(
               `le rendez vous se trouve à l'interrieur du créneau ${i}`
             );
-
+            // si
+            if (isCopied) {
+              tmpAvailabilities.pop();
+              isCopied = false;
+            }
             const tmpDate = new Date(meetings[0][j].day);
             // on ajoute deux nouveaux créneaux séparés par le rendez vous de 30 minutes
             tmpAvailabilities.push(
@@ -160,9 +173,12 @@ function Apointments({ setIsApointmentDisplayed }) {
                 end: availabilities[i].end,
               }
             );
-          } else {
-            // si le rdv n'appartient pas à ce créneau, on se contente d'ajouter la dispo
+            isSplit = true;
+          }
+          // si le rdv n'appartient pas à ce créneau, on se contente d'ajouter la dispo
+          if (!isSplit) {
             tmpAvailabilities.push(availabilities[i]);
+            isCopied = true;
           }
         }
       }
