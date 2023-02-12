@@ -60,7 +60,6 @@ function Apointments({ setIsApointmentDisplayed }) {
 
   const assignMeetingToTimeSlot = (availabilities, date) => {
     // on récupère les demandes de rendez-vous pour ce jour-ci
-    console.error(availabilities);
     const meetings = [];
 
     const getApointments = async () => {
@@ -73,9 +72,10 @@ function Apointments({ setIsApointmentDisplayed }) {
     };
 
     getApointments().then(() => {
-      console.error(meetings);
+      // avant de définir un état à afficher contenant les disponibilités, il nous faut corriger
+      //  les disponibilités issues de la base de données avec les éventuels demande de rendez-vous postées
+      // tmpAvailabilities va être ce tableau
       const tmpAvailabilities = [];
-      console.error(tmpAvailabilities);
 
       for (let i = 0; i < availabilities.length; i += 1) {
         for (let j = 0; j < meetings[0].length; j += 1) {
@@ -83,6 +83,7 @@ function Apointments({ setIsApointmentDisplayed }) {
           // on veut transformer l'heure de début ((tmpAvailabilities[i].start)
           //  et l(heure de fin (tmpAvailabilities[i].end)) en objet date qui pourront être ensuite comparés
 
+          // nous stockons d'abord la date de base qui va nous servir à construire la date de début puis de fin
           const baseDate = new Date(meetings[0][0].day);
           const startDate = new Date(baseDate);
 
@@ -121,6 +122,8 @@ function Apointments({ setIsApointmentDisplayed }) {
             )
           );
 
+          // si l'heure de notre rendez-vous est compris dans le créneau, on va le splitter en deux
+
           if (
             new Date(meetings[0][j].day) >= startDate &&
             new Date(meetings[0][j].day) <= endDate
@@ -128,26 +131,42 @@ function Apointments({ setIsApointmentDisplayed }) {
             console.error(
               `le rendez vous se trouve à l'interrieur du créneau ${i}`
             );
+
+            const tmpDate = new Date(meetings[0][j].day);
+            // on ajoute deux nouveaux créneaux séparés par le rendez vous de 30 minutes
             tmpAvailabilities.push(
               {
                 idavailability: `${availabilities[i].idavailability}-a`,
                 day: availabilities[i].day,
                 start: availabilities[i].start,
-                end: meetings[0][j].day,
+                end: `${
+                  tmpDate.getHours() < 10
+                    ? `0${tmpDate.getHours()}`
+                    : tmpDate.getHours()
+                }:${
+                  tmpDate.getMinutes() < 10
+                    ? `0${tmpDate.getMinutes()}`
+                    : tmpDate.getMinutes()
+                }:00`,
               },
               {
                 idavailability: `${availabilities[i].idavailability}-b`,
                 day: availabilities[i].day,
-                start: `${meetings[0][j].day} 00:30:00`,
+                start: `${
+                  tmpDate.getHours() < 10
+                    ? `0${tmpDate.getHours()}`
+                    : tmpDate.getHours()
+                }:${tmpDate.getMinutes() + 30}:00`,
                 end: availabilities[i].end,
               }
             );
           } else {
+            // si le rdv n'appartient pas à ce créneau, on se contente d'ajouter la dispo
             tmpAvailabilities.push(availabilities[i]);
           }
         }
       }
-      console.error(tmpAvailabilities);
+      setAvailability(tmpAvailabilities);
     });
   };
 
@@ -159,7 +178,6 @@ function Apointments({ setIsApointmentDisplayed }) {
     api
       .get(`/availability/${days}`)
       .then((result) => {
-        setAvailability(result.data);
         assignMeetingToTimeSlot(result.data, date);
       })
       .catch((error) => {
