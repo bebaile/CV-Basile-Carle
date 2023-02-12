@@ -58,22 +58,115 @@ function Apointments({ setIsApointmentDisplayed }) {
     }
   };
 
+  const assignMeetingToTimeSlot = (availabilities, date) => {
+    // on récupère les demandes de rendez-vous pour ce jour-ci
+    console.error(availabilities);
+    const meetings = [];
+
+    const getApointments = async () => {
+      try {
+        const response = await api.get(`/apointment/${date}`);
+        meetings.push(response.data);
+      } catch (error) {
+        console.error("Aucun autre rendez vous prévu ce jour là");
+      }
+    };
+
+    getApointments().then(() => {
+      console.error(meetings);
+      const tmpAvailabilities = [];
+      console.error(tmpAvailabilities);
+
+      for (let i = 0; i < availabilities.length; i += 1) {
+        for (let j = 0; j < meetings[0].length; j += 1) {
+          // ici on va préparer les dates pour pouvoir les comparer
+          // on veut transformer l'heure de début ((tmpAvailabilities[i].start)
+          //  et l(heure de fin (tmpAvailabilities[i].end)) en objet date qui pourront être ensuite comparés
+
+          const baseDate = new Date(meetings[0][0].day);
+          const startDate = new Date(baseDate);
+
+          startDate.setHours(
+            parseInt(
+              `${availabilities[i].start.charAt(0)}${availabilities[
+                i
+              ].start.charAt(1)}`,
+              10
+            )
+          );
+          startDate.setMinutes(
+            parseInt(
+              `${availabilities[i].start.charAt(3)}${availabilities[
+                i
+              ].start.charAt(4)}`,
+              10
+            )
+          );
+
+          const endDate = new Date(baseDate);
+          endDate.setHours(
+            parseInt(
+              `${availabilities[i].end.charAt(0)}${availabilities[i].end.charAt(
+                1
+              )}`,
+              10
+            )
+          );
+          endDate.setMinutes(
+            parseInt(
+              `${availabilities[i].end.charAt(3)}${availabilities[i].end.charAt(
+                4
+              )}`,
+              10
+            )
+          );
+
+          if (
+            new Date(meetings[0][j].day) >= startDate &&
+            new Date(meetings[0][j].day) <= endDate
+          ) {
+            console.error(
+              `le rendez vous se trouve à l'interrieur du créneau ${i}`
+            );
+            tmpAvailabilities.push(
+              {
+                idavailability: `${availabilities[i].idavailability}-a`,
+                day: availabilities[i].day,
+                start: availabilities[i].start,
+                end: meetings[0][j].day,
+              },
+              {
+                idavailability: `${availabilities[i].idavailability}-b`,
+                day: availabilities[i].day,
+                start: `${meetings[0][j].day} 00:30:00`,
+                end: availabilities[i].end,
+              }
+            );
+          } else {
+            tmpAvailabilities.push(availabilities[i]);
+          }
+        }
+      }
+      console.error(tmpAvailabilities);
+    });
+  };
+
   // récupère les disponibilités
-  const handleAvailabilities = (day) => {
-    const days = whichDayString(day);
+  const handleAvailabilities = (date) => {
+    const days = whichDayString(date.getDay());
     setJour(days);
+    // on récupère les disponibilités par tranche pour le jour en question
     api
       .get(`/availability/${days}`)
       .then((result) => {
         setAvailability(result.data);
+        assignMeetingToTimeSlot(result.data, date);
       })
       .catch((error) => {
         console.error(error.response.data);
         if (error.response.status === 404) {
           setAlert("Pas de disponibilité");
           setMessage({ ...message, next_step: 2 });
-        }
-        if (error.response.status === 404) {
           console.error("impossible de récupérer les disponibilités");
         }
       });
@@ -86,12 +179,12 @@ function Apointments({ setIsApointmentDisplayed }) {
       setAlert("Sélectionnez une date");
     } else {
       const date = new Date(selectedDate);
-      handleAvailabilities(date.getDay());
       setMessage({
         ...message,
-        next_step: 3,
         date,
+        next_step: 3,
       });
+      handleAvailabilities(date);
     }
   };
 
@@ -174,6 +267,7 @@ function Apointments({ setIsApointmentDisplayed }) {
   };
 
   const postAppointment = () => {
+    console.error(message);
     // poste la demande d'entretien
     api
       .post("/apointment", { timeslot: message.timeslot, date: message.date })
