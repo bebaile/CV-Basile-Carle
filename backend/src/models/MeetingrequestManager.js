@@ -19,6 +19,13 @@ class MeetingrequestManager extends AbstractManager {
       [item.firstname, item.email, item.company, item.id]
     );
   }
+
+  findByDate(date) {
+    return this.connection.query(
+      `SELECT idmeeting_request, day FROM ${this.table} WHERE DATE_FORMAT(day, '%Y-%m-%d') = DATE_FORMAT(?, '%Y-%m-%d')`,
+      [date]
+    );
+  }
 }
 
 module.exports = MeetingrequestManager;
