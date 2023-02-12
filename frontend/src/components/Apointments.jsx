@@ -167,6 +167,7 @@ function Apointments({ setIsApointmentDisplayed }) {
         }
       }
       setAvailability(tmpAvailabilities);
+      console.error(tmpAvailabilities);
     });
   };
 
@@ -214,7 +215,7 @@ function Apointments({ setIsApointmentDisplayed }) {
   };
 
   const handleDisplayTimeSelection = (e) => {
-    setIsVisible({ visible: true, id: parseInt(e.target.value, 10) });
+    setIsVisible({ visible: true, id: e.target.value });
   };
 
   // on met à jour l'heure choisie dans l'état avec le créneau associé (via onChange)
@@ -449,7 +450,7 @@ function Apointments({ setIsApointmentDisplayed }) {
                           htmlFor={`proposed-timeslot-${idavailability}`}
                           className={
                             isVisible.visible === true &&
-                            isVisible.id === idavailability
+                            isVisible.id === String(idavailability)
                               ? "visible"
                               : "invisible"
                           }
