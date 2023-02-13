@@ -28,6 +28,7 @@ function App() {
                 isApointmentDisplayed={isApointmentDisplayed}
                 setIsApointmentDisplayed={setIsApointmentDisplayed}
                 isUserAccountDisplayed={isUserAccountDisplayed}
+                setIsUserAccountDisplayed={setIsUserAccountDisplayed}
               />
             }
           />

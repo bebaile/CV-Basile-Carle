@@ -11,6 +11,7 @@ function MyCV({
   isApointmentDisplayed,
   setIsApointmentDisplayed,
   isUserAccountDisplayed,
+  setIsUserAccountDisplayed,
 }) {
   return (
     <>
@@ -25,7 +26,9 @@ function MyCV({
       {/* <GithubSummary /> */}
       <ProfessionalObjectives />
       <CvSections />
-      {isUserAccountDisplayed ? <UserAccount /> : null}
+      {isUserAccountDisplayed ? (
+        <UserAccount setIsUserAccountDisplayed={setIsUserAccountDisplayed} />
+      ) : null}
     </>
   );
 }
