@@ -58,22 +58,253 @@ function Apointments({ setIsApointmentDisplayed }) {
     }
   };
 
+  const assignMeetingToTimeSlot = (availabilities, date) => {
+    // on récupère les demandes de rendez-vous pour ce jour-ci
+    const meetings = [];
+
+    const getApointments = async () => {
+      try {
+        const response = await api.get(`/apointment/${date}`);
+        meetings.push(response.data);
+        console.error(response.data);
+      } catch (error) {
+        console.error("Aucun autre rendez vous prévu ce jour là");
+        setAvailability(availabilities);
+      }
+    };
+
+    getApointments().then(() => {
+      // avant de définir un état à afficher contenant les disponibilités, il nous faut corriger
+      //  les disponibilités issues de la base de données avec les éventuels demande de rendez-vous postées
+      // tmpAvailabilities va être ce tableau
+      const tmpAvailabilities = [];
+
+      // is Split sert à garder une trace au sein de la même boucle des créneaux qui ont
+      // déjà été splittés en deux pour un rendez vous et qui ne doivent donc pas être ajoutés
+      // au table tmpAvailabilities quand un autre rendez vous n'appartient pas à ce créneau
+      let isSplit = false;
+      let isCopied = false;
+
+      for (let i = 0; i < availabilities.length; i += 1) {
+        isSplit = false;
+        isCopied = false;
+        for (let j = 0; j < meetings[0].length; j += 1) {
+          // ici on va préparer les dates pour pouvoir les comparer
+          // on veut transformer l'heure de début ((tmpAvailabilities[i].start)
+          //  et l(heure de fin (tmpAvailabilities[i].end)) en objet date qui pourront être ensuite comparés
+
+          // nous stockons d'abord la date de base qui va nous servir à construire la date de début puis de fin
+          const baseDate = new Date(meetings[0][0].day);
+          const startDate = new Date(baseDate);
+
+          startDate.setHours(
+            parseInt(
+              `${availabilities[i].start.charAt(0)}${availabilities[
+                i
+              ].start.charAt(1)}`,
+              10
+            )
+          );
+          startDate.setMinutes(
+            parseInt(
+              `${availabilities[i].start.charAt(3)}${availabilities[
+                i
+              ].start.charAt(4)}`,
+              10
+            )
+          );
+
+          const endDate = new Date(baseDate);
+          endDate.setHours(
+            parseInt(
+              `${availabilities[i].end.charAt(0)}${availabilities[i].end.charAt(
+                1
+              )}`,
+              10
+            )
+          );
+          endDate.setMinutes(
+            parseInt(
+              `${availabilities[i].end.charAt(3)}${availabilities[i].end.charAt(
+                4
+              )}`,
+              10
+            )
+          );
+
+          // si l'heure de notre rendez-vous est compris dans le créneau, on va le splitter en deux
+
+          if (
+            new Date(meetings[0][j].day) >= startDate &&
+            new Date(meetings[0][j].day) <= endDate
+          ) {
+            console.error(
+              `le rendez vous se trouve à l'interrieur du créneau ${i}`
+            );
+            // si le meeting précédent a entrainé la recopie du timeslot précédent et que l'on s'apprète
+            // a le spliter finalement, il faut supprimer la précédente entrée dans tmpAvailabilities
+            if (isCopied) {
+              tmpAvailabilities.pop();
+              isCopied = false;
+            }
+
+            // si le prochain meeting est situé dans le même créneau, alors le système va splitter le créneau
+            // sans prendre en compte le nouveau slot
+            if (isSplit) {
+              const tmpAvailabilitiesBis = [];
+              let isSplitBis = false;
+              let isCopiedBis = false;
+              // le deuxième rendez vous est il avant ou après
+              for (let k = 0; k < tmpAvailabilities.length; k += 1) {
+                const startDateBis = new Date(baseDate);
+
+                startDateBis.setHours(
+                  parseInt(
+                    `${tmpAvailabilities[k].start.charAt(0)}${tmpAvailabilities[
+                      k
+                    ].start.charAt(1)}`,
+                    10
+                  )
+                );
+                startDateBis.setMinutes(
+                  parseInt(
+                    `${tmpAvailabilities[k].start.charAt(3)}${tmpAvailabilities[
+                      k
+                    ].start.charAt(4)}`,
+                    10
+                  )
+                );
+
+                const endDateBis = new Date(baseDate);
+                endDateBis.setHours(
+                  parseInt(
+                    `${tmpAvailabilities[k].end.charAt(0)}${tmpAvailabilities[
+                      k
+                    ].end.charAt(1)}`,
+                    10
+                  )
+                );
+                endDateBis.setMinutes(
+                  parseInt(
+                    `${tmpAvailabilities[k].end.charAt(3)}${tmpAvailabilities[
+                      k
+                    ].end.charAt(4)}`,
+                    10
+                  )
+                );
+
+                if (
+                  new Date(meetings[0][j].day) >= startDateBis &&
+                  new Date(meetings[0][j].day) <= endDateBis
+                ) {
+                  const tmpDateBis = new Date(meetings[0][j].day);
+
+                  if (isCopiedBis) {
+                    tmpAvailabilitiesBis.pop();
+                    isCopied = false;
+                  }
+                  tmpAvailabilitiesBis.push(
+                    {
+                      idavailability: `${tmpAvailabilities[k].idavailability}-a-a`,
+                      day: tmpAvailabilities[k].day,
+                      start: tmpAvailabilities[k].start,
+                      end: `${
+                        tmpDateBis.getHours() < 10
+                          ? `0${tmpDateBis.getHours()}`
+                          : tmpDateBis.getHours()
+                      }:${
+                        tmpDateBis.getMinutes() < 10
+                          ? `0${tmpDateBis.getMinutes()}`
+                          : tmpDateBis.getMinutes()
+                      }:00`,
+                    },
+                    {
+                      idavailability: `${tmpAvailabilities[i].idavailability}-b-b`,
+                      day: tmpAvailabilities[k].day,
+                      start: `${
+                        tmpDateBis.getHours() < 10
+                          ? `0${tmpDateBis.getHours()}`
+                          : tmpDateBis.getHours()
+                      }:${tmpDateBis.getMinutes() + 30}:00`,
+                      end: tmpAvailabilities[k].end,
+                    }
+                  );
+                  isSplitBis = true;
+                }
+                if (!isSplitBis) {
+                  tmpAvailabilitiesBis.push(tmpAvailabilities[k]);
+                  isCopiedBis = true;
+                }
+              }
+              // maintenant que nous avons modifié les créneaux dans un second tableau temporaire, nous le recopions dans le premier utilisé
+
+              // on vide d'abord le tableau
+              for (let l = 0; l < tmpAvailabilities.length; l += 1) {
+                tmpAvailabilities.pop();
+              }
+              // puis on le copie avec les valeurs de tmpBis
+              for (let l = 0; l < tmpAvailabilitiesBis.length; l += 1) {
+                tmpAvailabilities.push(tmpAvailabilitiesBis[l]);
+              }
+            } else {
+              const tmpDate = new Date(meetings[0][j].day);
+              // on ajoute deux nouveaux créneaux séparés par le rendez vous de 30 minutes
+              tmpAvailabilities.push(
+                {
+                  idavailability: `${availabilities[i].idavailability}-a`,
+                  day: availabilities[i].day,
+                  start: availabilities[i].start,
+                  end: `${
+                    tmpDate.getHours() < 10
+                      ? `0${tmpDate.getHours()}`
+                      : tmpDate.getHours()
+                  }:${
+                    tmpDate.getMinutes() < 10
+                      ? `0${tmpDate.getMinutes()}`
+                      : tmpDate.getMinutes()
+                  }:00`,
+                },
+                {
+                  idavailability: `${availabilities[i].idavailability}-b`,
+                  day: availabilities[i].day,
+                  start: `${
+                    tmpDate.getHours() < 10
+                      ? `0${tmpDate.getHours()}`
+                      : tmpDate.getHours()
+                  }:${tmpDate.getMinutes() + 30}:00`,
+                  end: availabilities[i].end,
+                }
+              );
+            }
+            isSplit = true;
+          }
+          // si le rdv n'appartient pas à ce créneau, on se contente d'ajouter la dispo
+          if (!isSplit && !isCopied) {
+            tmpAvailabilities.push(availabilities[i]);
+            isCopied = true;
+          }
+        }
+      }
+      setAvailability(tmpAvailabilities);
+      console.error(tmpAvailabilities);
+    });
+  };
+
   // récupère les disponibilités
-  const handleAvailabilities = (day) => {
-    const days = whichDayString(day);
+  const handleAvailabilities = (date) => {
+    const days = whichDayString(date.getDay());
     setJour(days);
+    // on récupère les disponibilités par tranche pour le jour en question
     api
       .get(`/availability/${days}`)
       .then((result) => {
-        setAvailability(result.data);
+        assignMeetingToTimeSlot(result.data, date);
       })
       .catch((error) => {
         console.error(error.response.data);
         if (error.response.status === 404) {
           setAlert("Pas de disponibilité");
           setMessage({ ...message, next_step: 2 });
-        }
-        if (error.response.status === 404) {
           console.error("impossible de récupérer les disponibilités");
         }
       });
@@ -86,12 +317,12 @@ function Apointments({ setIsApointmentDisplayed }) {
       setAlert("Sélectionnez une date");
     } else {
       const date = new Date(selectedDate);
-      handleAvailabilities(date.getDay());
       setMessage({
         ...message,
-        next_step: 3,
         date,
+        next_step: 3,
       });
+      handleAvailabilities(date);
     }
   };
 
@@ -103,7 +334,7 @@ function Apointments({ setIsApointmentDisplayed }) {
   };
 
   const handleDisplayTimeSelection = (e) => {
-    setIsVisible({ visible: true, id: parseInt(e.target.value, 10) });
+    setIsVisible({ visible: true, id: e.target.value });
   };
 
   // on met à jour l'heure choisie dans l'état avec le créneau associé (via onChange)
@@ -174,6 +405,7 @@ function Apointments({ setIsApointmentDisplayed }) {
   };
 
   const postAppointment = () => {
+    console.error(message);
     // poste la demande d'entretien
     api
       .post("/apointment", { timeslot: message.timeslot, date: message.date })
@@ -337,7 +569,7 @@ function Apointments({ setIsApointmentDisplayed }) {
                           htmlFor={`proposed-timeslot-${idavailability}`}
                           className={
                             isVisible.visible === true &&
-                            isVisible.id === idavailability
+                            isVisible.id === String(idavailability)
                               ? "visible"
                               : "invisible"
                           }
