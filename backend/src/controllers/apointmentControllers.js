@@ -13,18 +13,26 @@ const browse = (req, res) => {
 };
 
 const read = (req, res) => {
+  const tmpDate = new Date(req.params.id);
+  // on transforme la date que nous recevons pour correspondre au format de la table meetingrequest
+  // exemple Wed Feb 08 2023 01:00:00 GMT+0100 (heure normale d’Europe centrale)
+  // on veut fournir un format 2023-02-13 09:00:00
+  const formattedDate = `${tmpDate.getFullYear()}-${
+    tmpDate.getMonth() + 1
+  }-${tmpDate.getDate()}`;
+
   models.meetingrequest
-    .find(req.params.id)
+    .findByDate(formattedDate)
     .then(([rows]) => {
+      console.error(rows[0]);
       if (rows[0] == null) {
         res.sendStatus(404);
       } else {
-        res.send(rows[0]);
+        res.send(rows);
       }
     })
-    .catch((err) => {
-      console.error(err);
-      res.sendStatus(500);
+    .catch((error) => {
+      console.error(error);
     });
 };
 
