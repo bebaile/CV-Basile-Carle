@@ -69,6 +69,7 @@ function Apointments({ setIsApointmentDisplayed }) {
         console.error(response.data);
       } catch (error) {
         console.error("Aucun autre rendez vous prévu ce jour là");
+        setAvailability(availabilities);
       }
     };
 
@@ -140,39 +141,141 @@ function Apointments({ setIsApointmentDisplayed }) {
             console.error(
               `le rendez vous se trouve à l'interrieur du créneau ${i}`
             );
-            // si
+            // si le meeting précédent a entrainé la recopie du timeslot précédent et que l'on s'apprète
+            // a le spliter finalement, il faut supprimer la précédente entrée dans tmpAvailabilities
             if (isCopied) {
               tmpAvailabilities.pop();
               isCopied = false;
             }
-            const tmpDate = new Date(meetings[0][j].day);
-            // on ajoute deux nouveaux créneaux séparés par le rendez vous de 30 minutes
-            tmpAvailabilities.push(
-              {
-                idavailability: `${availabilities[i].idavailability}-a`,
-                day: availabilities[i].day,
-                start: availabilities[i].start,
-                end: `${
-                  tmpDate.getHours() < 10
-                    ? `0${tmpDate.getHours()}`
-                    : tmpDate.getHours()
-                }:${
-                  tmpDate.getMinutes() < 10
-                    ? `0${tmpDate.getMinutes()}`
-                    : tmpDate.getMinutes()
-                }:00`,
-              },
-              {
-                idavailability: `${availabilities[i].idavailability}-b`,
-                day: availabilities[i].day,
-                start: `${
-                  tmpDate.getHours() < 10
-                    ? `0${tmpDate.getHours()}`
-                    : tmpDate.getHours()
-                }:${tmpDate.getMinutes() + 30}:00`,
-                end: availabilities[i].end,
+
+            // si le prochain meeting est situé dans le même créneau, alors le système va splitter le créneau
+            // sans prendre en compte le nouveau slot
+            if (isSplit) {
+              const tmpAvailabilitiesBis = [];
+              let isSplitBis = false;
+              let isCopiedBis = false;
+              // le deuxième rendez vous est il avant ou après
+              for (let k = 0; k < tmpAvailabilities.length; k += 1) {
+                const startDateBis = new Date(baseDate);
+
+                startDateBis.setHours(
+                  parseInt(
+                    `${tmpAvailabilities[k].start.charAt(0)}${tmpAvailabilities[
+                      k
+                    ].start.charAt(1)}`,
+                    10
+                  )
+                );
+                startDateBis.setMinutes(
+                  parseInt(
+                    `${tmpAvailabilities[k].start.charAt(3)}${tmpAvailabilities[
+                      k
+                    ].start.charAt(4)}`,
+                    10
+                  )
+                );
+
+                const endDateBis = new Date(baseDate);
+                endDateBis.setHours(
+                  parseInt(
+                    `${tmpAvailabilities[k].end.charAt(0)}${tmpAvailabilities[
+                      k
+                    ].end.charAt(1)}`,
+                    10
+                  )
+                );
+                endDateBis.setMinutes(
+                  parseInt(
+                    `${tmpAvailabilities[k].end.charAt(3)}${tmpAvailabilities[
+                      k
+                    ].end.charAt(4)}`,
+                    10
+                  )
+                );
+
+                if (
+                  new Date(meetings[0][j].day) >= startDateBis &&
+                  new Date(meetings[0][j].day) <= endDateBis
+                ) {
+                  const tmpDateBis = new Date(meetings[0][j].day);
+
+                  if (isCopiedBis) {
+                    tmpAvailabilitiesBis.pop();
+                    isCopied = false;
+                  }
+                  tmpAvailabilitiesBis.push(
+                    {
+                      idavailability: `${tmpAvailabilities[k].idavailability}-a-a`,
+                      day: tmpAvailabilities[k].day,
+                      start: tmpAvailabilities[k].start,
+                      end: `${
+                        tmpDateBis.getHours() < 10
+                          ? `0${tmpDateBis.getHours()}`
+                          : tmpDateBis.getHours()
+                      }:${
+                        tmpDateBis.getMinutes() < 10
+                          ? `0${tmpDateBis.getMinutes()}`
+                          : tmpDateBis.getMinutes()
+                      }:00`,
+                    },
+                    {
+                      idavailability: `${tmpAvailabilities[i].idavailability}-b-b`,
+                      day: tmpAvailabilities[k].day,
+                      start: `${
+                        tmpDateBis.getHours() < 10
+                          ? `0${tmpDateBis.getHours()}`
+                          : tmpDateBis.getHours()
+                      }:${tmpDateBis.getMinutes() + 30}:00`,
+                      end: tmpAvailabilities[k].end,
+                    }
+                  );
+                  isSplitBis = true;
+                }
+                if (!isSplitBis) {
+                  tmpAvailabilitiesBis.push(tmpAvailabilities[k]);
+                  isCopiedBis = true;
+                }
               }
-            );
+              // maintenant que nous avons modifié les créneaux dans un second tableau temporaire, nous le recopions dans le premier utilisé
+
+              // on vide d'abord le tableau
+              for (let l = 0; l < tmpAvailabilities.length; l += 1) {
+                tmpAvailabilities.pop();
+              }
+              // puis on le copie avec les valeurs de tmpBis
+              for (let l = 0; l < tmpAvailabilitiesBis.length; l += 1) {
+                tmpAvailabilities.push(tmpAvailabilitiesBis[l]);
+              }
+            } else {
+              const tmpDate = new Date(meetings[0][j].day);
+              // on ajoute deux nouveaux créneaux séparés par le rendez vous de 30 minutes
+              tmpAvailabilities.push(
+                {
+                  idavailability: `${availabilities[i].idavailability}-a`,
+                  day: availabilities[i].day,
+                  start: availabilities[i].start,
+                  end: `${
+                    tmpDate.getHours() < 10
+                      ? `0${tmpDate.getHours()}`
+                      : tmpDate.getHours()
+                  }:${
+                    tmpDate.getMinutes() < 10
+                      ? `0${tmpDate.getMinutes()}`
+                      : tmpDate.getMinutes()
+                  }:00`,
+                },
+                {
+                  idavailability: `${availabilities[i].idavailability}-b`,
+                  day: availabilities[i].day,
+                  start: `${
+                    tmpDate.getHours() < 10
+                      ? `0${tmpDate.getHours()}`
+                      : tmpDate.getHours()
+                  }:${tmpDate.getMinutes() + 30}:00`,
+                  end: availabilities[i].end,
+                }
+              );
+            }
             isSplit = true;
           }
           // si le rdv n'appartient pas à ce créneau, on se contente d'ajouter la dispo
