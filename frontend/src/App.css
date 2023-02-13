@@ -156,6 +156,7 @@ a:hover ~ span {
 }
 
 #sub-navbar,
+#sub-navbar-bgd-0,
 #sub-navbar-bgd,
 #sub-navbar-bgd-2 {
   background-color: var(--bar-background-color);
@@ -170,18 +171,26 @@ a:hover ~ span {
   animation: display-subnav-bar 2s;
 }
 
+#sub-navbar-bgd-0,
 #sub-navbar-bgd,
 #sub-navbar-bgd-2 {
   background-color: white;
   opacity: 100%;
   z-index: 3;
-  width: 16rem;
+  width: 11.75rem;
   height: 4.37rem;
 }
 
 #sub-navbar-bgd-2 {
   width: 12.13rem;
   height: 5.5rem;
+}
+
+#sub-navbar-bgd-0 {
+  background-color: white;
+  opacity: 100%;
+  width: 15.875rem;
+  height: 4.37rem;
 }
 
 @keyframes display-subnav-bar {

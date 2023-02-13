@@ -1,3 +1,4 @@
+/* eslint-disable no-nested-ternary */
 import React, { useState, useContext } from "react";
 import { useNavigate, useLocation, Link } from "react-router-dom";
 import api from "@services/services";
@@ -162,7 +163,9 @@ function Navbar({ isApointmentDisplayed, setIsApointmentDisplayed }) {
       <div id="spacer" />
       <div
         id={
-          sessionStorage.getItem("type") === "admin"
+          !isConnected
+            ? "sub-navbar-bgd-0"
+            : sessionStorage.getItem("type") === "admin"
             ? "sub-navbar-bgd-2"
             : "sub-navbar-bgd"
         }
