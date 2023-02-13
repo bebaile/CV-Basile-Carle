@@ -279,7 +279,7 @@ function Apointments({ setIsApointmentDisplayed }) {
             isSplit = true;
           }
           // si le rdv n'appartient pas à ce créneau, on se contente d'ajouter la dispo
-          if (!isSplit) {
+          if (!isSplit && !isCopied) {
             tmpAvailabilities.push(availabilities[i]);
             isCopied = true;
           }
