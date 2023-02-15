@@ -36,6 +36,22 @@ const read = (req, res) => {
     });
 };
 
+const readByUser = (req, res) => {
+  const meetingId = req.params.idMeeting;
+  models.meetingrequest
+    .findById(meetingId)
+    .then(([rows]) => {
+      if (rows[0] == null) {
+        res.sendStatus(404);
+      } else {
+        res.send(rows);
+      }
+    })
+    .catch((error) => {
+      console.error(error);
+    });
+};
+
 const edit = (req, res) => {
   const item = req.body;
 
@@ -98,6 +114,7 @@ const destroy = (req, res) => {
 module.exports = {
   browse,
   read,
+  readByUser,
   edit,
   add,
   destroy,

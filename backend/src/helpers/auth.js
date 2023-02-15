@@ -72,6 +72,8 @@ const checkUser = (req, res, next) => {
   verifyAccessToken(token)
     .then((result) => {
       if (typeof result !== "undefined") {
+        // si l'email fournit dans la route correspond à l'email du token,
+        // alors on peut continuer
         if (email === result.email) {
           models.user.findIdByEmail(result.email).then((response) => {
             if (response[0] == null) {
