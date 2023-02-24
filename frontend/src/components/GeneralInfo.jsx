@@ -45,11 +45,13 @@ function GeneralInfo() {
       </div>
       <div className="qrcode">
         <div id="tiroir-qrcode">{"> "}Flasher mon CV</div>
-        <img
-          src={qrcode}
-          alt="QR code pour consulter le CV sur un mobile"
-          id="qrcode-img"
-        />
+        <a href="http://bebaile.free.fr/cvbc/devWebFullstackJunior/cvBasileCarleDevWebJunior.pdf">
+          <img
+            src={qrcode}
+            alt="QR code pour consulter le CV sur un mobile"
+            id="qrcode-img"
+          />
+        </a>
       </div>
     </div>
   );
