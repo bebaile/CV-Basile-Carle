@@ -64,6 +64,7 @@ const checkAdmin = (req, res, next) => {
 
 const checkUser = (req, res, next) => {
   // on récupère le token
+  const email = req.params.id;
   const token = req.cookies.user_token;
   if (!token) {
     res.status(401).end();
@@ -71,12 +72,23 @@ const checkUser = (req, res, next) => {
   verifyAccessToken(token)
     .then((result) => {
       if (typeof result !== "undefined") {
-        req.firstname = result.firstname;
-        req.lastname = result.lastname;
-        req.company = result.company;
-        req.email = result.email;
-        req.type = result.type;
-        next();
+        // si l'email fournit dans la route correspond à l'email du token,
+        // alors on peut continuer
+        if (email === result.email) {
+          models.user.findIdByEmail(result.email).then((response) => {
+            if (response[0] == null) {
+              res.sendStatus(401);
+            } else {
+              req.firstname = result.firstname;
+              req.lastname = result.lastname;
+              req.company = result.company;
+              req.email = result.email;
+              req.type = result.type;
+              req.id = response[0][0].id_user;
+              next();
+            }
+          });
+        }
       } else {
         res.status(401).end();
       }

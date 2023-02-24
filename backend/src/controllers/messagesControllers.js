@@ -15,15 +15,13 @@ const browse = (req, res) => {
 };
 
 const read = (req, res) => {
-  const { id } = req.body;
   models.messages
-    .findById(id)
+    .findById(req.id)
     .then(([rows]) => {
-      console.error(rows);
       if (rows[0] == null) {
         res.sendStatus(404);
       } else {
-        res.send(rows[0]);
+        res.send(rows);
       }
     })
     .catch((err) => {

@@ -5,10 +5,19 @@ import GeneralInfo from "@components/GeneralInfo";
 import ProfessionalObjectives from "@components/ProfessionalObjectives";
 import CvSections from "@components/CvSections";
 import Apointments from "@components/Apointments";
+import UserAccount from "@components/UserAccount";
 
-function MyCV({ isApointmentDisplayed, setIsApointmentDisplayed }) {
+function MyCV({
+  isApointmentDisplayed,
+  setIsApointmentDisplayed,
+  isUserAccountDisplayed,
+  setIsUserAccountDisplayed,
+}) {
   return (
     <>
+      {isUserAccountDisplayed ? (
+        <UserAccount setIsUserAccountDisplayed={setIsUserAccountDisplayed} />
+      ) : null}
       <GeneralInfo
         isApointmentDisplayed={isApointmentDisplayed}
         setIsApointmentDisplayed={setIsApointmentDisplayed}

@@ -9,7 +9,12 @@ import appointments from "@assets/appointment.png";
 import cv from "@assets/cv.png";
 import Context from "../context/Context";
 
-function Navbar({ isApointmentDisplayed, setIsApointmentDisplayed }) {
+function Navbar({
+  isApointmentDisplayed,
+  setIsApointmentDisplayed,
+  setIsUserAccountDisplayed,
+  isUserAccountDisplayed,
+}) {
   const {
     isConnected,
     setIsConnected,
@@ -48,6 +53,10 @@ function Navbar({ isApointmentDisplayed, setIsApointmentDisplayed }) {
 
   const displayApointment = () => {
     setIsApointmentDisplayed(!isApointmentDisplayed);
+  };
+
+  const displayUserAccount = () => {
+    setIsUserAccountDisplayed(!isUserAccountDisplayed);
   };
 
   return (
@@ -132,7 +141,21 @@ function Navbar({ isApointmentDisplayed, setIsApointmentDisplayed }) {
                   Page d'administration
                 </Link>
               </li>
-            ) : null}
+            ) : isConnected ? (
+              <li>
+                <div
+                  onClick={displayUserAccount}
+                  onKeyDown={null}
+                  tabIndex="0"
+                  role="button"
+                >
+                  <img src={admin} alt="admin by LAFS from Noun Project" />
+                  Compte utilisateur
+                </div>
+              </li>
+            ) : (
+              ""
+            )}
 
             <li>
               <div
@@ -162,13 +185,7 @@ function Navbar({ isApointmentDisplayed, setIsApointmentDisplayed }) {
       </div>
       <div id="spacer" />
       <div
-        id={
-          !isConnected
-            ? "sub-navbar-bgd-0"
-            : sessionStorage.getItem("type") === "admin"
-            ? "sub-navbar-bgd-2"
-            : "sub-navbar-bgd"
-        }
+        id={!isConnected ? "sub-navbar-bgd-0" : "sub-navbar-bgd-2"}
         className={isSubNavBarVisible ? null : "hidden-navbar"}
       />
     </div>

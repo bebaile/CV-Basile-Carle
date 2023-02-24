@@ -26,6 +26,13 @@ class MeetingrequestManager extends AbstractManager {
       [date]
     );
   }
+
+  findById(idMeeting) {
+    return this.connection.query(
+      `SELECT * FROM ${this.table} WHERE idmeeting_request = ?`,
+      [idMeeting]
+    );
+  }
 }
 
 module.exports = MeetingrequestManager;
