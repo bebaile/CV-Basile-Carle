@@ -1,0 +1,36 @@
+#user-account-container {
+  background-color: white;
+  border: 1px dotted grey;
+  padding: 0.5rem;
+  border-radius: 5px;
+  width: clamp(375px, 1024px, 100vw - 5rem);
+  position: fixed;
+  top: 90px;
+  box-shadow: 1rem 1rem 2rem rgba(216, 216, 216, 0.631);
+}
+
+#user-account-area {
+  overflow-x: auto;
+}
+
+#close-user-account-btn {
+  z-index: 9;
+}
+
+#messages-table {
+  background-color: white;
+}
+
+#messages-table thead th:nth-child(1) {
+  width: 1.5ch;
+}
+#messages-table thead th:nth-child(2) {
+  width: 2.5ch;
+}
+#messages-table thead th:nth-child(4) {
+  width: 2.5ch;
+}
+
+#messages-table tr:nth-child(2n) {
+  background-color: rgba(128, 128, 128, 0.371);
+}

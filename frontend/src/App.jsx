@@ -10,12 +10,15 @@ import "./App.css";
 
 function App() {
   const [isApointmentDisplayed, setIsApointmentDisplayed] = useState(false);
+  const [isUserAccountDisplayed, setIsUserAccountDisplayed] = useState(false);
   return (
     <Router>
       <div className="App">
         <Navbar
           isApointmentDisplayed={isApointmentDisplayed}
           setIsApointmentDisplayed={setIsApointmentDisplayed}
+          setIsUserAccountDisplayed={setIsUserAccountDisplayed}
+          isUserAccountDisplayed={isUserAccountDisplayed}
         />
         <Routes>
           <Route
@@ -24,6 +27,8 @@ function App() {
               <MyCV
                 isApointmentDisplayed={isApointmentDisplayed}
                 setIsApointmentDisplayed={setIsApointmentDisplayed}
+                isUserAccountDisplayed={isUserAccountDisplayed}
+                setIsUserAccountDisplayed={setIsUserAccountDisplayed}
               />
             }
           />
