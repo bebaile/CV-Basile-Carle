@@ -298,6 +298,7 @@ function Apointments({ setIsApointmentDisplayed }) {
     api
       .get(`/availability/${days}`)
       .then((result) => {
+        console.error(result.data);
         assignMeetingToTimeSlot(result.data, date);
       })
       .catch((error) => {

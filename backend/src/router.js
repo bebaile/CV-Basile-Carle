@@ -22,6 +22,11 @@ router.get("/apointment/:id", apointmentControllers.read);
 
 // routes sécurisée utilisateur
 router.get("/messages/:id", checkUser, messagesControllers.read);
+router.get(
+  "/apointment/:id/:idMeeting",
+  checkUser,
+  apointmentControllers.readByUser
+);
 
 // routes sécurisées Admin
 router.get("/auth/admin", checkAdmin, authControllers.admin);
