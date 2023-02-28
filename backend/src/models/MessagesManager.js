@@ -15,7 +15,7 @@ class MessagesManager extends AbstractManager {
 
   findById(id) {
     return this.connection.query(
-      `SELECT * FROM ${this.table} WHERE user_id_user = ?`,
+      `SELECT m.*, r.* FROM ${this.table} AS m INNER JOIN meetingrequest AS r ON m.meeting_request_idmeeting_request = r.idmeeting_request WHERE user_id_user = ?`,
       [id]
     );
   }
