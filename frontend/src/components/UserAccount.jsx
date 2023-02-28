@@ -1,20 +1,24 @@
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import api, { formatDateDMY } from "@services/services";
 import "../styles/user-account.css";
 
 function UserAccount({ setIsUserAccountDisplayed }) {
   const [userMessages, setUserMessages] = useState();
   const [isLoading, setIsLoading] = useState(true);
+  const navigate = useNavigate();
 
   useEffect(() => {
     api
       .get(`/messages/${sessionStorage.getItem("email")}`)
       .then((result) => {
         setUserMessages(result.data);
-        console.error(result.data);
       })
       .catch((error) => {
         console.error(error.response.status);
+        if (error.response.status === 401) {
+          navigate("/login");
+        }
       });
   }, []);
 
