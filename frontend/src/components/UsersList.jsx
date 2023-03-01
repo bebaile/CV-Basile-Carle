@@ -14,7 +14,6 @@ import ConfirmDeleteUser from "./ConfirmDeleteUser";
 function UsersList() {
   const [users, setUsers] = useState();
   const [messages, setMessages] = useState();
-  const [apointments, setApointments] = useState();
   const [replyMessage, setReplyMessage] = useState({ id: "" });
   const [replyAlert, setReplyAlert] = useState({
     idApointment: "",
@@ -50,14 +49,6 @@ function UsersList() {
         setMessages(result.data);
       }
     });
-    // on récupère les demandes de rendez-vous
-    api.get("/apointment").then((result) => {
-      if (result.status === 500) {
-        console.error("impossible de récupérer les demandes d'entretien");
-      } else {
-        setApointments(result.data);
-      }
-    });
   }, [areUsersModified]);
 
   // on attend le chargement des utilisateurs pour faire un rendering
@@ -65,12 +56,11 @@ function UsersList() {
     if (
       typeof users !== "undefined" &&
       typeof isEdited !== "undefined" &&
-      typeof messages !== "undefined" &&
-      typeof apointments !== "undefined"
+      typeof messages !== "undefined"
     ) {
       setIsLoading(false);
     }
-  }, [users, isEdited, messages, apointments]);
+  }, [users, isEdited, messages]);
 
   useEffect(() => {}, []);
 
@@ -396,15 +386,7 @@ function UsersList() {
                                             {message.recipient_email}
                                           </td>
                                           <td>{HTMLReactParser(html)} </td>
-                                          <td>
-                                            {formatDateDMY(
-                                              apointments.filter(
-                                                (apointment) =>
-                                                  apointment.idmeeting_request ===
-                                                  message.meeting_request_idmeeting_request
-                                              )[0].day
-                                            )}
-                                          </td>
+                                          <td>{formatDateDMY(message.day)}</td>
                                           <td id="reply-btn">
                                             <img
                                               src={replyImg2}
@@ -460,6 +442,10 @@ function UsersList() {
                                                             recipient:
                                                               message.user_id_user,
                                                           });
+                                                          setReplyAlert({
+                                                            ...replyAlert,
+                                                            message: "",
+                                                          });
                                                         }}
                                                       >
                                                         {replyAlert.message}
@@ -484,7 +470,6 @@ function UsersList() {
                                                 ""
                                               )}
                                             </td>
-                                            {/*  */}
                                           </tr>
                                         ) : (
                                           ""
