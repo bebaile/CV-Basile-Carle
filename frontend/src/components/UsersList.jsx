@@ -388,20 +388,24 @@ function UsersList() {
                                           <td>{HTMLReactParser(html)} </td>
                                           <td>{formatDateDMY(message.day)}</td>
                                           <td id="reply-btn">
-                                            <img
-                                              src={replyImg2}
-                                              alt="Reply by Adrien Coquet from Noun Project"
-                                              id="replyImg2"
-                                              onClick={() => {
-                                                // c'est ici qu'on modifie
-                                                handleDisplayReply(
-                                                  user.email,
-                                                  message.id
-                                                );
-                                              }}
-                                              onKeyDown={null}
-                                              role="button"
-                                            />
+                                            {message.recipient_email ===
+                                            sessionStorage.getItem("email") ? (
+                                              ""
+                                            ) : (
+                                              <img
+                                                src={replyImg2}
+                                                alt="Reply by Adrien Coquet from Noun Project"
+                                                id="replyImg2"
+                                                onClick={() => {
+                                                  handleDisplayReply(
+                                                    user.email,
+                                                    message.id
+                                                  );
+                                                }}
+                                                onKeyDown={null}
+                                                role="button"
+                                              />
+                                            )}
                                           </td>
                                         </tr>
                                         {isReplyDisplayed.email ===
