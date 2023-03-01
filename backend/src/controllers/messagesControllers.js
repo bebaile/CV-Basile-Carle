@@ -1,6 +1,7 @@
 const models = require("../models");
 const { hashPassword, returnUuid } = require("../helpers/auth");
 require("dotenv").config();
+const { sendAMail } = require("../helpers/mailer");
 
 const browse = (req, res) => {
   models.messages
@@ -84,6 +85,10 @@ const add = (req, res) => {
             models.messages
               .insert({ message, idUser, idApointment })
               .then(([createdUser]) => {
+                const subject =
+                  "Nouvelle demande d'entretien ou message pour votre CV";
+                const mailContent = `<div>Le ${new Date()}, <b>${firstname} ${lastname}</b> de l'entreprise <b>${company}</b> vous a envoyé un message et une demande de rendez-vous dont voici le contenu : <br><br>${message}<br><br>Cette personne a fait une demande de rendez-vous associée. Son email est : ${email}</div>`;
+                sendAMail(process.env.ADMIN_EMAIL, subject, mailContent);
                 res
                   .location(`/messages/${createdUser.insertId}`)
                   .sendStatus(201);
@@ -98,20 +103,14 @@ const add = (req, res) => {
       models.messages
         .insert({ message, idUser, idApointment, recipient })
         .then(([reponse]) => {
+          const subject =
+            "Nouvelle demande d'entretien ou message pour votre CV";
+          const mailContent = `<div>Le ${new Date()}, <b>${firstname} ${lastname}</b> de l'entreprise <b>${company}</b> vous a envoyé un message et une demande de rendez-vous dont voici le contenu : <br><br>${message}<br><br>Cette personne a fait une demande de rendez-vous associée. Son email est : ${email}</div>`;
+          sendAMail(process.env.ADMIN_EMAIL, subject, mailContent);
           res.location(`/messages/${reponse.insertId}`).sendStatus(201);
         });
     }
   });
-
-  // models.messages
-  //   .insert(req.body)
-  //   .then(([result]) => {
-  //     res.location(`/messagess/${result.insertId}`).sendStatus(201);
-  //   })
-  //   .catch((err) => {
-  //     console.error(err);
-  //     res.sendStatus(500);
-  //   });
 };
 
 // TODO validations (length, format...)
