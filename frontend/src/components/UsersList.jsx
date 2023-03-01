@@ -368,7 +368,8 @@ function UsersList() {
                                   .filter(
                                     (message) =>
                                       message.user_id_user.data.join("") ===
-                                      user.id_user.data.join("")
+                                        user.id_user.data.join("") ||
+                                      message.recipient_email === user.email
                                   )
                                   .map((message, index) => {
                                     const html = DOMPurify.sanitize(
@@ -393,6 +394,7 @@ function UsersList() {
                                               alt="Reply by Adrien Coquet from Noun Project"
                                               id="replyImg2"
                                               onClick={() => {
+                                                // c'est ici qu'on modifie
                                                 handleDisplayReply(
                                                   user.email,
                                                   message.id
