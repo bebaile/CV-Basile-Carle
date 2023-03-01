@@ -395,7 +395,7 @@ function Apointments({ setIsApointmentDisplayed }) {
         if (result.status === 201) {
           setMessage({ ...message, next_step: 5 });
           setAlert(
-            "Message bien envoyé, merci pour votre celui-ci, je ne manquerai pas de revenir vers vous par mail !"
+            "Message bien envoyé, merci pour celui-ci, je ne manquerai pas de revenir vers vous par mail !"
           );
           endApointment();
         }
