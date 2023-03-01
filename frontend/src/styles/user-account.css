@@ -43,6 +43,9 @@
 #messages-table thead th:nth-child(4) {
   width: 2.5ch;
 }
+#messages-table thead th:nth-child(5) {
+  width: 0.5ch;
+}
 
 #messages-table tr:nth-child(2n) {
   background-color: rgba(128, 128, 128, 0.371);
