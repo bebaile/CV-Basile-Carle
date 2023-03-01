@@ -54,6 +54,7 @@ function Navbar({
 
   const displayApointment = () => {
     setIsApointmentDisplayed(!isApointmentDisplayed);
+    setIsUserAccountDisplayed(false);
     setIsSubNavBarVisible(false);
   };
 
