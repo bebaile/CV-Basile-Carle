@@ -64,6 +64,7 @@ const checkAdmin = (req, res, next) => {
 
 const checkUser = (req, res, next) => {
   // on récupère le token
+
   const email = req.params.id;
   const token = req.cookies.user_token;
   if (!token) {
@@ -85,6 +86,7 @@ const checkUser = (req, res, next) => {
               req.email = result.email;
               req.type = result.type;
               req.id = response[0][0].id_user;
+              // on continue vers le refresh du cookie
               next();
             }
           });
@@ -96,6 +98,25 @@ const checkUser = (req, res, next) => {
     .catch((error) => {
       console.error(error);
     });
+};
+
+const refreshToken = (req, res, next) => {
+  // quelque soit le temps restant, on raffraichit le cookie
+  const newToken = createToken({
+    firstname: req.firstname,
+    lastname: req.lastname,
+    email: req.email,
+    company: req.company,
+    type: req.type,
+  });
+  res.cookie("user_token", newToken, {
+    httpOnly: true,
+    sameSite: "lax",
+    expires: new Date(Date.now() + 15 * 60 * 1000),
+  });
+  next();
+  // }
+  // });
 };
 
 // utilisé avant la création d'un utilisateur
@@ -124,6 +145,7 @@ module.exports = {
   createToken,
   verifyAccessToken,
   checkUser,
+  refreshToken,
   checkAdmin,
   userExist,
 };

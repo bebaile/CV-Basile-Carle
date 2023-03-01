@@ -13,10 +13,16 @@ class MessagesManager extends AbstractManager {
     );
   }
 
-  findById(id) {
+  findById(id, email) {
     return this.connection.query(
-      `SELECT * FROM ${this.table} WHERE user_id_user = ?`,
-      [id]
+      `SELECT m.*, r.* FROM ${this.table} AS m INNER JOIN meetingrequest AS r ON m.meeting_request_idmeeting_request = r.idmeeting_request WHERE user_id_user = ? OR recipient_email = ? ORDER BY m.create_time ASC`,
+      [id, email]
+    );
+  }
+
+  findAllWithAppointments() {
+    return this.connection.query(
+      `SELECT m.*, r.* FROM ${this.table} AS m INNER JOIN meetingrequest AS r ON m.meeting_request_idmeeting_request = r.idmeeting_request`
     );
   }
 

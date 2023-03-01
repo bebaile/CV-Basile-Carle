@@ -39,9 +39,9 @@ function Navbar({
   };
 
   const handleDisconnect = () => {
-    api.post("/logout").then((result) => {
+    api.post("/logout").then(() => {
+      setIsUserAccountDisplayed(false);
       setIsConnected(false);
-      console.error(result);
       sessionStorage.clear("email");
       sessionStorage.clear("company");
       sessionStorage.clear("type");

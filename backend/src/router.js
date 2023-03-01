@@ -4,7 +4,12 @@ const authControllers = require("./controllers/authControllers");
 const availabilityControllers = require("./controllers/availabilityControllers");
 const messagesControllers = require("./controllers/messagesControllers");
 const apointmentControllers = require("./controllers/apointmentControllers");
-const { userExist, checkAdmin, checkUser } = require("./helpers/auth");
+const {
+  userExist,
+  checkAdmin,
+  checkUser,
+  refreshToken,
+} = require("./helpers/auth");
 
 const router = express.Router();
 
@@ -21,20 +26,25 @@ router.post("/availability", availabilityControllers.add);
 router.get("/apointment/:id", apointmentControllers.read);
 
 // routes sécurisée utilisateur
-router.get("/messages/:id", checkUser, messagesControllers.read);
-router.get(
-  "/apointment/:id/:idMeeting",
-  checkUser,
-  apointmentControllers.readByUser
-);
+router.get("/messages/:id", checkUser, refreshToken, messagesControllers.read);
 
 // routes sécurisées Admin
-router.get("/auth/admin", checkAdmin, authControllers.admin);
-router.delete("/users/:id", checkAdmin, userControllers.destroy);
-router.get("/users", checkAdmin, userControllers.browse);
-router.put("/users/:id", checkAdmin, userControllers.edit);
-router.delete("/availability/:id", checkAdmin, availabilityControllers.destroy);
-router.get("/apointment", checkAdmin, apointmentControllers.browse);
-router.get("/messages/", checkAdmin, messagesControllers.browse);
+router.get("/auth/admin", checkAdmin, refreshToken, authControllers.admin);
+router.delete("/users/:id", checkAdmin, refreshToken, userControllers.destroy);
+router.get("/users", checkAdmin, refreshToken, userControllers.browse);
+router.put("/users/:id", checkAdmin, refreshToken, userControllers.edit);
+router.delete(
+  "/availability/:id",
+  checkAdmin,
+  refreshToken,
+  availabilityControllers.destroy
+);
+router.get(
+  "/apointment",
+  checkAdmin,
+  refreshToken,
+  apointmentControllers.browse
+);
+router.get("/messages/", checkAdmin, refreshToken, messagesControllers.browse);
 
 module.exports = router;

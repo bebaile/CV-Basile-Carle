@@ -4,7 +4,7 @@ require("dotenv").config();
 
 const browse = (req, res) => {
   models.messages
-    .findAll()
+    .findAllWithAppointments()
     .then(([rows]) => {
       res.send(rows);
     })
@@ -15,8 +15,9 @@ const browse = (req, res) => {
 };
 
 const read = (req, res) => {
+  const { email } = req;
   models.messages
-    .findById(req.id)
+    .findById(req.id, email)
     .then(([rows]) => {
       if (rows[0] == null) {
         res.sendStatus(404);
