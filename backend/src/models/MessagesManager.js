@@ -20,6 +20,12 @@ class MessagesManager extends AbstractManager {
     );
   }
 
+  findAllWithAppointments() {
+    return this.connection.query(
+      `SELECT m.*, r.* FROM ${this.table} AS m INNER JOIN meetingrequest AS r ON m.meeting_request_idmeeting_request = r.idmeeting_request`
+    );
+  }
+
   update(item) {
     return this.connection.query(
       `update ${this.table} SET username = ?, email = ?, company = ? WHERE email = ?`,

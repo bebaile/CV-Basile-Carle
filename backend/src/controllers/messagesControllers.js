@@ -4,7 +4,7 @@ require("dotenv").config();
 
 const browse = (req, res) => {
   models.messages
-    .findAll()
+    .findAllWithAppointments()
     .then(([rows]) => {
       res.send(rows);
     })
