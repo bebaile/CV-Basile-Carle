@@ -15,8 +15,9 @@ const browse = (req, res) => {
 };
 
 const read = (req, res) => {
+  const { email } = req;
   models.messages
-    .findById(req.id)
+    .findById(req.id, email)
     .then(([rows]) => {
       if (rows[0] == null) {
         res.sendStatus(404);

@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import DOMPurify from "dompurify";
+import HTMLReactParser from "html-react-parser";
 import api, { formatDateDMY } from "@services/services";
 import "../styles/user-account.css";
 
@@ -48,11 +50,17 @@ function UserAccount({ setIsUserAccountDisplayed }) {
               </thead>
               <tbody>
                 {userMessages.map((message) => {
+                  const html = DOMPurify.sanitize(message.message);
                   return (
                     <tr key={message.id}>
-                      <td>Moi</td>
+                      <td>
+                        {message.recipient_email ===
+                        sessionStorage.getItem("email")
+                          ? "Admin"
+                          : "Moi"}
+                      </td>
                       <td>{formatDateDMY(message.create_time)}</td>
-                      <td>{message.message}</td>
+                      <td>{HTMLReactParser(html)}</td>
                       <td>{formatDateDMY(message.day)}</td>
                     </tr>
                   );
