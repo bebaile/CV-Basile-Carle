@@ -1,5 +1,6 @@
 /* eslint-disable jsx-a11y/no-noninteractive-element-to-interactive-role */
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import DOMPurify from "dompurify";
 import HTMLReactParser from "html-react-parser";
 import api, { formatDateDMY } from "@services/services";
@@ -31,24 +32,39 @@ function UsersList() {
     visible: "false",
   });
   const [userToDelete, setUserToDelete] = useState("");
+  const navigate = useNavigate();
 
   useEffect(() => {
     // récupère la liste de tous les utilisateurs pour les afficher
-    api.get("/users").then((result) => {
-      if (result.status === 500) {
-        console.error("Erreur de communication avec la base de données");
-      } else {
-        setUsers(result.data);
-      }
-    });
+    api
+      .get("/users")
+      .then((result) => {
+        if (result.status === 500) {
+          console.error("Erreur de communication avec la base de données");
+        } else {
+          setUsers(result.data);
+        }
+      })
+      .catch((error) => {
+        if (error.response.status === 401) {
+          navigate("/login");
+        }
+      });
     // on récupère les messages
-    api.get("/messages").then((result) => {
-      if (result.status === 500) {
-        console.error("impossible de récupérer les messages");
-      } else {
-        setMessages(result.data);
-      }
-    });
+    api
+      .get("/messages")
+      .then((result) => {
+        if (result.status === 500) {
+          console.error("impossible de récupérer les messages");
+        } else {
+          setMessages(result.data);
+        }
+      })
+      .catch((error) => {
+        if (error.response.status === 401) {
+          navigate("/login");
+        }
+      });
   }, [areUsersModified]);
 
   // on attend le chargement des utilisateurs pour faire un rendering
@@ -388,7 +404,7 @@ function UsersList() {
                                           <td>{HTMLReactParser(html)} </td>
                                           <td>{formatDateDMY(message.day)}</td>
                                           <td id="reply-btn">
-                                            {message.recipient_email ===
+                                            {message.recipient_email !==
                                             sessionStorage.getItem("email") ? (
                                               ""
                                             ) : (

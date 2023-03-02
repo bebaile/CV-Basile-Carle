@@ -41,6 +41,7 @@ function Navbar({
   const handleDisconnect = () => {
     api.post("/logout").then(() => {
       setIsUserAccountDisplayed(false);
+      setIsSubNavBarVisible(false);
       setIsConnected(false);
       sessionStorage.clear("email");
       sessionStorage.clear("company");
@@ -53,10 +54,13 @@ function Navbar({
 
   const displayApointment = () => {
     setIsApointmentDisplayed(!isApointmentDisplayed);
+    setIsUserAccountDisplayed(false);
+    setIsSubNavBarVisible(false);
   };
 
   const displayUserAccount = () => {
     setIsUserAccountDisplayed(!isUserAccountDisplayed);
+    setIsSubNavBarVisible(false);
   };
 
   return (
