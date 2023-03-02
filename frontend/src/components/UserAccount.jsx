@@ -1,4 +1,6 @@
+/* eslint-disable no-nested-ternary */
 /* eslint-disable jsx-a11y/no-noninteractive-element-to-interactive-role */
+
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import DOMPurify from "dompurify";
@@ -11,6 +13,7 @@ import "../styles/user-account.css";
 
 function UserAccount({ setIsUserAccountDisplayed }) {
   const [userMessages, setUserMessages] = useState();
+  const [alert, setAlert] = useState("");
   const [isLoading, setIsLoading] = useState(true);
   const [isReplyDisplayed, setIsReplyDisplayed] = useState({
     email: "",
@@ -36,6 +39,9 @@ function UserAccount({ setIsUserAccountDisplayed }) {
         console.error(error.response.status);
         if (error.response.status === 401) {
           navigate("/login");
+        }
+        if (error.response.status === 404) {
+          setAlert("Aucune demande de rendez-vous ni message");
         }
       });
   }, [areUsersModified]);
@@ -97,7 +103,11 @@ function UserAccount({ setIsUserAccountDisplayed }) {
             {sessionStorage.getItem("lastname")}
           </h1>
           {isLoading ? (
-            "Chargement des messages"
+            typeof alert !== "undefined" ? (
+              alert
+            ) : (
+              "Chargement des messages"
+            )
           ) : (
             <table id="messages-table">
               <thead>

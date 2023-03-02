@@ -1,4 +1,5 @@
 {
+  "homepage": "https://bebaile.github.io/CV-Basile-Carle/",
   "name": "template-frontend",
   "private": true,
   "version": "0.0.0",
@@ -7,7 +8,8 @@
     "build": "vite build",
     "preview": "vite preview",
     "lint": "echo '----- Checking Frontend...' && prettier --debug-check . && eslint --ext .jsx . && echo '----- Done!'",
-    "fix": "prettier --write . && eslint --fix --ext .jsx ."
+    "fix": "prettier --write . && eslint --fix --ext .jsx .",
+    "deploy": "gh-pages -d build"
   },
   "dependencies": {
     "axios": "^1.2.2",
@@ -29,6 +31,7 @@
     "eslint-plugin-prettier": "^4.0.0",
     "eslint-plugin-react": "^7.29.4",
     "eslint-plugin-react-hooks": "^4.3.0",
+    "gh-pages": "^5.0.0",
     "husky": "^7.0.0",
     "prettier": "^2.5.1",
     "vite": "^2.8.0"
