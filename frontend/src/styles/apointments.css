@@ -1,7 +1,7 @@
 .user-interaction {
   border: var(--border-area-style);
   border-radius: 5px;
-  width: calc(var(--content-width)- 0.5rem);
+  width: calc(var(--content-width) - 0.5rem);
   padding: 0.5rem 0;
   margin: 1rem;
   min-width: 375px;

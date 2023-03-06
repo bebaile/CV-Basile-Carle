@@ -14,6 +14,14 @@ function Login() {
     type: "button",
     message: "> Je souhaite m'inscrire",
   });
+  const [credentials, setCredentials] = useState({
+    email: "",
+    firstname: "",
+    lastname: "",
+    company: "",
+    password: "",
+    confirmedPassword: "",
+  });
 
   const navigate = useNavigate();
 
@@ -55,43 +63,69 @@ function Login() {
       });
   };
 
+  const checkFilledInputs = () => {
+    const checkedValues = [];
+    for (const key in credentials) {
+      // sans cette condition, on va aussi parcourir les propriétés du prototype
+      // eslint-disable-next-line no-prototype-builtins
+      if (credentials.hasOwnProperty(key)) {
+        if (credentials[key] === "") {
+          checkedValues.push(key);
+        }
+      }
+    }
+
+    return checkedValues;
+  };
+
   const handleSubmit = () => {
     // si l'utilisateur veut créer un compte
     if (isSubscribing === true) {
-      if (
-        document.querySelector("#password").value !==
-        document.querySelector("#confirmed-password").value
-      ) {
-        setArePasswordEqual(false);
-        setAlert({ type: "alert", message: "Mots de passes différents" });
-      } else {
-        api
-          .post("/users/create", {
-            email: document.querySelector("#courriel").value,
-            firstname: document.querySelector("#firstname").value,
-            lastname: document.querySelector("#lastname").value,
-            company: document.querySelector("#entreprise").value,
-            password: document.querySelector("#password").value,
-          })
-          .then((result) => {
-            if (result.data === "Created") {
-              setAlert({
-                type: "announce",
-                message: "Utilisateur créé avec succès",
-              });
-              setTimeout(() => {
-                setIsSubscribing(false);
-              }, 3000);
-            }
-          })
-          .catch((error) => {
-            if (error.response.status === 409) {
-              setAlert({ type: "alert", message: "Utilisateur déjà existant" });
-            }
-            if (error.response.status === 422) {
-              console.error(error.response.statusText);
-            }
-          });
+      // si tous les champs sont remplis, on peut procéder à la création de l'utilisateur
+      if (checkFilledInputs().length === 0) {
+        if (credentials.password !== credentials.confirmedPassword) {
+          setArePasswordEqual(false);
+          setAlert({ type: "alert", message: "Mots de passes différents" });
+        } else {
+          api
+            .post("/users/create", {
+              email: credentials.email,
+              firstname: credentials.firstname,
+              lastname: credentials.lastname,
+              company: credentials.company,
+              password: credentials.password,
+            })
+            .then((result) => {
+              if (result.data === "Created") {
+                setAlert({
+                  type: "announce",
+                  message: "Utilisateur créé avec succès",
+                });
+                setTimeout(() => {
+                  setIsSubscribing(false);
+                }, 3000);
+              }
+            })
+            .catch((error) => {
+              if (error.response.status === 409) {
+                setAlert({
+                  type: "alert",
+                  message: "Utilisateur déjà existant",
+                });
+              }
+              if (error.response.status === 422) {
+                console.error(error.response.statusText);
+              }
+            });
+        }
+      }
+      // mais si un des champs est manquant, il faut le signaler
+      else {
+        setAlert({
+          type: "alert",
+          message: `Remplissez bien tous les champs`,
+        });
+        console.error(checkFilledInputs());
       }
     }
     // si l'utilisateur a déjà un compte et veut se connecter
@@ -167,6 +201,10 @@ function Login() {
                     type="text"
                     id="courriel"
                     name="courriel"
+                    onChange={(e) => {
+                      setIsSubscribing(true);
+                      setCredentials({ ...credentials, email: e.target.value });
+                    }}
                     onBlur={isSubscribing ? checkEmail : null}
                     className={
                       alert.message === "L'utilisateur existe déjà"
@@ -181,19 +219,52 @@ function Login() {
                   <label htmlFor="firstname">
                     <div>Prénom :</div>
                     <div>
-                      <input type="text" id="firstname" name="firstname" />
+                      <input
+                        type="text"
+                        id="firstname"
+                        name="firstname"
+                        onChange={(e) => {
+                          setIsSubscribing(true);
+                          setCredentials({
+                            ...credentials,
+                            firstname: e.target.value,
+                          });
+                        }}
+                      />
                     </div>
                   </label>
                   <label htmlFor="lastname">
                     <div>Nom :</div>
                     <div>
-                      <input type="text" id="lastname" name="lastname" />
+                      <input
+                        type="text"
+                        id="lastname"
+                        name="lastname"
+                        onChange={(e) => {
+                          setIsSubscribing(true);
+                          setCredentials({
+                            ...credentials,
+                            lastname: e.target.value,
+                          });
+                        }}
+                      />
                     </div>
                   </label>
                   <label htmlFor="entreprise">
                     <div>Entreprise :</div>
                     <div>
-                      <input type="text" id="entreprise" name="entreprise" />
+                      <input
+                        type="text"
+                        id="entreprise"
+                        name="entreprise"
+                        onChange={(e) => {
+                          setIsSubscribing(true);
+                          setCredentials({
+                            ...credentials,
+                            company: e.target.value,
+                          });
+                        }}
+                      />
                     </div>
                   </label>
                 </div>
@@ -206,6 +277,13 @@ function Login() {
                     id="password"
                     name="password"
                     className={arePasswordEqual ? null : "incorrect"}
+                    onChange={(e) => {
+                      setIsSubscribing(true);
+                      setCredentials({
+                        ...credentials,
+                        password: e.target.value,
+                      });
+                    }}
                   />
                 </div>
               </label>
@@ -218,6 +296,13 @@ function Login() {
                       id="confirmed-password"
                       name="confirmed-password"
                       className={arePasswordEqual ? null : "incorrect"}
+                      onChange={(e) => {
+                        setIsSubscribing(true);
+                        setCredentials({
+                          ...credentials,
+                          confirmedPassword: e.target.value,
+                        });
+                      }}
                     />
                   </div>
                 </label>
