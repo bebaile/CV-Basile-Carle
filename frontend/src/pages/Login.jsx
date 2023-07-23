@@ -202,7 +202,8 @@ function Login() {
                     id="courriel"
                     name="courriel"
                     onChange={(e) => {
-                      setIsSubscribing(true);
+                      // a priori, c'est ce qui pose notre problème
+                      // setIsSubscribing(true);
                       setCredentials({ ...credentials, email: e.target.value });
                     }}
                     onBlur={isSubscribing ? checkEmail : null}
@@ -278,7 +279,8 @@ function Login() {
                     name="password"
                     className={arePasswordEqual ? null : "incorrect"}
                     onChange={(e) => {
-                      setIsSubscribing(true);
+                      // à priori, une partie de notre problème
+                      // setIsSubscribing(true);
                       setCredentials({
                         ...credentials,
                         password: e.target.value,
